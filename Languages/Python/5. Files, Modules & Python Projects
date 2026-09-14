@@ -1,0 +1,161 @@
+## Reading/writing files
+
+python can read from and write to files sitting on disk, letting a program save data outside of just running once and losing everything when it closes
+basic idea: open a file, do something with it, then close it again so nothing gets left dangling
+there are a couple of main modes for text files, covered properly under open() below
+
+## open()
+
+the built-in function used to open a file and get a file object back, which is what you actually read from or write to
+needs a filename, and a mode telling it what you plan to do with the file: f = open("notes.txt", "r") r means read
+f = open("notes.txt", "w") w means write, overwrites the whole file if it already exists
+f = open("notes.txt", "a") a means append, adds to the end instead of overwriting
+reading the contents once it's open: f = open("notes.txt", "r")
+content = f.read()
+print(content)
+f.close()
+writing works similarly: f = open("notes.txt", "w")
+f.write("hello file")
+f.close()
+forgetting to close a file can cause problems, especially with writing, since changes might not actually get saved to disk until it's closed properly
+
+## Context managers
+
+a cleaner way of handling something that needs setup and cleanup, files being the most common example
+using with automatically closes the file for you, even if an error happens partway through, so you never have to remember to call close() manually
+example: with open("notes.txt", "r") as f:
+content = f.read()
+print(content)
+as soon as the code exits the with block, the file gets closed automatically behind the scenes
+this is the pattern worth reaching for basically every time, instead of manually calling open() and close() yourself
+
+## pathlib
+
+a more modern way of working with file paths, built around a Path object instead of plain strings
+example: from pathlib import Path p = Path("notes.txt")
+p.exists() result True or False, checks if it's actually there
+p.name result "notes.txt"
+p.suffix result ".txt"
+makes joining paths together far less error prone than manually gluing strings with slashes, since it works the same on windows and mac/linux even though they use different slash characters normally: folder = Path("documents")
+full_path = folder / "notes.txt"
+
+## Directories
+
+a folder, basically, used to organise files
+pathlib handles most directory tasks cleanly: from pathlib import Path Path("new_folder").mkdir() creates a folder
+Path("new_folder").exists() checks if it exists
+list(Path(".").iterdir()) lists everything in the current folder
+os.listdir() and os.makedirs() are the older, pre-pathlib way of doing the same sort of thing, still common in existing code
+
+## File manipulation
+
+covers the general tasks of moving, renaming, copying, and deleting files from within python itself
+the shutil and os modules handle most of this: import shutil
+import os os.rename("old_name.txt", "new_name.txt")
+shutil.copy("notes.txt", "notes_backup.txt")
+os.remove("notes_backup.txt")
+worth being careful with anything that deletes or overwrites — python won't ask for confirmation first, it just does it
+
+## JSON
+
+a common text format for storing structured data, looks a lot like a python dictionary
+python's json module converts between JSON text and actual python objects
+example: import json data = {"name": "Ben", "age": 20} with open("data.json", "w") as f:
+json.dump(data, f) with open("data.json", "r") as f:
+loaded = json.load(f) print(loaded)
+result {'name': 'Ben', 'age': 20}
+dump writes python data out as JSON, load reads JSON back in as python data
+dumps and loads, with an s on the end, do the same thing but work with plain strings directly instead of files
+
+## CSV
+
+comma separated values, a plain text format for tabular data, basically a simple spreadsheet
+python's csv module handles reading and writing it properly, including tricky edge cases like commas sitting inside a field
+example: import csv with open("people.csv", "r") as f:
+reader = csv.reader(f)
+for row in reader:
+print(row)
+writing works the same way in reverse: with open("people.csv", "w") as f:
+writer = csv.writer(f)
+writer.writerow(["name", "age"])
+writer.writerow(["Ben", 20])
+DictReader and DictWriter do the same job but let you work with each row as a dictionary using the header row as keys, instead of a plain list by position
+
+## Regular expressions
+
+a pattern language for searching, matching, and manipulating text, accessed through the re module
+looks cryptic at first but covers a huge amount of ground once it clicks
+example: import re text = "my number is 12345"
+match = re.search(r"\d+", text)
+print(match.group())
+result 12345
+a few building blocks worth knowing: \d matches any digit
+\w matches any letter, digit, or underscore
+means one or more of whatever came before it
+means zero or more
+. matches any character
+also useful for replacing text: re.sub(r"\d+", "X", "my number is 12345")
+result "my number is X"
+
+## Modules
+
+a single python file containing code, functions, classes, variables, that can be reused in another file
+literally just any .py file — the moment you write one, it's technically a module
+example, a file called helpers.py containing: def greet(name):
+return "hello " + name
+
+## Imports
+
+how you actually bring a module's code into another file so you can use it
+example, assuming helpers.py exists in the same folder: import helpers
+helpers.greet("Ben")
+can also import just one specific thing from a module instead of the whole thing: from helpers import greet
+greet("Ben")
+or rename something on the way in if it's long or clashes with something else: import helpers as h
+h.greet("Ben")
+
+## Packages
+
+a folder containing multiple related modules, grouped together as one importable unit
+turns a plain folder into a package by including a special file inside it, covered next
+example structure: my_package/
+init.py
+helpers.py
+utils.py
+once set up, you can import from inside it like: from my_package import helpers
+
+## __init__.py
+
+a special, usually empty file that tells python to treat that folder as a package
+can also be used to control what gets exposed when someone imports the package, or to run setup code the moment the package gets imported
+older python needed this file present to recognise a folder as a package at all — newer python is more lenient about it, but including it is still the standard, expected convention
+
+## __name__
+
+a special built-in variable that every python file automatically has, holding the name of the current module
+if the file is being run directly, __name__ gets set to the literal string __main__
+if the file is instead being imported into another file, __name__ gets set to the module's actual filename instead
+this is what lets a single file behave differently depending on whether it's the one being run, or just being borrowed for its functions
+
+## __main__
+
+the value __name__ holds specifically when a file is run directly rather than imported
+the common pattern you'll see constantly: def main():
+print("running the program") if __name__ == "__main__":
+    main()
+this means main() only runs when the file is executed directly, not when some other file imports it just to reuse its functions — without this check, importing a file would also accidentally run all its top-level code immediately
+
+## Project structure
+
+how files and folders get organised once a program grows past a single script
+a reasonably typical layout for a small project: my_project/
+main.py
+my_package/
+init.py
+helpers.py
+utils.py
+tests/
+test_helpers.py
+README.md
+requirements.txt
+keeping related code grouped into packages, tests separated out, and dependencies listed in one place makes a project far easier to navigate as it grows, both for you later on and for anyone else looking at it

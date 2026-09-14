@@ -1,0 +1,840 @@
+
+Python is usually fast enough for normal applications, but performance matters when working with large amounts of data, expensive calculations, high traffic, or CPU-heavy workloads.
+
+The most important rule:
+
+    Do not optimise based on guesses.
+    Measure first, find the bottleneck, then optimise it.
+
+---
+
+## Profiling
+
+Profiling means measuring where a program spends its time and resources.
+
+Instead of asking:
+
+    "Which part of my code looks slow?"
+
+Ask:
+
+    "Which part of my code is actually taking the most time?"
+
+Common profiling tools:
+
+    timeit       → benchmark small pieces of code
+    cProfile     → profile an entire program
+    tracemalloc  → investigate memory usage
+
+Example:
+
+    import cProfile
+
+    def slow_function():
+        total = 0
+        for i in range(1_000_000):
+            total += i
+        return total
+
+    cProfile.run("slow_function()")
+
+Profiling can show:
+
+    - How many times functions were called
+    - How much total time they used
+    - Which functions are taking the most time
+
+---
+
+## Benchmarking
+
+Benchmarking means measuring how long something takes.
+
+Example:
+
+    import time
+
+    start = time.perf_counter()
+
+    # Code being measured
+    total = sum(range(1_000_000))
+
+    end = time.perf_counter()
+
+    print(end - start)
+
+Use `time.perf_counter()` for general timing because it is designed for measuring elapsed time.
+
+Do not rely on a single run.
+
+Results can vary because of:
+
+    - Background processes
+    - CPU load
+    - Operating system scheduling
+    - Caches
+    - Memory pressure
+
+For small pieces of code, use `timeit`.
+
+---
+
+## timeit
+
+`timeit` is designed for accurately benchmarking small pieces of Python code.
+
+Example:
+
+    import timeit
+
+    result = timeit.timeit(
+        "sum(range(1000))",
+        number=10_000
+    )
+
+    print(result)
+
+You can also benchmark functions:
+
+    import timeit
+
+    def test():
+        return sum(range(1000))
+
+    result = timeit.timeit(test, number=10_000)
+
+    print(result)
+
+Useful for comparing implementations:
+
+    # Version 1
+    [x * 2 for x in numbers]
+
+    # Version 2
+    list(map(lambda x: x * 2, numbers))
+
+Benchmark both rather than assuming one is faster.
+
+---
+
+## cProfile
+
+`cProfile` is a built-in profiler for analysing entire programs.
+
+Example:
+
+    import cProfile
+
+    cProfile.run("main()")
+
+It helps identify:
+
+    - Slow functions
+    - Functions called frequently
+    - Total execution time
+    - Time spent inside functions
+
+A function that takes 0.01 seconds but runs 1,000,000 times can matter more than a function that takes 1 second but runs once.
+
+Important measurements include:
+
+    ncalls → number of calls
+    tottime → time spent directly inside the function
+    cumtime → cumulative time including functions it calls
+
+---
+
+## tracemalloc
+
+`tracemalloc` helps investigate Python memory allocation.
+
+Example:
+
+    import tracemalloc
+
+    tracemalloc.start()
+
+    data = [x for x in range(1_000_000)]
+
+    snapshot = tracemalloc.take_snapshot()
+
+    for statistic in snapshot.statistics("lineno")[:5]:
+        print(statistic)
+
+It can help identify:
+
+    - Where memory is being allocated
+    - Which lines use the most memory
+    - Memory growth
+    - Potential memory leaks
+
+Python normally handles memory automatically, but programs can still use far more memory than necessary.
+
+---
+
+## Memory Optimisation
+
+Memory optimisation means reducing unnecessary memory usage.
+
+Example:
+
+    numbers = [1, 2, 3, 4, 5]
+
+A list stores all values in memory.
+
+For large sequences, a generator can avoid storing everything:
+
+    numbers = (x for x in range(1_000_000))
+
+The generator produces values when needed.
+
+Other techniques:
+
+    - Avoid unnecessary copies
+    - Process large files in chunks
+    - Use generators
+    - Delete objects that are no longer needed
+    - Choose appropriate data structures
+    - Avoid keeping unnecessary data in memory
+    - Use caching carefully
+
+Example:
+
+    # Loads entire file
+    data = open("large.txt").read()
+
+    # Processes one line at a time
+    with open("large.txt") as file:
+        for line in file:
+            process(line)
+
+---
+
+## Algorithm Optimisation
+
+Improving the algorithm is often much more important than micro-optimising Python code.
+
+Example:
+
+    # O(n²)
+    for x in numbers:
+        for y in numbers:
+            if x == y:
+                ...
+
+Could potentially become:
+
+    # O(n)
+    lookup = set(numbers)
+
+    for x in numbers:
+        if x in lookup:
+            ...
+
+Changing the algorithm can produce enormous performance improvements.
+
+Typical improvements:
+
+    O(n²) → O(n)
+    O(n)  → O(log n)
+    repeated work → cached results
+
+Always consider algorithmic complexity before worrying about tiny syntax differences.
+
+---
+
+## Lazy Evaluation
+
+Lazy evaluation means delaying work until the result is actually needed.
+
+Generators are a major example.
+
+    def numbers():
+        for i in range(1_000_000):
+            yield i
+
+    for number in numbers():
+        print(number)
+
+The million values do not all need to exist in memory simultaneously.
+
+Useful for:
+
+    - Large files
+    - Large datasets
+    - Pipelines
+    - Streams
+    - Expensive calculations
+
+Compare:
+
+    numbers = [calculate(x) for x in data]
+
+with:
+
+    numbers = (calculate(x) for x in data)
+
+The second version calculates values as they are requested.
+
+---
+
+## Caching
+
+Caching stores previously calculated results so they can be reused.
+
+Example:
+
+    from functools import cache
+
+    @cache
+    def fibonacci(n):
+        if n <= 1:
+            return n
+
+        return fibonacci(n - 1) + fibonacci(n - 2)
+
+Without caching, Fibonacci repeatedly calculates the same values.
+
+With caching:
+
+    fibonacci(10)
+
+stores previous results and reuses them.
+
+Other caching techniques include:
+
+    - functools.cache
+    - functools.lru_cache
+    - Application-level caches
+    - Database caches
+    - HTTP caches
+
+Caching can greatly improve performance, but uses memory and can create stale-data problems.
+
+---
+
+## Efficient Data Structures
+
+Choosing the correct data structure can have a huge performance impact.
+
+Common choices:
+
+    list
+        Fast indexing
+        Good general-purpose sequence
+
+    set
+        Fast membership testing
+        Removes duplicates
+
+    dict
+        Fast key-based lookup
+
+    deque
+        Efficient operations at both ends
+
+    heap
+        Efficient priority queue operations
+
+Example:
+
+    # Potentially slow
+    if username in usernames_list:
+        ...
+
+    # Usually much faster for repeated membership checks
+    usernames = set(usernames_list)
+
+    if username in usernames:
+        ...
+
+The best data structure depends on what operations your program performs most often.
+
+---
+
+## CPU-bound vs I/O-bound
+
+This distinction is extremely important when choosing how to improve performance.
+
+CPU-bound:
+
+    The program spends most of its time doing calculations.
+
+Examples:
+
+    - Image processing
+    - Mathematical calculations
+    - Compression
+    - Large simulations
+
+I/O-bound:
+
+    The program spends most of its time waiting for external operations.
+
+Examples:
+
+    - Network requests
+    - Reading files
+    - Database queries
+    - API requests
+
+CPU-bound problems often benefit from:
+
+    - Better algorithms
+    - Multiprocessing
+    - Native code
+    - Vectorisation
+
+I/O-bound problems often benefit from:
+
+    - Asyncio
+    - Threads
+    - Connection pooling
+    - Caching
+    - Batching requests
+
+---
+
+## Multiprocessing
+
+Multiprocessing runs code in separate processes.
+
+Each process has its own Python interpreter and memory space.
+
+Example:
+
+    from multiprocessing import Pool
+
+    def square(x):
+        return x * x
+
+    with Pool() as pool:
+        results = pool.map(square, range(10))
+
+Multiprocessing can be useful for CPU-heavy workloads because separate processes can execute on multiple CPU cores.
+
+Advantages:
+
+    - Can use multiple CPU cores
+    - Avoids the normal CPython GIL limitation
+
+Disadvantages:
+
+    - More memory usage
+    - Process startup overhead
+    - Data must often be transferred between processes
+    - More complicated than normal function calls
+
+Do not automatically use multiprocessing. The workload must be large enough for the overhead to be worthwhile.
+
+---
+
+## The GIL
+
+GIL = Global Interpreter Lock.
+
+In traditional CPython, the GIL prevents multiple threads from executing Python bytecode simultaneously within the same interpreter.
+
+This means:
+
+    Multiple threads
+        ↓
+    Usually cannot execute CPU-heavy Python code
+    simultaneously in one traditional CPython interpreter
+
+However, threads are still very useful for I/O-bound work.
+
+For example:
+
+    Thread 1 → waiting for website
+    Thread 2 → waiting for database
+    Thread 3 → waiting for file
+
+While one thread waits, another can make progress.
+
+Modern Python also has free-threaded CPython builds that can run without the traditional GIL, so the GIL should not be treated as an absolute property of every Python implementation/build.
+
+---
+
+## Vectorisation
+
+Vectorisation means performing operations on many values at once using optimised underlying code rather than repeatedly executing Python-level loops.
+
+This is particularly important in scientific computing and data analysis.
+
+For example, NumPy can perform operations using highly optimised native code.
+
+    import numpy as np
+
+    numbers = np.array([1, 2, 3, 4])
+
+    result = numbers * 2
+
+    print(result)
+
+Result:
+
+    [2 4 6 8]
+
+Python loops can be slower for huge numerical datasets because every operation may involve Python-level overhead.
+
+Libraries such as NumPy move much of the work into fast compiled code.
+
+---
+
+## CPython Internals
+
+CPython is the most widely used implementation of Python.
+
+Python itself is a language specification.
+
+CPython is one implementation of that language.
+
+Other implementations include:
+
+    - PyPy
+    - Jython
+    - IronPython
+
+Understanding CPython helps explain why certain operations behave the way they do.
+
+---
+
+## Interpreter
+
+A simplified view of CPython is:
+
+    Python source code
+            ↓
+    Compilation
+            ↓
+    Python bytecode
+            ↓
+    CPython interpreter
+            ↓
+    Machine-level operations
+
+Example:
+
+    x = 10
+    y = 20
+    print(x + y)
+
+Python does not normally compile directly into a native executable like C++.
+
+CPython compiles Python source into bytecode and executes that bytecode using its interpreter/runtime.
+
+---
+
+## Bytecode
+
+Bytecode is an intermediate representation used by CPython.
+
+You can inspect it with `dis`.
+
+    import dis
+
+    def add(a, b):
+        return a + b
+
+    dis.dis(add)
+
+This shows the bytecode instructions CPython uses to execute the function.
+
+Bytecode is an implementation detail.
+
+You generally do not need to understand individual instructions when writing normal Python.
+
+It becomes useful when studying:
+
+    - CPython internals
+    - Performance
+    - Function execution
+    - The interpreter
+
+---
+
+## Reference Counting
+
+CPython primarily manages object lifetime using reference counting.
+
+Conceptually:
+
+    Object
+       ↑
+    references
+
+When an object's reference count reaches zero, CPython can normally release it immediately.
+
+Example:
+
+    x = [1, 2, 3]
+
+    y = x
+
+Now both `x` and `y` reference the same object.
+
+    del x
+
+The object still exists because `y` references it.
+
+    del y
+
+The object may now be released because no references remain.
+
+---
+
+## Garbage Collector
+
+Reference counting alone cannot handle every situation.
+
+For example, objects can reference each other:
+
+    a → b
+    ↑   ↓
+    └───┘
+
+Neither object's reference count reaches zero even if nothing else references them.
+
+CPython therefore also has a cyclic garbage collector that can detect certain reference cycles and reclaim them.
+
+So simplified:
+
+    Reference counting
+        +
+    Cyclic garbage collection
+        =
+    CPython memory management
+
+---
+
+## C Extensions
+
+Python can call highly optimised code written in languages such as C.
+
+This is one reason Python can be surprisingly fast for certain tasks.
+
+A Python program might call:
+
+    Python code
+        ↓
+    C extension
+        ↓
+    Optimised native code
+
+Many important Python libraries use this approach.
+
+Examples include parts of:
+
+    - NumPy
+    - pandas
+    - Pillow
+    - CPython itself
+
+This allows Python to provide a simple interface while expensive operations happen in compiled code.
+
+---
+
+## Cython
+
+Cython allows Python-like code to be compiled into C/C++ extension modules.
+
+Example concept:
+
+    Python/Cython code
+            ↓
+        C/C++ code
+            ↓
+      Native machine code
+
+Cython can be useful when:
+
+    - Python code is CPU-heavy
+    - Algorithms contain expensive loops
+    - You need more performance
+    - Rewriting the entire program in C/C++ is undesirable
+
+It is not automatically faster just because it is called Cython. Performance depends on how the code is written and compiled.
+
+---
+
+## ctypes
+
+`ctypes` allows Python to interact with shared libraries written in C.
+
+Example concept:
+
+    Python
+       ↓
+    ctypes
+       ↓
+    C library
+
+It can be useful for calling existing native libraries without writing a full Python extension.
+
+However, it requires care around:
+
+    - Types
+    - Memory
+    - Pointers
+    - Function signatures
+
+Incorrect usage can cause crashes or memory corruption.
+
+---
+
+## cffi
+
+`cffi` is another way to call C code from Python.
+
+It is designed to make interfacing with C libraries easier than manually working with low-level details in some situations.
+
+Conceptually:
+
+    Python
+       ↓
+      cffi
+       ↓
+    C library
+
+It is commonly used when Python needs to interact with existing native libraries.
+
+---
+
+## Performance Optimisation Strategy
+
+A good optimisation workflow is:
+
+    1. Write correct code
+           ↓
+    2. Measure performance
+           ↓
+    3. Find the bottleneck
+           ↓
+    4. Identify why it is slow
+           ↓
+    5. Choose an optimisation
+           ↓
+    6. Implement it
+           ↓
+    7. Benchmark again
+           ↓
+    8. Check that correctness is unchanged
+
+Do not optimise code simply because it "looks inefficient."
+
+---
+
+## Common Performance Mistakes
+
+Avoid:
+
+    - Optimising before measuring
+    - Replacing readable code for tiny theoretical gains
+    - Using multiprocessing for tiny tasks
+    - Using threads for CPU-heavy Python code without understanding the workload
+    - Keeping enormous datasets in memory unnecessarily
+    - Repeating expensive calculations
+    - Choosing poor algorithms
+    - Creating unnecessary copies
+    - Assuming newer syntax is automatically faster
+
+The biggest performance improvements usually come from:
+
+    1. Better algorithms
+    2. Better data structures
+    3. Avoiding unnecessary work
+    4. Caching
+    5. Efficient I/O
+    6. Vectorisation/native code
+    7. Parallelism where appropriate
+
+---
+
+## Performance Decision Guide
+
+If code is slow:
+
+    Is the algorithm inefficient?
+        ↓
+    Improve the algorithm.
+
+    Is it doing unnecessary work?
+        ↓
+    Remove/reduce the work.
+
+    Is it repeating calculations?
+        ↓
+    Consider caching.
+
+    Is it using too much memory?
+        ↓
+    Consider generators, streaming and better data structures.
+
+    Is it waiting for I/O?
+        ↓
+    Consider async, threads, batching or caching.
+
+    Is it CPU-bound?
+        ↓
+    Consider better algorithms, multiprocessing or native/vectorised code.
+
+    Is Python itself the bottleneck?
+        ↓
+    Consider NumPy, C extensions, Cython, cffi or another suitable native implementation.
+
+---
+
+## Key Performance Tools
+
+    time.perf_counter()
+        Measure elapsed time.
+
+    timeit
+        Benchmark small pieces of code.
+
+    cProfile
+        Find slow functions.
+
+    tracemalloc
+        Investigate memory usage.
+
+    dis
+        Inspect CPython bytecode.
+
+    functools.cache
+        Cache function results.
+
+    multiprocessing
+        Run CPU-heavy work across processes.
+
+---
+
+## Final Goal
+
+You should understand:
+
+    - How to measure performance
+    - How to profile Python programs
+    - How to identify bottlenecks
+    - How algorithms affect performance
+    - How data structures affect performance
+    - How memory usage affects programs
+    - Lazy evaluation and generators
+    - Caching
+    - CPU-bound vs I/O-bound workloads
+    - Threads vs multiprocessing vs asyncio
+    - What the GIL is
+    - The basic CPython execution model
+    - Bytecode
+    - Reference counting
+    - Garbage collection
+    - How Python can use compiled C/C++ code
+    - When vectorisation or native code is worthwhile
+
+The main principle:
+
+    Measure → Identify the bottleneck → Optimise → Measure again.
+
+You do NOT need to become a CPython internals expert to write fast Python.
+The important skill is knowing where performance problems come from and choosing the appropriate solution.

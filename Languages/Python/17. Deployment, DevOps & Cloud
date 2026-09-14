@@ -1,0 +1,1150 @@
+
+Deployment means taking your application from your development computer and making it available for other people to use.
+
+A simplified production setup looks like:
+
+    Your code
+        ↓
+    GitHub
+        ↓
+    Server / Cloud
+        ↓
+    Nginx
+        ↓
+    Gunicorn
+        ↓
+    Python application
+        ↓
+    Database
+
+---
+
+## Linux
+
+Linux is one of the most common operating systems used for servers.
+
+Most cloud servers run some form of Linux.
+
+Important concepts:
+
+    Files and directories
+    Users and permissions
+    Processes
+    Services
+    Networking
+    Package management
+    Environment variables
+    SSH
+    Bash
+
+Common commands:
+
+    pwd
+        Show current directory.
+
+    ls
+        List files.
+
+    cd
+        Change directory.
+
+    mkdir
+        Create directory.
+
+    touch
+        Create a file.
+
+    cp
+        Copy files.
+
+    mv
+        Move/rename files.
+
+    rm
+        Delete files.
+
+    cat
+        Display a file.
+
+    less
+        View a file.
+
+    grep
+        Search text.
+
+    find
+        Find files.
+
+    chmod
+        Change permissions.
+
+    sudo
+        Run a command with elevated privileges.
+
+    apt
+        Package manager on Debian/Ubuntu systems.
+
+Example:
+
+    cd my_project
+    ls
+    python3 --version
+
+---
+
+## Bash
+
+Bash is a command-line shell commonly used on Linux.
+
+Instead of clicking through a graphical interface, you can control the computer using commands.
+
+Example:
+
+    mkdir project
+    cd project
+    touch app.py
+    python3 app.py
+
+Bash can also automate tasks.
+
+Example:
+
+    #!/bin/bash
+
+    echo "Starting application..."
+
+    python3 app.py
+
+Shell scripts are useful for:
+
+    - Deployment
+    - Backups
+    - Server setup
+    - Running repeated commands
+    - Automation
+
+---
+
+## SSH
+
+SSH = Secure Shell.
+
+It allows you to securely connect to another computer over a network.
+
+For example:
+
+    ssh username@server-ip
+
+You can then control the remote server from your terminal.
+
+Typical workflow:
+
+    Your computer
+          ↓
+        SSH
+          ↓
+    Remote server
+
+You can:
+
+    - Run commands
+    - Upload files
+    - Install software
+    - Start applications
+    - Inspect logs
+    - Manage the server
+
+SSH commonly uses public/private key authentication.
+
+Conceptually:
+
+    Private key → stays on your computer
+
+    Public key → placed on the server
+
+Never share your private SSH key.
+
+---
+
+## Servers
+
+A server is simply a computer that provides services to other computers.
+
+A cloud server might run:
+
+    Linux
+    Python
+    Nginx
+    Gunicorn
+    PostgreSQL
+    Your application
+
+Servers can be:
+
+    Physical
+    Virtual machines
+    Containers
+    Cloud instances
+
+A server normally has:
+
+    CPU
+    RAM
+    Storage
+    Network connection
+    Operating system
+
+---
+
+## Processes
+
+A process is a running instance of a program.
+
+For example:
+
+    Python application
+        ↓
+    Running process
+
+Linux commands for inspecting processes include:
+
+    ps
+    top
+    htop
+    kill
+
+Example:
+
+    ps aux
+
+You can terminate a process with:
+
+    kill <PID>
+
+A production application may have multiple processes running simultaneously.
+
+---
+
+## Services
+
+A service is a program intended to run continuously or in the background.
+
+Examples:
+
+    Nginx
+    PostgreSQL
+    Gunicorn
+
+Linux systems commonly use `systemd` to manage services.
+
+Example:
+
+    sudo systemctl status nginx
+
+Other commands:
+
+    sudo systemctl start nginx
+    sudo systemctl stop nginx
+    sudo systemctl restart nginx
+
+---
+
+## Environment Variables
+
+Environment variables store configuration outside your source code.
+
+Example:
+
+    import os
+
+    database_url = os.environ["DATABASE_URL"]
+
+Instead of writing:
+
+    DATABASE_PASSWORD = "mypassword"
+
+you store the value outside the code.
+
+Example:
+
+    DATABASE_PASSWORD=secret
+
+Environment variables are useful for:
+
+    - Passwords
+    - API keys
+    - Database URLs
+    - Secret keys
+    - Debug settings
+    - Configuration
+
+Never commit real secrets to GitHub.
+
+---
+
+## `.env` Files
+
+During development, you may use a `.env` file:
+
+    SECRET_KEY=my-secret
+    DEBUG=True
+    DATABASE_URL=...
+
+Then load the values into your application.
+
+Make sure `.env` is normally included in:
+
+    .gitignore
+
+Example:
+
+    .env
+    __pycache__/
+    *.pyc
+
+Production environments generally store secrets using proper secret/environment-variable management rather than committing `.env` files to Git.
+
+---
+
+## Docker
+
+Docker packages an application and its dependencies into a container.
+
+Without Docker:
+
+    My computer
+        ↓
+    "It works here..."
+        ↓
+    Different server
+        ↓
+    Dependency problems
+
+With Docker:
+
+    Application
+    +
+    Python
+    +
+    Dependencies
+    +
+    Configuration
+        ↓
+    Container
+
+Containers provide a consistent environment.
+
+---
+
+## Docker Image vs Container
+
+An image is the packaged blueprint.
+
+A container is a running instance of that image.
+
+Think:
+
+    Image
+      ↓
+    Blueprint
+
+    Container
+      ↓
+    Running instance
+
+You can create multiple containers from one image.
+
+---
+
+## Dockerfile
+
+A `Dockerfile` describes how to build an image.
+
+Example:
+
+    FROM python:3.13-slim
+
+    WORKDIR /app
+
+    COPY requirements.txt .
+
+    RUN pip install --no-cache-dir -r requirements.txt
+
+    COPY . .
+
+    CMD ["python", "app.py"]
+
+Basic process:
+
+    Dockerfile
+        ↓
+    docker build
+        ↓
+    Image
+        ↓
+    docker run
+        ↓
+    Container
+
+---
+
+## Docker Compose
+
+Docker Compose allows you to define multiple services together.
+
+For example:
+
+    Application
+        +
+    Database
+        +
+    Redis
+
+A Compose file can describe all of them.
+
+Conceptually:
+
+    services:
+
+        web:
+            Python application
+
+        db:
+            PostgreSQL
+
+        redis:
+            Redis
+
+Then you can start the whole system together.
+
+    docker compose up
+
+This is particularly useful during development and for smaller deployments.
+
+---
+
+## Nginx
+
+Nginx is a high-performance web server and reverse proxy.
+
+A common setup is:
+
+    Internet
+        ↓
+      Nginx
+        ↓
+    Gunicorn
+        ↓
+    Django / Flask application
+
+Nginx can handle:
+
+    - HTTP requests
+    - HTTPS
+    - Static files
+    - Reverse proxying
+    - Compression
+    - Request routing
+    - Load balancing
+
+Your Python application does not necessarily need to directly handle every internet-facing connection.
+
+---
+
+## Reverse Proxy
+
+A reverse proxy receives requests from users and forwards them to backend services.
+
+Example:
+
+    User
+      ↓
+    Nginx
+      ↓
+    Gunicorn
+      ↓
+    Django
+
+The user only sees the public server.
+
+The backend application can remain behind the reverse proxy.
+
+Benefits include:
+
+    - HTTPS termination
+    - Security
+    - Routing
+    - Static file serving
+    - Load balancing
+    - Hiding backend details
+
+---
+
+## Gunicorn
+
+Gunicorn is a Python WSGI HTTP server commonly used to run Python web applications in production.
+
+For example:
+
+    gunicorn myproject.wsgi
+
+The architecture might be:
+
+    Internet
+        ↓
+    Nginx
+        ↓
+    Gunicorn
+        ↓
+    Django
+
+Gunicorn can run multiple worker processes:
+
+    Gunicorn
+      ├── Worker
+      ├── Worker
+      ├── Worker
+      └── Worker
+
+This allows multiple requests to be handled concurrently.
+
+For ASGI applications, servers such as Uvicorn are commonly used instead.
+
+---
+
+## WSGI vs ASGI
+
+WSGI is an interface for Python web applications.
+
+Commonly used with:
+
+    Django
+    Flask
+    Gunicorn
+
+ASGI is a newer interface supporting asynchronous applications and long-lived connections.
+
+It is useful for:
+
+    - Async Python
+    - WebSockets
+    - Long-lived connections
+
+Common ASGI server:
+
+    Uvicorn
+
+Simplified:
+
+    WSGI → traditional synchronous web applications
+
+    ASGI → synchronous + asynchronous applications
+
+---
+
+## Deployment
+
+Deployment means putting your application onto a server so users can access it.
+
+A simplified deployment process:
+
+    1. Write application
+    2. Test application
+    3. Push code to GitHub
+    4. Create server
+    5. Install dependencies
+    6. Configure environment variables
+    7. Configure database
+    8. Start application server
+    9. Configure Nginx
+    10. Configure DNS
+    11. Configure HTTPS
+    12. Monitor application
+
+---
+
+## Production vs Development
+
+Development:
+
+    DEBUG=True
+    Local database
+    Development server
+    Local environment
+    Detailed error messages
+
+Production:
+
+    DEBUG=False
+    Production database
+    Production server
+    Secure secrets
+    HTTPS
+    Logging
+    Monitoring
+    Backups
+
+Never expose sensitive debugging information to users in production.
+
+---
+
+## CI/CD
+
+CI/CD automates software development and deployment.
+
+CI = Continuous Integration
+
+CD = Continuous Delivery / Continuous Deployment
+
+Typical workflow:
+
+    Developer
+        ↓
+    git push
+        ↓
+    Automated tests
+        ↓
+    Build
+        ↓
+    Deployment
+        ↓
+    Production
+
+This reduces manual deployment work and helps catch problems early.
+
+---
+
+## GitHub Actions
+
+GitHub Actions allows you to automate workflows when something happens in a repository.
+
+For example:
+
+    Push code
+        ↓
+    GitHub Actions
+        ↓
+    Install Python
+        ↓
+    Install dependencies
+        ↓
+    Run tests
+        ↓
+    Run linting
+        ↓
+    Build/deploy
+
+Workflow files are normally stored in:
+
+    .github/workflows/
+
+Example concept:
+
+    name: Tests
+
+    on: [push]
+
+    jobs:
+      test:
+        runs-on: ubuntu-latest
+
+        steps:
+          - uses: actions/checkout@v4
+
+          - uses: actions/setup-python@v5
+            with:
+              python-version: "3.13"
+
+          - run: pip install -r requirements.txt
+          - run: pytest
+
+---
+
+## Monitoring
+
+Monitoring means observing the health and performance of your application.
+
+Useful things to monitor:
+
+    CPU usage
+    RAM usage
+    Disk usage
+    Network traffic
+    Response times
+    Error rates
+    Request counts
+    Database performance
+    Application availability
+
+The goal is to know:
+
+    "Is my application working properly?"
+
+before users have to tell you that it isn't.
+
+---
+
+## Logging
+
+Logging records what an application is doing.
+
+Python example:
+
+    import logging
+
+    logging.basicConfig(level=logging.INFO)
+
+    logging.info("Application started")
+    logging.warning("Something unusual happened")
+    logging.error("Something went wrong")
+
+Common log levels:
+
+    DEBUG
+    INFO
+    WARNING
+    ERROR
+    CRITICAL
+
+Avoid using `print()` as your main production logging system.
+
+Logs can help answer:
+
+    - What happened?
+    - When did it happen?
+    - Which request caused it?
+    - What error occurred?
+    - Which part of the application failed?
+
+---
+
+## Cloud Computing
+
+Cloud computing means using computing resources provided remotely over the internet.
+
+Instead of buying your own physical server:
+
+    Your application
+        ↓
+    Cloud provider
+        ↓
+    Remote infrastructure
+
+Cloud services can provide:
+
+    - Virtual machines
+    - Databases
+    - Storage
+    - Networking
+    - Containers
+    - Serverless functions
+    - Monitoring
+    - DNS
+    - Load balancers
+
+---
+
+## AWS / Azure / GCP
+
+Three major cloud providers are:
+
+    AWS
+        Amazon Web Services
+
+    Azure
+        Microsoft Azure
+
+    GCP
+        Google Cloud Platform
+
+They provide similar categories of services but use different names and interfaces.
+
+Examples:
+
+    AWS
+        EC2 → virtual machines
+        S3 → object storage
+        RDS → managed databases
+        Route 53 → DNS
+
+    Azure
+        Virtual Machines
+        Blob Storage
+        Azure Database services
+        Azure DNS
+
+    GCP
+        Compute Engine
+        Cloud Storage
+        Cloud SQL
+        Cloud DNS
+
+You do not need to master all three.
+
+Learning one cloud platform properly gives you transferable knowledge.
+
+---
+
+## Cloud Service Models
+
+### IaaS
+
+Infrastructure as a Service.
+
+You manage more of the server yourself.
+
+Example:
+
+    Virtual machine
+    Linux
+    Your software
+
+### PaaS
+
+Platform as a Service.
+
+The provider manages more infrastructure for you.
+
+You mainly provide your application.
+
+### SaaS
+
+Software as a Service.
+
+You use a complete software product.
+
+Examples:
+
+    Gmail
+    GitHub
+    Microsoft 365
+
+For Python development, understanding IaaS and PaaS is particularly useful.
+
+---
+
+## Production Databases
+
+A production application should normally use a proper production database rather than a development-only setup.
+
+Common choice:
+
+    PostgreSQL
+
+Typical architecture:
+
+    Internet
+       ↓
+    Application
+       ↓
+    PostgreSQL
+
+Production databases need:
+
+    - Backups
+    - Security
+    - Access control
+    - Monitoring
+    - Reliable storage
+    - Migrations
+    - Connection management
+
+Do not expose your database directly to the public internet unless there is a very good reason.
+
+---
+
+## Database Backups
+
+Databases contain valuable application data.
+
+A production system should have backups.
+
+A useful principle:
+
+    If losing the database would be disastrous,
+    you need a recovery plan.
+
+Backups should ideally be:
+
+    - Automated
+    - Tested
+    - Stored separately
+    - Retained appropriately
+
+A backup that has never been tested may not actually be a reliable recovery solution.
+
+---
+
+## DNS
+
+DNS = Domain Name System.
+
+It translates domain names into network addresses.
+
+For example:
+
+    example.com
+        ↓
+    IP address
+        ↓
+    Server
+
+Common DNS records:
+
+    A
+        Domain → IPv4 address
+
+    AAAA
+        Domain → IPv6 address
+
+    CNAME
+        Domain → another hostname
+
+    MX
+        Email servers
+
+    TXT
+        Text/verification information
+
+Example:
+
+    example.com → 203.0.113.10
+
+---
+
+## SSL/TLS
+
+TLS encrypts communication between the user and your server.
+
+You normally access a secure website through:
+
+    https://
+
+Instead of:
+
+    http://
+
+TLS provides:
+
+    Encryption
+    Authentication
+    Integrity
+
+This helps prevent attackers from simply reading or modifying network traffic.
+
+Modern websites should use HTTPS.
+
+---
+
+## HTTPS Architecture
+
+A common production setup:
+
+    User
+      ↓
+    HTTPS
+      ↓
+    Nginx
+      ↓
+    Gunicorn
+      ↓
+    Django
+      ↓
+    PostgreSQL
+
+Nginx commonly handles the TLS connection.
+
+A TLS certificate proves that the server is authorised for the domain.
+
+---
+
+## Ports
+
+Servers expose network services through ports.
+
+Common examples:
+
+    22   → SSH
+    80   → HTTP
+    443  → HTTPS
+    5432 → PostgreSQL
+
+You generally do not want every port publicly accessible.
+
+A firewall can restrict which connections are allowed.
+
+---
+
+## Deployment Security
+
+Important security principles:
+
+    - Use HTTPS
+    - Use SSH keys where appropriate
+    - Keep software updated
+    - Do not expose unnecessary ports
+    - Never commit secrets
+    - Use strong authentication
+    - Use environment variables/secrets management
+    - Keep databases private where possible
+    - Run services with appropriate permissions
+    - Monitor logs
+    - Back up important data
+
+Never assume:
+
+    "Nobody will attack my small website."
+
+Automated scanners constantly search the internet for vulnerable systems.
+
+---
+
+## Typical Python Production Architecture
+
+A small Django application might look like:
+
+    User
+      │
+      │ HTTPS
+      ↓
+    DNS
+      ↓
+    Server
+      │
+      ↓
+    Nginx
+      │
+      ↓
+    Gunicorn
+      │
+      ↓
+    Django
+      │
+      ├──────────────→ PostgreSQL
+      │
+      └──────────────→ Redis / other services
+
+With Docker:
+
+    Server
+      │
+      └── Docker Compose
+            │
+            ├── Nginx
+            ├── Django/Gunicorn
+            ├── PostgreSQL
+            └── Redis
+
+The exact architecture depends on the application.
+
+---
+
+## Basic Deployment Workflow
+
+A simplified real-world workflow:
+
+    Write code
+        ↓
+    Test locally
+        ↓
+    Commit to Git
+        ↓
+    Push to GitHub
+        ↓
+    CI runs tests
+        ↓
+    Build application
+        ↓
+    Deploy to server
+        ↓
+    Run migrations
+        ↓
+    Restart application
+        ↓
+    Nginx serves traffic
+        ↓
+    HTTPS protects connection
+        ↓
+    Monitor application
+
+---
+
+## Important Concepts to Understand
+
+You do not need to become a full-time DevOps engineer to deploy Python applications.
+
+You should understand:
+
+    Linux
+    Bash
+    SSH
+    Processes
+    Environment variables
+    Docker
+    Docker Compose
+    Nginx
+    Gunicorn
+    CI/CD
+    GitHub Actions
+    DNS
+    HTTPS
+    Production databases
+    Logging
+    Monitoring
+    Basic cloud infrastructure
+
+You should be able to look at:
+
+    User
+      ↓
+    DNS
+      ↓
+    Server
+      ↓
+    Nginx
+      ↓
+    Gunicorn
+      ↓
+    Python
+      ↓
+    Database
+
+and understand what each component is doing.
+
+---
+
+## Final Goal
+
+You should be able to take:
+
+    Python application
+          ↓
+    Git repository
+          ↓
+    Cloud/server
+          ↓
+    Production configuration
+          ↓
+    Domain
+          ↓
+    HTTPS
+          ↓
+    Public website/API
+
+and understand the entire journey.
+
+The key idea is:
+
+    Development:
+        "It works on my computer."
+
+    Deployment:
+        "It works on a server."
+
+    Production:
+        "It works reliably, securely and
+         can be monitored and maintained."
+
+You do not need to memorise every Linux command or AWS service.
+
+The important skill is understanding how the pieces fit together and being able to deploy, troubleshoot and maintain a real Python application.

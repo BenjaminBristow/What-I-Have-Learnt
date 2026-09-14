@@ -1,0 +1,1195 @@
+
+Python comes with a large standard library containing modules for mathematics, dates, files, data processing, networking, debugging, command-line programs and much more.
+
+before installing a third-party package, check whether the standard library already provides what you need.
+
+## math
+
+the `math` module provides mathematical functions and constants.
+
+example:
+
+import math
+
+print(math.sqrt(25))
+print(math.floor(3.8))
+print(math.ceil(3.2))
+print(math.pi)
+
+result:
+
+5.0
+3
+4
+3.141592653589793
+
+useful functions include:
+
+`math.sqrt()` - square root
+
+`math.pow()` - power
+
+`math.floor()` - round down
+
+`math.ceil()` - round up
+
+`math.factorial()` - factorial
+
+`math.gcd()` - greatest common divisor
+
+`math.sin()` - sine
+
+`math.cos()` - cosine
+
+`math.log()` - logarithm
+
+`math.pi` - pi
+
+## statistics
+
+the `statistics` module provides common statistical calculations.
+
+example:
+
+import statistics
+
+numbers = [10, 20, 20, 30, 40]
+
+print(statistics.mean(numbers))
+print(statistics.median(numbers))
+print(statistics.mode(numbers))
+
+result:
+
+24
+20
+20
+
+useful functions include:
+
+`mean()` - average
+
+`median()` - middle value
+
+`mode()` - most common value
+
+`stdev()` - standard deviation
+
+`variance()` - variance
+
+## random
+
+the `random` module generates pseudo-random values.
+
+example:
+
+import random
+
+print(random.randint(1, 10))
+
+choose a random item:
+
+colours = ["red", "blue", "green"]
+
+print(random.choice(colours))
+
+shuffle a list:
+
+numbers = [1, 2, 3, 4, 5]
+
+random.shuffle(numbers)
+
+print(numbers)
+
+useful functions include:
+
+`random()` - random float from 0 up to 1
+
+`randint()` - random integer within a range
+
+`choice()` - random item
+
+`choices()` - multiple random choices
+
+`sample()` - unique random selections
+
+`shuffle()` - randomly reorder a list
+
+the `random` module is not suitable for security-sensitive randomness.
+
+## datetime
+
+the `datetime` module works with dates and times.
+
+example:
+
+from datetime import datetime
+
+now = datetime.now()
+
+print(now)
+
+create a specific date:
+
+from datetime import date
+
+birthday = date(2005, 6, 15)
+
+print(birthday)
+
+useful classes include:
+
+`date` - date without a time
+
+`time` - time without a date
+
+`datetime` - date and time
+
+`timedelta` - difference between dates/times
+
+## timedelta
+
+`timedelta` represents a duration.
+
+example:
+
+from datetime import datetime, timedelta
+
+now = datetime.now()
+
+tomorrow = now + timedelta(days=1)
+
+print(tomorrow)
+
+you can use:
+
+days
+seconds
+microseconds
+milliseconds
+minutes
+hours
+weeks
+
+## Formatting dates
+
+use `strftime()` to convert a date into formatted text.
+
+example:
+
+from datetime import datetime
+
+now = datetime.now()
+
+print(now.strftime("%d/%m/%Y"))
+
+result:
+
+14/09/2026
+
+common format codes:
+
+`%d` - day
+
+`%m` - month
+
+`%Y` - four-digit year
+
+`%H` - hour
+
+`%M` - minute
+
+`%S` - second
+
+## Parsing dates
+
+use `strptime()` to convert text into a datetime.
+
+example:
+
+from datetime import datetime
+
+date = datetime.strptime(
+    "14/09/2026",
+    "%d/%m/%Y"
+)
+
+print(date)
+
+## time
+
+the `time` module provides lower-level time-related functionality.
+
+example:
+
+import time
+
+print(time.time())
+
+`time.time()` returns the current Unix timestamp.
+
+you can pause execution using:
+
+time.sleep(2)
+
+print("finished")
+
+this pauses the program for approximately two seconds.
+
+for measuring elapsed time, `time.perf_counter()` is often more appropriate.
+
+example:
+
+start = time.perf_counter()
+
+# code
+
+end = time.perf_counter()
+
+print(end - start)
+
+## collections
+
+the `collections` module provides specialised container types.
+
+important tools include:
+
+`Counter`
+
+`defaultdict`
+
+`deque`
+
+`namedtuple`
+
+## Counter
+
+`Counter` counts how many times values occur.
+
+example:
+
+from collections import Counter
+
+letters = ["a", "b", "a", "c", "a", "b"]
+
+counts = Counter(letters)
+
+print(counts)
+
+result:
+
+Counter({'a': 3, 'b': 2, 'c': 1})
+
+useful methods include:
+
+`most_common()`
+
+`update()`
+
+`subtract()`
+
+## defaultdict
+
+`defaultdict` automatically creates a default value when a missing key is accessed.
+
+example:
+
+from collections import defaultdict
+
+scores = defaultdict(int)
+
+scores["Ben"] += 1
+
+print(scores)
+
+result:
+
+defaultdict(<class 'int'>, {'Ben': 1})
+
+this is useful for grouping and counting.
+
+## deque
+
+`deque` is a double-ended queue.
+
+example:
+
+from collections import deque
+
+queue = deque()
+
+queue.append("A")
+queue.append("B")
+
+print(queue.popleft())
+
+result:
+
+A
+
+`deque` is efficient for adding and removing items from both ends.
+
+use it for queues where you frequently remove items from the front.
+
+## itertools
+
+the `itertools` module provides efficient tools for working with iterators.
+
+useful functions include:
+
+`count()`
+
+`cycle()`
+
+`repeat()`
+
+`chain()`
+
+`islice()`
+
+`product()`
+
+`permutations()`
+
+`combinations()`
+
+## itertools.chain
+
+`chain()` joins multiple iterables together.
+
+example:
+
+from itertools import chain
+
+numbers = chain([1, 2], [3, 4], [5, 6])
+
+print(list(numbers))
+
+result:
+
+[1, 2, 3, 4, 5, 6]
+
+## itertools.combinations
+
+`combinations()` generates combinations without repeating the same positions.
+
+example:
+
+from itertools import combinations
+
+numbers = [1, 2, 3]
+
+print(list(combinations(numbers, 2)))
+
+result:
+
+[(1, 2), (1, 3), (2, 3)]
+
+## itertools.permutations
+
+`permutations()` generates possible arrangements.
+
+example:
+
+from itertools import permutations
+
+numbers = [1, 2, 3]
+
+print(list(permutations(numbers)))
+
+## itertools.product
+
+`product()` generates Cartesian products.
+
+example:
+
+from itertools import product
+
+colours = ["red", "blue"]
+sizes = ["S", "M"]
+
+print(list(product(colours, sizes)))
+
+result:
+
+[('red', 'S'), ('red', 'M'), ('blue', 'S'), ('blue', 'M')]
+
+## functools
+
+the `functools` module contains tools for working with functions.
+
+useful features include:
+
+`reduce()`
+
+`partial()`
+
+`cache()`
+
+`lru_cache()`
+
+`wraps()`
+
+## functools.reduce
+
+`reduce()` repeatedly applies a function to an iterable.
+
+example:
+
+from functools import reduce
+
+numbers = [1, 2, 3, 4]
+
+result = reduce(lambda x, y: x + y, numbers)
+
+print(result)
+
+result:
+
+10
+
+normal loops or `sum()` are often clearer for simple cases.
+
+## functools.partial
+
+`partial()` creates a new function with some arguments already supplied.
+
+example:
+
+from functools import partial
+
+def multiply(a, b):
+    return a * b
+
+double = partial(multiply, 2)
+
+print(double(5))
+
+result:
+
+10
+
+## functools.cache
+
+`cache` remembers previous results of a function.
+
+example:
+
+from functools import cache
+
+@cache
+def fibonacci(n):
+
+    if n <= 1:
+        return n
+
+    return fibonacci(n - 1) + fibonacci(n - 2)
+
+print(fibonacci(40))
+
+this can dramatically improve recursive functions where the same inputs occur repeatedly.
+
+## operator
+
+the `operator` module provides function versions of common operators.
+
+example:
+
+import operator
+
+print(operator.add(2, 3))
+print(operator.mul(4, 5))
+
+result:
+
+5
+20
+
+useful functions include:
+
+`operator.add()`
+
+`operator.sub()`
+
+`operator.mul()`
+
+`operator.truediv()`
+
+`operator.eq()`
+
+`operator.lt()`
+
+`operator.gt()`
+
+`operator.itemgetter()`
+
+`operator.attrgetter()`
+
+these are especially useful with functions such as `sorted()`, `map()` and `itertools`.
+
+## heapq
+
+the `heapq` module provides a heap-based priority queue.
+
+a heap allows you to efficiently access the smallest item.
+
+example:
+
+import heapq
+
+numbers = [5, 1, 8, 2, 3]
+
+heapq.heapify(numbers)
+
+print(numbers)
+
+print(heapq.heappop(numbers))
+
+result:
+
+1
+
+useful functions include:
+
+`heapify()`
+
+`heappush()`
+
+`heappop()`
+
+`heappushpop()`
+
+`heapreplace()`
+
+`nlargest()`
+
+`nsmallest()`
+
+heaps are useful for priority queues and problems where you repeatedly need the smallest or largest values.
+
+## os
+
+the `os` module provides operating-system functionality.
+
+example:
+
+import os
+
+print(os.getcwd())
+
+get the contents of a directory:
+
+print(os.listdir())
+
+create a directory:
+
+os.mkdir("test")
+
+change directory:
+
+os.chdir("test")
+
+environment variables:
+
+print(os.environ.get("HOME"))
+
+`pathlib` is generally preferred for modern path manipulation.
+
+## sys
+
+the `sys` module provides access to Python interpreter functionality.
+
+example:
+
+import sys
+
+print(sys.version)
+
+command-line arguments:
+
+print(sys.argv)
+
+exit the program:
+
+sys.exit()
+
+useful features include:
+
+`sys.argv`
+
+`sys.path`
+
+`sys.version`
+
+`sys.platform`
+
+`sys.stdin`
+
+`sys.stdout`
+
+`sys.stderr`
+
+## pathlib
+
+`pathlib` provides an object-oriented way to work with filesystem paths.
+
+example:
+
+from pathlib import Path
+
+path = Path("data.txt")
+
+print(path.exists())
+print(path.name)
+print(path.suffix)
+
+read a file:
+
+text = path.read_text()
+
+write a file:
+
+path.write_text("hello")
+
+create a path:
+
+path = Path("data") / "example.txt"
+
+`pathlib` is usually preferable to manually constructing paths with strings.
+
+## shutil
+
+the `shutil` module provides high-level file operations.
+
+copy a file:
+
+import shutil
+
+shutil.copy("source.txt", "copy.txt")
+
+move a file:
+
+shutil.move("copy.txt", "data/copy.txt")
+
+copy a directory:
+
+shutil.copytree("folder", "backup")
+
+remove a directory tree:
+
+shutil.rmtree("backup")
+
+be careful with `rmtree()` because it permanently deletes the directory and its contents.
+
+## glob
+
+the `glob` module finds files using wildcard patterns.
+
+example:
+
+import glob
+
+files = glob.glob("*.txt")
+
+print(files)
+
+recursive search:
+
+files = glob.glob("**/*.py", recursive=True)
+
+`pathlib.Path.rglob()` is another useful option for recursive searches.
+
+## tempfile
+
+the `tempfile` module creates temporary files and directories.
+
+example:
+
+import tempfile
+
+with tempfile.NamedTemporaryFile(mode="w", delete=False) as file:
+    file.write("temporary data")
+    print(file.name)
+
+temporary files are useful when data only needs to exist for a short period.
+
+## subprocess
+
+the `subprocess` module allows Python to run external programs.
+
+example:
+
+import subprocess
+
+result = subprocess.run(
+    ["python", "--version"],
+    capture_output=True,
+    text=True
+)
+
+print(result.stdout)
+print(result.stderr)
+
+`subprocess` is useful when Python needs to communicate with another program.
+
+avoid using `shell=True` with untrusted input because it can create command-injection vulnerabilities.
+
+## json
+
+the `json` module converts between Python objects and JSON.
+
+Python object → JSON:
+
+import json
+
+data = {
+    "name": "Ben",
+    "age": 20
+}
+
+text = json.dumps(data)
+
+print(text)
+
+JSON → Python object:
+
+data = json.loads(text)
+
+print(data["name"])
+
+## JSON files
+
+you can directly read and write JSON files.
+
+example:
+
+with open("data.json", "w") as file:
+    json.dump(data, file, indent=4)
+
+read:
+
+with open("data.json", "r") as file:
+    data = json.load(file)
+
+## csv
+
+the `csv` module works with CSV files.
+
+example:
+
+import csv
+
+with open("people.csv", newline="") as file:
+
+    reader = csv.reader(file)
+
+    for row in reader:
+        print(row)
+
+writing CSV:
+
+with open("people.csv", "w", newline="") as file:
+
+    writer = csv.writer(file)
+
+    writer.writerow(["Name", "Age"])
+    writer.writerow(["Ben", 20])
+
+## sqlite3
+
+`sqlite3` provides a built-in interface to SQLite databases.
+
+create a database:
+
+import sqlite3
+
+connection = sqlite3.connect("database.db")
+
+cursor = connection.cursor()
+
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS people (
+    name TEXT,
+    age INTEGER
+)
+""")
+
+connection.commit()
+
+insert data:
+
+cursor.execute(
+    "INSERT INTO people VALUES (?, ?)",
+    ("Ben", 20)
+)
+
+connection.commit()
+
+query data:
+
+cursor.execute("SELECT * FROM people")
+
+rows = cursor.fetchall()
+
+print(rows)
+
+always use parameterised SQL values rather than constructing SQL queries by concatenating untrusted input.
+
+## re
+
+the `re` module provides regular expressions.
+
+example:
+
+import re
+
+text = "My number is 12345"
+
+match = re.search(r"\d+", text)
+
+if match:
+    print(match.group())
+
+result:
+
+12345
+
+useful functions include:
+
+`re.search()` - find a match anywhere
+
+`re.match()` - match from the beginning
+
+`re.fullmatch()` - require the entire string to match
+
+`re.findall()` - find all matches
+
+`re.sub()` - replace matches
+
+## Regular expression patterns
+
+common patterns include:
+
+`\d` - digit
+
+`\w` - word character
+
+`\s` - whitespace
+
+`.` - almost any character
+
+`+` - one or more
+
+`*` - zero or more
+
+`?` - zero or one
+
+`^` - start of string
+
+`$` - end of string
+
+`[]` - character set
+
+example:
+
+pattern = r"\d{3}"
+
+this matches exactly three digits.
+
+regular expressions are powerful, but for simple string operations, normal string methods are often easier to read.
+
+## typing
+
+the `typing` module provides tools for type hints.
+
+example:
+
+def add(a: int, b: int) -> int:
+    return a + b
+
+type hints do not normally enforce types at runtime.
+
+they help:
+- developers
+- IDEs
+- linters
+- static type checkers
+- documentation
+
+## Common typing tools
+
+useful types include:
+
+`list`
+
+`dict`
+
+`set`
+
+`tuple`
+
+`Optional`
+
+`Union`
+
+`Any`
+
+`Callable`
+
+`TypeVar`
+
+`Literal`
+
+`Protocol`
+
+modern Python generally allows built-in generic syntax:
+
+numbers: list[int]
+
+people: dict[str, int]
+
+## dataclasses
+
+the `dataclasses` module makes classes designed to store data easier to create.
+
+example:
+
+from dataclasses import dataclass
+
+@dataclass
+class Person:
+    name: str
+    age: int
+
+person = Person("Ben", 20)
+
+print(person)
+
+dataclasses automatically provide useful methods such as `__init__()` and `__repr__()`.
+
+## dataclass defaults
+
+example:
+
+from dataclasses import dataclass
+
+@dataclass
+class Person:
+    name: str
+    age: int = 18
+
+person = Person("Ben")
+
+print(person)
+
+result:
+
+Person(name='Ben', age=18)
+
+for mutable defaults, use `default_factory`.
+
+example:
+
+from dataclasses import dataclass, field
+
+@dataclass
+class Team:
+    members: list[str] = field(default_factory=list)
+
+## enum
+
+the `enum` module allows you to create named constants.
+
+example:
+
+from enum import Enum
+
+class Colour(Enum):
+    RED = 1
+    GREEN = 2
+    BLUE = 3
+
+print(Colour.RED)
+
+enums are useful when a value should come from a fixed set of choices.
+
+## logging
+
+the `logging` module provides structured application logging.
+
+example:
+
+import logging
+
+logging.basicConfig(level=logging.INFO)
+
+logging.debug("debug message")
+logging.info("program started")
+logging.warning("something may be wrong")
+logging.error("something went wrong")
+
+common logging levels:
+
+`DEBUG`
+
+`INFO`
+
+`WARNING`
+
+`ERROR`
+
+`CRITICAL`
+
+logging is generally better than using `print()` for diagnostics in larger applications.
+
+## Logging format
+
+you can configure the output format.
+
+example:
+
+import logging
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s"
+)
+
+logging.info("program started")
+
+## argparse
+
+the `argparse` module makes it possible to create command-line interfaces.
+
+example:
+
+import argparse
+
+parser = argparse.ArgumentParser()
+
+parser.add_argument("name")
+
+args = parser.parse_args()
+
+print(f"Hello {args.name}")
+
+running:
+
+python program.py Ben
+
+produces:
+
+Hello Ben
+
+you can also create optional arguments.
+
+example:
+
+parser.add_argument(
+    "--age",
+    type=int
+)
+
+then:
+
+python program.py Ben --age 20
+
+## Standard library decision making
+
+before installing a package, ask:
+
+does Python already provide this?
+
+for example:
+
+mathematics → `math`
+
+statistics → `statistics`
+
+dates → `datetime`
+
+random values → `random`
+
+queues/counting → `collections`
+
+iteration tools → `itertools`
+
+function utilities → `functools`
+
+priority queues → `heapq`
+
+files → `pathlib`
+
+file copying → `shutil`
+
+temporary files → `tempfile`
+
+external programs → `subprocess`
+
+JSON → `json`
+
+CSV → `csv`
+
+databases → `sqlite3`
+
+regular expressions → `re`
+
+type hints → `typing`
+
+data classes → `dataclasses`
+
+constants → `enum`
+
+logging → `logging`
+
+command-line programs → `argparse`
+
+## Standard library mindset
+
+you do not need to memorise every module.
+
+instead, learn:
+- what the standard library contains
+- which module solves a particular problem
+- how to find the documentation
+- how to recognise when a third-party package is unnecessary
+
+being able to think:
+
+"there is probably already a standard library module for this"
+
+is an important Python skill.
+
+## Goal
+
+before installing a package, know whether Python already provides what you need.
+
+you should be comfortable using:
+- `math`
+- `statistics`
+- `random`
+- `datetime`
+- `time`
+- `collections`
+- `itertools`
+- `functools`
+- `operator`
+- `heapq`
+- `os`
+- `sys`
+- `pathlib`
+- `shutil`
+- `glob`
+- `tempfile`
+- `subprocess`
+- `json`
+- `csv`
+- `sqlite3`
+- `re`
+- `typing`
+- `dataclasses`
+- `enum`
+- `logging`
+- `argparse`
+
+you should also know when to use the standard library, when a third-party package is justified, and where to look when you do not know the exact module or function.

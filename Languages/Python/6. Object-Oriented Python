@@ -1,0 +1,669 @@
+## Object-Oriented Python
+
+object-oriented programming (OOP) is a way of organising code around objects that combine data and behaviour
+classes define what an object should contain and do, while objects are the actual things created from those classes
+OOP is useful for keeping larger programs organised, reusable, and easier to maintain
+
+## Classes
+
+a class is a blueprint for creating objects
+it defines the attributes and methods that objects created from it can have
+
+example:
+
+class Person:
+    def greet(self):
+        print("hello")
+
+the class can then be used to create objects:
+
+person1 = Person()
+person2 = Person()
+
+`Person` is the class, while `person1` and `person2` are objects created from it
+
+## Objects
+
+an object is a specific instance of a class
+different objects created from the same class can contain different data
+
+example:
+
+class Person:
+    pass
+
+person1 = Person()
+person2 = Person()
+
+person1.name = "Ben"
+person2.name = "Alice"
+
+print(person1.name)
+print(person2.name)
+
+result:
+
+Ben
+Alice
+
+each object has its own state, even though both objects were created from the same class
+
+## Attributes
+
+attributes are variables belonging to an object or class
+they store information about an object
+
+example:
+
+class Person:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+person = Person("Ben", 20)
+
+print(person.name)
+print(person.age)
+
+result:
+
+Ben
+20
+
+attributes are normally accessed using dot notation:
+
+person.name
+person.age
+
+## Methods
+
+a method is a function defined inside a class
+methods describe behaviour that an object can perform
+
+example:
+
+class Person:
+    def greet(self):
+        print("hello")
+
+person = Person()
+person.greet()
+
+methods can accept additional parameters just like normal functions:
+
+class Person:
+    def greet(self, other):
+        print("hello", other)
+
+person = Person()
+person.greet("Alice")
+
+## self
+
+`self` refers to the current object that a method is operating on
+it allows a method to access that object's attributes and other methods
+
+example:
+
+class Person:
+    def __init__(self, name):
+        self.name = name
+
+    def greet(self):
+        print("hello", self.name)
+
+person = Person("Ben")
+person.greet()
+
+when `person.greet()` is called, `self` refers to `person`
+
+`self` is the conventional name for the first parameter of an instance method and should normally always be written as `self`
+
+## **init**
+
+`__init__` is a special method that runs automatically when an object is initialised
+it is normally used to set up the object's initial attributes
+
+example:
+
+class Person:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+person = Person("Ben", 20)
+
+when `Person("Ben", 20)` is created, Python automatically calls `__init__`
+
+technically, `__init__` initialises an object rather than creating it, although it is commonly called a constructor
+
+## Instance attributes
+
+an instance attribute belongs to one specific object
+different objects can therefore have different values
+
+example:
+
+class Person:
+    def __init__(self, name):
+        self.name = name
+
+person1 = Person("Ben")
+person2 = Person("Alice")
+
+print(person1.name)
+print(person2.name)
+
+result:
+
+Ben
+Alice
+
+using `self.name` creates an attribute belonging to that particular instance
+
+## Class attributes
+
+a class attribute belongs to the class and can be shared by all its objects
+
+example:
+
+class Person:
+    species = "human"
+
+    def __init__(self, name):
+        self.name = name
+
+person1 = Person("Ben")
+person2 = Person("Alice")
+
+print(person1.species)
+print(person2.species)
+print(Person.species)
+
+result:
+
+human
+human
+human
+
+class attributes are useful for values that should be shared across instances
+
+be careful with mutable class attributes such as lists and dictionaries because modifying them can affect every instance
+
+## Instance methods
+
+an instance method operates on a particular object
+it takes `self` as its first parameter
+
+example:
+
+class Dog:
+    def bark(self):
+        print("woof")
+
+dog = Dog()
+dog.bark()
+
+most normal methods inside a class are instance methods
+
+## Class methods
+
+a class method operates on the class rather than a specific object
+it uses the `@classmethod` decorator and takes `cls` as its first parameter
+
+example:
+
+class Person:
+    species = "human"
+
+    @classmethod
+    def get_species(cls):
+        return cls.species
+
+print(Person.get_species())
+
+`cls` refers to the class itself
+
+class methods are also useful for alternative ways of creating objects:
+
+class Person:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+    @classmethod
+    def from_string(cls, ):
+        name, age = .split(",")
+        return cls(name, int(age))
+
+person = Person.from_string("Ben,20")
+
+## Static methods
+
+a static method belongs logically to a class but does not need access to either the object or the class
+it uses the `@staticmethod` decorator
+
+example:
+
+class Maths:
+    @staticmethod
+    def add(a, b):
+        return a + b
+
+print(Maths.add(5, 3))
+
+static methods do not receive `self` or `cls`
+
+they are useful for helper functions that are related to a class but don't need any instance or class data
+
+## Instance vs class vs static methods
+
+instance method
+- uses self
+- works with a specific object
+- most common type
+
+class method
+- uses cls
+- works with the class
+- often used for alternative constructors
+
+static method
+- uses neither self nor cls
+- doesn't need object or class data
+
+## Properties
+
+a property allows a method to be accessed like an attribute
+it is useful when you need to control how an attribute is accessed or changed
+
+example:
+
+class Person:
+    def __init__(self, age):
+        self._age = age
+
+    @property
+    def age(self):
+        return self._age
+
+person = Person(20)
+
+print(person.age)
+
+`age` looks like a normal attribute when accessed, but Python actually calls the property method
+
+properties can also have setters:
+
+class Person:
+    def __init__(self, age):
+        self.age = age
+
+    @property
+    def age(self):
+        return self._age
+
+    @age.setter
+    def age(self, value):
+        if value < 0:
+            raise ValueError("age cannot be negative")
+        self._age = value
+
+person = Person(20)
+person.age = 21
+
+the setter allows the class to validate the value before storing it
+
+## Encapsulation
+
+encapsulation means keeping an object's internal data and implementation details controlled behind a public interface
+Python does not have strict private attributes, but it uses naming conventions
+
+a single underscore means an attribute is intended to be internal:
+
+class Person:
+    def __init__(self, age):
+        self._age = age
+
+double underscores trigger name mangling:
+
+class Person:
+    def __init__(self, age):
+        self.__age = age
+
+`__age` is internally changed to a name similar to `_Person__age`
+
+this is mainly used to prevent accidental name clashes, not to provide true security
+
+## Inheritance
+
+inheritance allows one class to reuse and extend another class
+the original class is the parent/base class and the new class is the child/subclass
+
+example:
+
+class Animal:
+    def speak(self):
+        print("some sound")
+
+
+class Dog(Animal):
+    pass
+
+dog = Dog()
+dog.speak()
+
+`Dog` inherits `speak()` from `Animal`
+
+a subclass can also add its own methods:
+
+class Dog(Animal):
+    def fetch(self):
+        print("fetching")
+
+inheritance represents an "is-a" relationship
+
+Dog is an Animal
+Car is a Vehicle
+Student is a Person
+
+## Method overriding
+
+a subclass can replace a method inherited from its parent
+
+example:
+
+class Animal:
+    def speak(self):
+        print("some sound")
+
+
+class Dog(Animal):
+    def speak(self):
+        print("woof")
+
+dog = Dog()
+dog.speak()
+
+result:
+
+woof
+
+the `Dog` version overrides the `Animal` version
+
+## Polymorphism
+
+polymorphism means different types of objects can be used through the same interface while behaving differently
+
+example:
+
+class Dog:
+    def speak(self):
+        print("woof")
+
+
+class Cat:
+    def speak(self):
+        print("meow")
+
+
+animals = [Dog(), Cat()]
+
+for animal in animals:
+    animal.speak()
+
+result:
+
+woof
+meow
+
+the loop doesn't need to know the exact type of each object — it only needs the object to provide a `speak()` method
+
+## Duck typing
+
+duck typing is Python's approach to polymorphism where the exact type of an object often doesn't matter
+if an object provides the behaviour you need, you can use it
+
+example:
+
+class Dog:
+    def speak(self):
+        print("woof")
+
+
+class Robot:
+    def speak(self):
+        print("beep")
+
+
+def make_speak(thing):
+    thing.speak()
+
+make_speak(Dog())
+make_speak(Robot())
+
+`Dog` and `Robot` don't need to inherit from the same class
+they simply need to provide the required `speak()` method
+
+## Abstraction
+
+abstraction means hiding unnecessary implementation details and exposing only the important interface
+
+for example:
+
+car.start()
+
+the user of the `Car` object doesn't need to know how the engine, fuel system, and electronics work internally
+
+abstraction lets you interact with complicated systems through simpler interfaces
+
+## Composition
+
+composition means building a class using other objects as components
+it represents a "has-a" relationship rather than an "is-a" relationship
+
+example:
+
+class Engine:
+    def start(self):
+        print("engine started")
+
+
+class Car:
+    def __init__(self):
+        self.engine = Engine()
+
+    def start(self):
+        self.engine.start()
+
+the `Car` has an `Engine`
+
+Inheritance:
+Dog is an Animal
+
+Composition:
+Car has an Engine
+
+composition is often preferable to inheritance when objects are made up of other objects
+
+## Multiple inheritance
+
+Python allows a class to inherit from multiple classes
+
+example:
+
+class Flyer:
+    def fly(self):
+        print("flying")
+
+
+class Swimmer:
+    def swim(self):
+        print("swimming")
+
+
+class Duck(Flyer, Swimmer):
+    pass
+
+duck = Duck()
+
+duck.fly()
+duck.swim()
+
+`Duck` inherits from both `Flyer` and `Swimmer`
+
+multiple inheritance can be useful but can make code more complicated when multiple parent classes provide methods with the same name
+
+## super()
+
+`super()` is used to access methods from a parent class or the next class in the Method Resolution Order
+
+a common use is calling a parent's `__init__`:
+
+class Animal:
+    def __init__(self, name):
+        self.name = name
+
+
+class Dog(Animal):
+    def __init__(self, name, breed):
+        super().__init__(name)
+        self.breed = breed
+
+dog = Dog("Buddy", "Labrador")
+
+`super().__init__(name)` runs the parent class's initialisation code
+
+`super()` is particularly important when working with inheritance and multiple inheritance
+
+## Method Resolution Order
+
+Method Resolution Order (MRO) is the order Python uses to search through classes for methods and attributes
+
+example:
+
+class A:
+    pass
+
+
+class B(A):
+    pass
+
+
+class C(B):
+    pass
+
+the MRO is:
+
+C → B → A → object
+
+you can view it with:
+
+print(C.mro())
+
+or:
+
+print(C.__mro__)
+
+with multiple inheritance, Python uses the MRO to determine which class's method should be used first
+
+`super()` follows this MRO rather than simply meaning "my direct parent"
+
+## Abstract base classes
+
+Abstract Base Classes (ABCs) allow you to define a class that specifies methods subclasses must implement
+
+Python provides them through the `abc` module
+
+example:
+
+from abc import ABC, abstractmethod
+
+
+class Animal(ABC):
+    @abstractmethod
+    def speak(self):
+        pass
+
+a subclass must implement `speak()` before it can be instantiated:
+
+class Dog(Animal):
+    def speak(self):
+        print("woof")
+
+dog = Dog()
+
+trying to instantiate `Animal` directly causes an error because it contains an abstract method
+
+ABCs are useful when you want to explicitly enforce an interface across a class hierarchy
+
+## Protocols
+
+a `Protocol` defines an interface based on what an object can do rather than what class it inherits from
+
+example:
+
+from typing import Protocol
+
+
+class Speaker(Protocol):
+    def speak(self) -> None:
+        ...
+
+a class doesn't need to inherit from `Speaker` to satisfy the protocol:
+
+class Dog:
+    def speak(self) -> None:
+        print("woof")
+
+
+class Robot:
+    def speak(self) -> None:
+        print("beep")
+
+both `Dog` and `Robot` have the required `speak()` method
+
+protocols are particularly useful with type hints and static type checkers
+
+## Abstract base classes vs protocols
+
+ABC
+- uses explicit inheritance
+- subclasses inherit from the ABC
+- can contain shared implementation
+- can enforce abstract methods
+- useful for controlled class hierarchies
+
+Protocol
+- doesn't require inheritance
+- focuses on required behaviour
+- works through structural typing
+- useful when unrelated classes can provide the same interface
+- works especially well with type hints
+
+## OOP design
+
+the goal of OOP is not to turn every piece of code into a class
+classes are useful when they make the program easier to organise, reuse, test, and maintain
+
+the main relationships to remember are:
+
+Class
+    ↓
+creates
+    ↓
+Objects
+    ↓
+contain
+    ↓
+Attributes + Methods
+
+Inheritance = "is-a"
+Composition = "has-a"
+Polymorphism = "different objects, same interface"
+Abstraction = "hide unnecessary implementation details"
+Encapsulation = "control access to internal state"
+
+when designing larger programs, prefer small focused classes, clear interfaces, composition where appropriate, and inheritance only when there is a genuine "is-a" relationship
+
+the goal is to design abstractions that make complicated programs easier to understand and extend

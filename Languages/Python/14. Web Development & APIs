@@ -1,0 +1,2746 @@
+
+Web development is the process of building applications that communicate over the internet.
+
+A modern web application usually looks something like:
+
+Browser
+    ↓
+HTTP/HTTPS
+    ↓
+Web server
+    ↓
+Python application
+    ↓
+Database
+    ↓
+Response
+    ↓
+Browser
+
+For example:
+
+User visits:
+https://example.com/posts
+
+The browser sends an HTTP request.
+
+The server processes it, potentially queries a database, and sends an HTTP response back.
+
+---
+
+## Web Fundamentals
+
+Before becoming advanced with Django, FastAPI or Flask, you should understand how the web actually works underneath them.
+
+---
+
+## HTTP
+
+HTTP = HyperText Transfer Protocol.
+
+It is the protocol used for communication between clients and web servers.
+
+A client might be:
+
+- Web browser
+- Mobile app
+- Python program
+- JavaScript application
+- Another server
+
+A server receives requests and sends responses.
+
+Basic flow:
+
+Client
+    ↓
+HTTP Request
+    ↓
+Server
+    ↓
+HTTP Response
+    ↓
+Client
+
+---
+
+## HTTP Request
+
+A request tells a server what the client wants.
+
+Example:
+
+GET /users HTTP/1.1
+Host: example.com
+
+A request contains things such as:
+
+- Method
+- URL/path
+- Headers
+- Optional body
+
+---
+
+## HTTP Methods
+
+The most important HTTP methods are:
+
+GET
+    Retrieve data
+
+POST
+    Create/send data
+
+PUT
+    Replace/update a resource
+
+PATCH
+    Partially update a resource
+
+DELETE
+    Delete a resource
+
+HEAD
+    Retrieve headers without the response body
+
+OPTIONS
+    Ask what operations/options are supported
+
+---
+
+## GET
+
+Used to retrieve data.
+
+Example:
+
+GET /users
+
+Could return:
+
+[
+    {"id": 1, "name": "Ben"},
+    {"id": 2, "name": "Alice"}
+]
+
+GET requests should generally not change server-side data.
+
+---
+
+## POST
+
+Used to create or submit data.
+
+Example:
+
+POST /users
+
+Body:
+
+{
+    "name": "Ben",
+    "email": "ben@example.com"
+}
+
+The server might create a new user.
+
+---
+
+## PUT
+
+Usually used to replace an entire resource.
+
+Example:
+
+PUT /users/1
+
+Body:
+
+{
+    "name": "Benjamin",
+    "email": "ben@example.com"
+}
+
+---
+
+## PATCH
+
+Used to partially update a resource.
+
+Example:
+
+PATCH /users/1
+
+Body:
+
+{
+    "name": "Benjamin"
+}
+
+Only the specified field needs to change.
+
+---
+
+## DELETE
+
+Deletes a resource.
+
+Example:
+
+DELETE /users/1
+
+---
+
+## HTTP Response
+
+The server sends a response back to the client.
+
+Example:
+
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+    "name": "Ben"
+}
+
+A response contains:
+
+- Status code
+- Headers
+- Optional body
+
+---
+
+## HTTP Status Codes
+
+Status codes are grouped into categories.
+
+1xx
+    Informational
+
+2xx
+    Success
+
+3xx
+    Redirection
+
+4xx
+    Client error
+
+5xx
+    Server error
+
+Important examples:
+
+200 OK
+    Request succeeded
+
+201 Created
+    Resource successfully created
+
+204 No Content
+    Successful request with no response body
+
+301 Moved Permanently
+    Resource permanently moved
+
+302 Found
+    Temporary redirect
+
+304 Not Modified
+    Cached version can be used
+
+400 Bad Request
+    Invalid request
+
+401 Unauthorized
+    Authentication required/failed
+
+403 Forbidden
+    Authenticated but not allowed
+
+404 Not Found
+    Resource does not exist
+
+405 Method Not Allowed
+    HTTP method isn't supported
+
+409 Conflict
+    Request conflicts with current state
+
+422 Unprocessable Content
+    Request is understood but contains invalid data
+
+429 Too Many Requests
+    Rate limit exceeded
+
+500 Internal Server Error
+    Server-side error
+
+502 Bad Gateway
+    Server received an invalid response from another server
+
+503 Service Unavailable
+    Server temporarily unavailable
+
+---
+
+## 401 vs 403
+
+This distinction is extremely important.
+
+401:
+
+"You haven't successfully authenticated."
+
+403:
+
+"You are authenticated, but you aren't allowed to do this."
+
+Example:
+
+User isn't logged in:
+
+GET /my-profile
+
+→ 401
+
+User is logged in but tries to access an admin page:
+
+GET /admin
+
+→ 403
+
+---
+
+## HTTP Headers
+
+Headers provide additional information about requests and responses.
+
+Example:
+
+Content-Type: application/json
+
+Common request headers:
+
+Authorization
+    Authentication information
+
+Content-Type
+    Format of the request body
+
+Accept
+    Formats the client accepts
+
+User-Agent
+    Information about the client
+
+Cookie
+    Sends cookies to the server
+
+Common response headers:
+
+Content-Type
+    Format of the response
+
+Set-Cookie
+    Creates/updates cookies
+
+Cache-Control
+    Controls caching
+
+Location
+    Specifies a redirect/resource location
+
+Access-Control-Allow-Origin
+    Controls CORS access
+
+---
+
+## Content-Type
+
+Tells the server/client what format the data uses.
+
+JSON:
+
+Content-Type: application/json
+
+HTML:
+
+Content-Type: text/html
+
+Form data:
+
+Content-Type: application/x-www-form-urlencoded
+
+File upload:
+
+Content-Type: multipart/form-data
+
+---
+
+## JSON
+
+JSON = JavaScript Object Notation.
+
+It is one of the most common formats used by APIs.
+
+Example:
+
+{
+    "name": "Ben",
+    "age": 20,
+    "skills": [
+        "Python",
+        "Java"
+    ]
+}
+
+JSON supports:
+
+- Strings
+- Numbers
+- Booleans
+- Null
+- Arrays
+- Objects
+
+---
+
+## HTTPS
+
+HTTPS = HTTP Secure.
+
+It uses TLS to encrypt communication between the client and server.
+
+HTTP:
+
+Client
+    ↓
+Unencrypted communication
+    ↓
+Server
+
+HTTPS:
+
+Client
+    ↓
+Encrypted TLS connection
+    ↓
+Server
+
+HTTPS protects against people intercepting sensitive information.
+
+Always use HTTPS for production websites and APIs.
+
+---
+
+## TLS
+
+TLS provides secure communication over a network.
+
+It provides:
+
+- Encryption
+- Authentication
+- Integrity
+
+You will often hear:
+
+"SSL certificate"
+
+Modern systems use TLS, although "SSL certificate" is still commonly used as a general term.
+
+---
+
+## URLs
+
+A URL identifies a resource.
+
+Example:
+
+https://example.com/users/42?active=true
+
+Parts:
+
+https
+    Protocol/scheme
+
+example.com
+    Domain
+
+/users/42
+    Path
+
+?active=true
+    Query string
+
+---
+
+## Query Parameters
+
+Query parameters provide additional information.
+
+Example:
+
+/products?category=computers&sort=price
+
+The parameters are:
+
+category=computers
+sort=price
+
+In Django or FastAPI, these can be read by the application.
+
+---
+
+## Path Parameters
+
+A path parameter identifies a particular resource.
+
+Example:
+
+/users/42
+
+Here:
+
+42
+
+could represent the user's ID.
+
+Compare:
+
+/users/42
+
+with:
+
+/users?id=42
+
+Both can identify a user, but they represent different URL designs.
+
+REST APIs commonly use:
+
+/users/42
+
+---
+
+## DNS
+
+DNS = Domain Name System.
+
+DNS converts domain names into IP addresses.
+
+Instead of remembering:
+
+93.184.216.34
+
+you can use:
+
+example.com
+
+Basic process:
+
+Browser
+    ↓
+DNS lookup
+    ↓
+IP address
+    ↓
+Server
+
+---
+
+## Domain Names
+
+Example:
+
+www.example.com
+
+The domain is made from different levels.
+
+.com
+    Top-level domain
+
+example
+    Domain name
+
+www
+    Subdomain
+
+Other examples:
+
+.co.uk
+.org
+.net
+.dev
+
+---
+
+## DNS Records
+
+Common DNS record types:
+
+A
+    Domain → IPv4 address
+
+AAAA
+    Domain → IPv6 address
+
+CNAME
+    Alias for another domain
+
+MX
+    Mail server
+
+TXT
+    Text information, often used for verification/security
+
+NS
+    Nameservers for the domain
+
+---
+
+## Browser Request Process
+
+When you enter:
+
+https://example.com
+
+a simplified process is:
+
+1. Browser checks its cache
+2. DNS resolves the domain
+3. Browser connects to the server
+4. TLS handshake occurs for HTTPS
+5. Browser sends HTTP request
+6. Server processes request
+7. Server sends HTTP response
+8. Browser processes the response
+9. HTML/CSS/JavaScript are loaded
+10. Browser renders the page
+
+Understanding this process makes web development much easier.
+
+---
+
+## Cookies
+
+Cookies are small pieces of data stored by the browser and associated with a website.
+
+Example:
+
+session_id=abc123
+
+Cookies can be used for:
+
+- Sessions
+- Preferences
+- Authentication
+- Tracking
+
+A server can send:
+
+Set-Cookie: session_id=abc123
+
+The browser can then send:
+
+Cookie: session_id=abc123
+
+on later requests.
+
+---
+
+## Cookie Security
+
+Important cookie attributes include:
+
+Secure
+    Only send the cookie over HTTPS
+
+HttpOnly
+    JavaScript cannot access the cookie
+
+SameSite
+    Controls when cookies are sent with cross-site requests
+
+Example:
+
+Set-Cookie: session_id=abc123; Secure; HttpOnly; SameSite=Lax
+
+These settings are important for protecting authentication sessions.
+
+---
+
+## Sessions
+
+HTTP itself is stateless.
+
+That means each request is generally independent.
+
+For example:
+
+Request 1:
+    GET /login
+
+Request 2:
+    GET /profile
+
+The server needs some way to know that both requests belong to the same logged-in user.
+
+Sessions solve this.
+
+Typical flow:
+
+User logs in
+    ↓
+Server creates session
+    ↓
+Server gives browser session cookie
+    ↓
+Browser sends cookie with future requests
+    ↓
+Server identifies user
+
+---
+
+## Authentication
+
+Authentication asks:
+
+"Who are you?"
+
+Examples:
+
+- Username/password
+- Session cookie
+- API key
+- JWT
+- OAuth
+- Passkeys
+
+---
+
+## Authorisation
+
+Authorisation asks:
+
+"What are you allowed to do?"
+
+Example:
+
+Authentication:
+
+"Ben is logged in."
+
+Authorisation:
+
+"Ben is allowed to edit his own post."
+
+But:
+
+"Ben is not allowed to delete another user's private account."
+
+Remember:
+
+Authentication
+    = Who are you?
+
+Authorisation
+    = What can you do?
+
+---
+
+# HTML
+
+HTML = HyperText Markup Language.
+
+HTML defines the structure of a web page.
+
+Example:
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Website</title>
+</head>
+<body>
+    <h1>Hello World</h1>
+    <p>This is my website.</p>
+</body>
+</html>
+
+---
+
+## Common HTML Elements
+
+Important elements include:
+
+<h1>
+    Main heading
+
+<h2>
+    Subheading
+
+<p>
+    Paragraph
+
+<a>
+    Link
+
+<img>
+    Image
+
+<div>
+    Generic container
+
+<span>
+    Inline container
+
+<button>
+    Button
+
+<form>
+    Form
+
+<input>
+    Input field
+
+<textarea>
+    Multi-line input
+
+<select>
+    Dropdown
+
+<ul>
+    Unordered list
+
+<ol>
+    Ordered list
+
+<li>
+    List item
+
+<header>
+    Header
+
+<nav>
+    Navigation
+
+<main>
+    Main content
+
+<section>
+    Section
+
+<footer>
+    Footer
+
+---
+
+## HTML Attributes
+
+Attributes provide additional information.
+
+Example:
+
+<a href="https://example.com">
+    Website
+</a>
+
+Here:
+
+href
+
+is an attribute.
+
+Another example:
+
+<img src="image.jpg" alt="A picture">
+
+Important attributes include:
+
+id
+class
+href
+src
+alt
+name
+value
+type
+placeholder
+
+---
+
+## Semantic HTML
+
+Semantic elements describe what content means.
+
+Examples:
+
+<header>
+<nav>
+<main>
+<article>
+<section>
+<aside>
+<footer>
+
+Prefer semantic HTML over using <div> for absolutely everything.
+
+Benefits include:
+
+- Accessibility
+- SEO
+- Maintainability
+- Clearer structure
+
+---
+
+# CSS
+
+CSS = Cascading Style Sheets.
+
+CSS controls how HTML looks.
+
+Example:
+
+body {
+    font-family: Arial;
+}
+
+h1 {
+    font-size: 32px;
+}
+
+---
+
+## CSS Selectors
+
+Element selector:
+
+p {
+    color: black;
+}
+
+Class selector:
+
+.card {
+    padding: 20px;
+}
+
+ID selector:
+
+#header {
+    height: 100px;
+}
+
+Attribute selector:
+
+input[type="text"] {
+    border: 1px solid black;
+}
+
+---
+
+## CSS Box Model
+
+Every element can be thought of as:
+
+Content
+    ↓
+Padding
+    ↓
+Border
+    ↓
+Margin
+
+Example:
+
+.card {
+    padding: 20px;
+    border: 1px solid black;
+    margin: 10px;
+}
+
+Understanding the box model is essential for layout.
+
+---
+
+## CSS Layout
+
+Important layout systems:
+
+- Normal flow
+- Flexbox
+- Grid
+- Positioning
+
+Flexbox:
+
+.container {
+    display: flex;
+}
+
+Grid:
+
+.container {
+    display: grid;
+}
+
+---
+
+## Responsive Design
+
+Websites need to work across different screen sizes.
+
+Common approaches:
+
+- Flexible layouts
+- Relative units
+- Flexbox
+- CSS Grid
+- Media queries
+
+Example:
+
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+}
+
+---
+
+# JavaScript Fundamentals
+
+JavaScript is the primary programming language used to make web pages interactive in the browser.
+
+HTML:
+    Structure
+
+CSS:
+    Appearance
+
+JavaScript:
+    Behaviour
+
+---
+
+## JavaScript Variables
+
+Modern JavaScript primarily uses:
+
+let
+const
+
+Example:
+
+const name = "Ben";
+let age = 20;
+
+Prefer `const` when the variable does not need reassignment.
+
+---
+
+## JavaScript Data Types
+
+Common types:
+
+string
+number
+boolean
+null
+undefined
+object
+bigint
+symbol
+
+Arrays are objects in JavaScript.
+
+Example:
+
+const numbers = [1, 2, 3];
+
+---
+
+## Functions
+
+Example:
+
+function add(a, b) {
+    return a + b;
+}
+
+const result = add(5, 3);
+
+---
+
+## Arrow Functions
+
+Modern JavaScript commonly uses arrow functions:
+
+const add = (a, b) => {
+    return a + b;
+};
+
+Short form:
+
+const add = (a, b) => a + b;
+
+---
+
+## Objects
+
+Example:
+
+const user = {
+    name: "Ben",
+    age: 20
+};
+
+Access properties:
+
+user.name
+
+user.age
+
+---
+
+## DOM
+
+DOM = Document Object Model.
+
+The browser converts HTML into a tree-like structure that JavaScript can manipulate.
+
+Example:
+
+const heading = document.querySelector("h1");
+
+heading.textContent = "New Heading";
+
+---
+
+## Events
+
+JavaScript can respond to user actions.
+
+Example:
+
+const button = document.querySelector("button");
+
+button.addEventListener("click", () => {
+    alert("Button clicked!");
+});
+
+Common events:
+
+click
+submit
+input
+change
+keydown
+keyup
+mouseover
+load
+
+---
+
+## Fetch API
+
+JavaScript can communicate with APIs using `fetch()`.
+
+Example:
+
+fetch("/api/users")
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+    });
+
+Modern JavaScript often uses async/await:
+
+async function getUsers() {
+    const response = await fetch("/api/users");
+    const data = await response.json();
+
+    console.log(data);
+}
+
+---
+
+# Python Web Development
+
+Python has several major web frameworks.
+
+The three important ones to understand are:
+
+Django
+FastAPI
+Flask
+
+They overlap, but they are designed with different philosophies.
+
+---
+
+# Django
+
+Django is a full-featured Python web framework.
+
+It includes:
+
+- URL routing
+- Views
+- Templates
+- ORM
+- Database migrations
+- Authentication
+- Admin interface
+- Forms
+- Security features
+- Middleware
+- Sessions
+- CSRF protection
+
+Django is excellent for building complete web applications.
+
+---
+
+## Django Architecture
+
+A simplified Django application looks like:
+
+Browser
+    ↓
+URL
+    ↓
+Django URL configuration
+    ↓
+View
+    ↓
+Business logic
+    ↓
+ORM
+    ↓
+Database
+    ↓
+Template / JSON response
+    ↓
+Browser
+
+---
+
+## Django URLs
+
+Example:
+
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path("users/", views.users),
+]
+
+This connects:
+
+/users/
+
+to:
+
+views.users
+
+---
+
+## Django Views
+
+Example:
+
+from django.http import HttpResponse
+
+def users(request):
+    return HttpResponse("Users")
+
+A view receives a request and returns a response.
+
+---
+
+## Django Templates
+
+Django can generate HTML dynamically.
+
+Example:
+
+<h1>Hello {{ name }}</h1>
+
+Python:
+
+return render(
+    request,
+    "home.html",
+    {"name": "Ben"}
+)
+
+The template becomes:
+
+Hello Ben
+
+---
+
+## Django Forms
+
+Django provides tools for handling user input.
+
+Forms can handle:
+
+- Validation
+- User input
+- HTML generation
+- Error messages
+- Security
+
+---
+
+## Django Authentication
+
+Django has a built-in authentication system.
+
+It supports concepts such as:
+
+- Users
+- Passwords
+- Sessions
+- Permissions
+- Groups
+- Login
+- Logout
+
+---
+
+## Django Middleware
+
+Middleware sits between the request and response.
+
+Simplified:
+
+Request
+    ↓
+Middleware
+    ↓
+View
+    ↓
+Middleware
+    ↓
+Response
+
+Middleware can handle things like:
+
+- Authentication
+- Security
+- Sessions
+- Logging
+- Request processing
+
+---
+
+# FastAPI
+
+FastAPI is a modern Python framework particularly well suited to APIs.
+
+Example:
+
+from fastapi import FastAPI
+
+app = FastAPI()
+
+@app.get("/users")
+def get_users():
+    return {"users": []}
+
+FastAPI provides:
+
+- Fast API development
+- Type-hint-based validation
+- Automatic API documentation
+- Async support
+- Modern Python features
+
+---
+
+## FastAPI Path Parameters
+
+Example:
+
+@app.get("/users/{user_id}")
+def get_user(user_id: int):
+    return {"user_id": user_id}
+
+The `int` type hint tells FastAPI that `user_id` should be an integer.
+
+---
+
+## FastAPI Query Parameters
+
+Example:
+
+@app.get("/users")
+def get_users(limit: int = 10):
+    return {"limit": limit}
+
+Request:
+
+/users?limit=20
+
+FastAPI handles the parameter and validation.
+
+---
+
+## FastAPI Request Bodies
+
+Using Pydantic models:
+
+from pydantic import BaseModel
+
+class User(BaseModel):
+    name: str
+    age: int
+
+@app.post("/users")
+def create_user(user: User):
+    return user
+
+FastAPI validates incoming data.
+
+---
+
+# Flask
+
+Flask is a lightweight Python web framework.
+
+Example:
+
+from flask import Flask
+
+app = Flask(__name__)
+
+@app.route("/")
+def home():
+    return "Hello World"
+
+Flask provides a minimal core.
+
+You can add functionality through extensions and libraries.
+
+---
+
+## Django vs FastAPI vs Flask
+
+Django:
+
+Best for:
+    Full web applications
+
+Strengths:
+    Lots built in
+    ORM
+    Authentication
+    Admin
+    Templates
+    Forms
+
+FastAPI:
+
+Best for:
+    APIs and modern backend services
+
+Strengths:
+    Type hints
+    Validation
+    Automatic API docs
+    Async support
+
+Flask:
+
+Best for:
+    Lightweight/custom applications
+
+Strengths:
+    Simple
+    Flexible
+    Minimal
+    Easy to understand
+
+---
+
+# APIs
+
+API = Application Programming Interface.
+
+A web API allows software systems to communicate.
+
+Example:
+
+Your application:
+
+GET /api/users
+
+Server:
+
+{
+    "users": [
+        {
+            "id": 1,
+            "name": "Ben"
+        }
+    ]
+}
+
+The client can use this data without knowing how the server stores it internally.
+
+---
+
+# REST
+
+REST = Representational State Transfer.
+
+REST is a common architectural style for web APIs.
+
+A REST API generally models resources.
+
+Example:
+
+/users
+/users/1
+/posts
+/posts/42
+/comments
+
+---
+
+## REST CRUD
+
+Users:
+
+GET /users
+    Get users
+
+POST /users
+    Create user
+
+GET /users/1
+    Get user 1
+
+PUT /users/1
+    Replace user 1
+
+PATCH /users/1
+    Update part of user 1
+
+DELETE /users/1
+    Delete user 1
+
+This maps HTTP methods to operations on resources.
+
+---
+
+## REST Principles
+
+Important REST ideas include:
+
+- Resources
+- Stateless requests
+- Standard HTTP methods
+- Representations such as JSON
+- Clear resource URLs
+- Appropriate HTTP status codes
+
+REST APIs should generally avoid relying on server-side conversational state between requests.
+
+---
+
+# JSON APIs
+
+JSON is the most common format for modern web APIs.
+
+Example response:
+
+{
+    "id": 1,
+    "name": "Ben",
+    "email": "ben@example.com"
+}
+
+Nested data:
+
+{
+    "id": 1,
+    "name": "Ben",
+    "posts": [
+        {
+            "id": 10,
+            "title": "My First Post"
+        },
+        {
+            "id": 11,
+            "title": "Another Post"
+        }
+    ]
+}
+
+---
+
+# API Authentication
+
+Authentication verifies who is making the API request.
+
+Common approaches:
+
+- Session authentication
+- API keys
+- JWT
+- OAuth 2.0
+- OpenID Connect
+
+The correct method depends on the application.
+
+---
+
+# API Keys
+
+An API key is a secret/token identifying the client.
+
+Example:
+
+Authorization: Api-Key abc123
+
+or:
+
+X-API-Key: abc123
+
+API keys are commonly used for:
+
+- Server-to-server APIs
+- Third-party services
+- Developer APIs
+
+Never expose secret API keys in frontend JavaScript.
+
+---
+
+# JWT
+
+JWT = JSON Web Token.
+
+A JWT is a token containing claims that can be cryptographically signed.
+
+Simplified structure:
+
+header.payload.signature
+
+Example concept:
+
+Header:
+    Algorithm/type
+
+Payload:
+    User information/claims
+
+Signature:
+    Used to verify the token
+
+A client might send:
+
+Authorization: Bearer <token>
+
+---
+
+## JWT Flow
+
+Typical flow:
+
+User logs in
+    ↓
+Server verifies credentials
+    ↓
+Server creates token
+    ↓
+Client stores token
+    ↓
+Client sends token with requests
+    ↓
+Server validates token
+    ↓
+Request is accepted/rejected
+
+JWTs are useful, but they are not automatically better than sessions.
+
+---
+
+## JWT Security
+
+Important points:
+
+- Use HTTPS
+- Keep token lifetimes appropriate
+- Validate signatures
+- Validate claims
+- Don't put sensitive secrets in the payload
+- Think carefully about token storage
+- Have a strategy for revocation/expiry
+
+JWT payloads are encoded, not inherently encrypted.
+
+Do not assume:
+
+"JWT = encrypted data."
+
+---
+
+# Authorisation
+
+After authentication, the server needs to determine what the user can do.
+
+Example:
+
+User:
+    Ben
+
+Permissions:
+
+Can view posts
+Can create posts
+Can edit own posts
+Cannot edit Alice's posts
+Cannot access admin panel
+
+This can be implemented using:
+
+- Permissions
+- Roles
+- Groups
+- Ownership checks
+- Scopes
+
+---
+
+# Role-Based Access Control
+
+Example roles:
+
+User
+Moderator
+Admin
+
+User:
+
+Can create posts
+
+Moderator:
+
+Can remove inappropriate posts
+
+Admin:
+
+Can manage users
+
+This is commonly called RBAC:
+
+Role-Based Access Control
+
+---
+
+# API Pagination
+
+APIs shouldn't necessarily return thousands or millions of records in one response.
+
+Instead:
+
+GET /api/posts?page=1&page_size=20
+
+Response:
+
+{
+    "results": [...],
+    "page": 1,
+    "page_size": 20,
+    "total": 500
+}
+
+Pagination reduces:
+
+- Response size
+- Database load
+- Memory usage
+- Network usage
+- Client processing
+
+---
+
+## Offset Pagination
+
+Example:
+
+/posts?limit=20&offset=40
+
+This means:
+
+Skip 40 records
+Return the next 20
+
+Simple and widely used.
+
+---
+
+## Cursor Pagination
+
+Instead of offsets, the API uses a cursor representing a position in the dataset.
+
+Example:
+
+/posts?cursor=abc123
+
+Cursor pagination can perform better for very large or frequently changing datasets.
+
+---
+
+# Rate Limiting
+
+Rate limiting restricts how frequently a client can make requests.
+
+Example:
+
+100 requests per minute
+
+If the limit is exceeded:
+
+429 Too Many Requests
+
+Rate limiting helps prevent:
+
+- Abuse
+- Accidental overload
+- Brute-force attacks
+- Excessive API usage
+
+Common approaches include:
+
+- Requests per second
+- Requests per minute
+- Token bucket
+- Leaky bucket
+
+---
+
+# Webhooks
+
+A webhook allows one system to notify another system when an event occurs.
+
+Without a webhook:
+
+Your application repeatedly asks:
+
+"Did anything happen?"
+
+"Did anything happen?"
+
+"Did anything happen?"
+
+This is polling.
+
+With a webhook:
+
+Event occurs
+    ↓
+Service sends HTTP request
+    ↓
+Your server receives it
+    ↓
+Your server processes the event
+
+Example:
+
+Payment completed
+    ↓
+Payment provider
+    ↓
+POST /webhooks/payment
+    ↓
+Your application
+
+---
+
+## Webhook Security
+
+Never blindly trust incoming webhook requests.
+
+Common protections include:
+
+- Signature verification
+- HTTPS
+- Secret tokens
+- Timestamp validation
+- Replay protection
+- Idempotency
+
+---
+
+# Idempotency
+
+An operation is idempotent if repeating it produces the same final result.
+
+This is particularly important for APIs and payments.
+
+Imagine:
+
+POST /payments
+
+The request succeeds, but the response gets lost.
+
+The client retries.
+
+Without protection, you might accidentally charge the customer twice.
+
+An idempotency key can prevent duplicate processing.
+
+Example:
+
+Idempotency-Key: abc123
+
+The server remembers that request and avoids processing the same operation twice.
+
+---
+
+# API Versioning
+
+APIs change over time.
+
+Suppose version 1 returns:
+
+{
+    "name": "Ben"
+}
+
+Later you need to change the format.
+
+Existing applications may depend on the old response.
+
+Versioning allows different API versions to coexist.
+
+Example:
+
+/api/v1/users
+
+/api/v2/users
+
+---
+
+## Versioning Strategies
+
+Common approaches include:
+
+URL:
+
+/api/v1/users
+
+Header:
+
+Accept: application/vnd.example.v1+json
+
+Query parameter:
+
+/users?version=1
+
+URL versioning is simple and commonly used.
+
+---
+
+# API Error Handling
+
+APIs should return useful errors.
+
+Example:
+
+HTTP 400
+
+{
+    "error": "Invalid email address"
+}
+
+More structured:
+
+{
+    "error": {
+        "code": "INVALID_EMAIL",
+        "message": "The supplied email address is invalid."
+    }
+}
+
+Clients should be able to understand what went wrong.
+
+---
+
+# API Documentation
+
+A professional API should be documented.
+
+Documentation should explain:
+
+- Endpoints
+- HTTP methods
+- Parameters
+- Request bodies
+- Response formats
+- Status codes
+- Authentication
+- Errors
+- Rate limits
+- Examples
+
+OpenAPI is a common standard for describing APIs.
+
+FastAPI can automatically generate OpenAPI documentation.
+
+---
+
+# CORS
+
+CORS = Cross-Origin Resource Sharing.
+
+Browsers restrict certain cross-origin requests for security reasons.
+
+Example:
+
+Frontend:
+
+https://frontend.example.com
+
+API:
+
+https://api.example.com
+
+These are different origins.
+
+The server can use CORS headers to specify which origins are allowed.
+
+Example:
+
+Access-Control-Allow-Origin: https://frontend.example.com
+
+CORS is primarily a browser security mechanism.
+
+It does not replace API authentication or authorisation.
+
+---
+
+# CSRF
+
+CSRF = Cross-Site Request Forgery.
+
+It involves tricking a user's browser into sending an unwanted authenticated request.
+
+This is particularly relevant to cookie-based authentication.
+
+Django includes built-in CSRF protection.
+
+Important distinction:
+
+CSRF
+    Protects against unwanted authenticated browser requests
+
+CORS
+    Controls which browser origins may make certain cross-origin requests
+
+They solve different problems.
+
+---
+
+# Web Application Security
+
+You should understand:
+
+- HTTPS
+- Authentication
+- Authorisation
+- Password hashing
+- Session security
+- CSRF
+- XSS
+- SQL injection
+- CORS
+- Rate limiting
+- Input validation
+- Secure cookies
+- Secret management
+
+Never store passwords as plain text.
+
+Use a secure password hashing system provided by a trusted framework/library.
+
+---
+
+# XSS
+
+XSS = Cross-Site Scripting.
+
+An attacker attempts to inject malicious JavaScript into a website.
+
+Example dangerous user input:
+
+<script>
+    maliciousCode();
+</script>
+
+Applications should properly escape/sanitise untrusted content.
+
+Modern frameworks provide protections, but developers still need to understand how XSS happens.
+
+---
+
+# Deployment
+
+Developing locally is only part of web development.
+
+A production application typically involves:
+
+User
+    ↓
+DNS
+    ↓
+HTTPS
+    ↓
+Reverse proxy / web server
+    ↓
+Application server
+    ↓
+Python application
+    ↓
+Database
+
+For example:
+
+Browser
+    ↓
+Nginx
+    ↓
+Gunicorn/Uvicorn
+    ↓
+Django/FastAPI
+    ↓
+PostgreSQL
+
+---
+
+## Development vs Production
+
+Development:
+
+- Debugging enabled
+- Local database
+- Local server
+- Development settings
+- Detailed errors
+
+Production:
+
+- Debugging disabled
+- HTTPS
+- Secure secrets
+- Production database
+- Logging
+- Monitoring
+- Proper application server
+- Backups
+- Security configuration
+
+Never deploy a Django application with:
+
+DEBUG = True
+
+---
+
+# Environment Variables
+
+Production configuration should not be hard-coded.
+
+Example:
+
+import os
+
+SECRET_KEY = os.environ["SECRET_KEY"]
+
+DATABASE_URL = os.environ["DATABASE_URL"]
+
+Environment variables are commonly used for:
+
+- Database credentials
+- Secret keys
+- API keys
+- Configuration
+- Production settings
+
+---
+
+# WSGI and ASGI
+
+Python web applications commonly use application interfaces between the Python framework and server.
+
+WSGI:
+
+Web Server Gateway Interface
+
+Commonly used for traditional synchronous Python web applications.
+
+ASGI:
+
+Asynchronous Server Gateway Interface
+
+Supports modern asynchronous applications and protocols.
+
+ASGI can support:
+
+- Async HTTP
+- WebSockets
+- Long-lived connections
+
+Django supports ASGI.
+
+FastAPI is designed around ASGI.
+
+---
+
+# WebSockets
+
+HTTP normally follows:
+
+Request
+    ↓
+Response
+
+WebSockets allow a persistent two-way connection.
+
+Client ←→ Server
+
+Useful for:
+
+- Live chat
+- Multiplayer games
+- Live notifications
+- Real-time dashboards
+- Collaborative applications
+
+---
+
+# Background Tasks
+
+Some operations shouldn't block the HTTP request.
+
+For example:
+
+User uploads a video
+    ↓
+Application receives upload
+    ↓
+Background worker processes video
+    ↓
+User doesn't need to wait for everything
+
+Common tools in Python ecosystems include:
+
+- Celery
+- Redis
+- Task queues
+
+This becomes important as applications grow.
+
+---
+
+# Caching
+
+Caching stores frequently used data so it doesn't need to be repeatedly calculated or retrieved.
+
+Example:
+
+Without cache:
+
+Request
+    ↓
+Database
+    ↓
+Response
+
+With cache:
+
+Request
+    ↓
+Cache
+    ↓
+Response
+
+If data isn't cached:
+
+Request
+    ↓
+Cache miss
+    ↓
+Database
+    ↓
+Cache
+    ↓
+Response
+
+Common caching systems include:
+
+- Redis
+- Memcached
+- Application-level caching
+- Browser caching
+- CDN caching
+
+---
+
+# Full Web Application Architecture
+
+A larger Python application might look like:
+
+Browser
+    ↓
+DNS
+    ↓
+HTTPS
+    ↓
+Reverse Proxy
+    ↓
+Django / FastAPI
+    ↓
+Authentication
+    ↓
+Business Logic
+    ↓
+ORM
+    ↓
+PostgreSQL
+
+Alongside this:
+
+Redis
+    ↓
+Caching / background jobs
+
+Worker
+    ↓
+Background tasks
+
+Object Storage
+    ↓
+Images / files
+
+Monitoring
+    ↓
+Logs / metrics / errors
+
+---
+
+# Example REST API
+
+Imagine a blog application.
+
+Resources:
+
+/api/users
+/api/posts
+/api/comments
+
+User endpoints:
+
+GET /api/users
+POST /api/users
+GET /api/users/1
+PATCH /api/users/1
+DELETE /api/users/1
+
+Post endpoints:
+
+GET /api/posts
+POST /api/posts
+GET /api/posts/1
+PATCH /api/posts/1
+DELETE /api/posts/1
+
+Comments:
+
+GET /api/posts/1/comments
+POST /api/posts/1/comments
+
+This is a typical REST-style structure.
+
+---
+
+# Example Request
+
+Client:
+
+POST /api/posts
+
+Content-Type: application/json
+
+Authorization: Bearer <token>
+
+{
+    "title": "My First Post",
+    "content": "Hello world!"
+}
+
+Server:
+
+201 Created
+
+{
+    "id": 42,
+    "title": "My First Post",
+    "content": "Hello world!"
+}
+
+The complete process is:
+
+Browser
+    ↓
+HTTPS
+    ↓
+API endpoint
+    ↓
+Authentication
+    ↓
+Validation
+    ↓
+Business logic
+    ↓
+Database
+    ↓
+JSON response
+
+---
+
+# Django Web Application Mental Model
+
+For a traditional Django website:
+
+Browser
+    ↓
+URL
+    ↓
+urls.py
+    ↓
+View
+    ↓
+Model / ORM
+    ↓
+Database
+    ↓
+Template
+    ↓
+HTML
+    ↓
+Browser
+
+For a Django API:
+
+Browser / App
+    ↓
+URL
+    ↓
+View / API View
+    ↓
+Validation
+    ↓
+ORM
+    ↓
+Database
+    ↓
+JSON
+    ↓
+Client
+
+---
+
+# Django + JavaScript
+
+Django doesn't have to generate every part of the page.
+
+You can combine:
+
+Django
+    ↓
+HTML/CSS
+    ↓
+JavaScript
+    ↓
+Fetch API
+    ↓
+Django API
+
+For example:
+
+JavaScript:
+
+async function loadPosts() {
+    const response = await fetch("/api/posts");
+    const posts = await response.json();
+
+    console.log(posts);
+}
+
+Django:
+
+GET /api/posts
+
+returns:
+
+{
+    "posts": [...]
+}
+
+This creates a more interactive application.
+
+---
+
+# When To Use What
+
+Use Django when:
+
+- Building a complete website
+- You need authentication
+- You need a database
+- You want an admin panel
+- You need forms
+- You want server-rendered HTML
+- You want an ORM
+- You want lots of functionality built in
+
+Use FastAPI when:
+
+- Building APIs
+- Building backend services
+- You want strong type-based validation
+- You need async support
+- You want automatic API documentation
+
+Use Flask when:
+
+- You want a lightweight framework
+- You want maximum flexibility
+- You're building a relatively small application
+- You want to choose your own components
+
+---
+
+# What You Should Learn First
+
+A good learning order is:
+
+1. HTTP
+2. URLs
+3. Requests and responses
+4. Status codes
+5. Headers
+6. Cookies and sessions
+7. HTML
+8. CSS
+9. JavaScript fundamentals
+10. Django
+11. REST APIs
+12. JSON
+13. Authentication
+14. Authorisation
+15. Django ORM
+16. API pagination
+17. Security
+18. Deployment
+19. Performance
+20. FastAPI
+21. Flask
+
+You don't need to master every framework.
+
+Django + FastAPI is an excellent combination for Python development.
+
+---
+
+# Practical Projects
+
+You should eventually build projects that force you to use these concepts.
+
+## Project 1 — Basic Website
+
+Build:
+
+- Multiple pages
+- Navigation
+- HTML
+- CSS
+- Forms
+- Django templates
+- Static files
+
+---
+
+## Project 2 — Blog
+
+Build:
+
+- User accounts
+- Login/logout
+- Posts
+- Comments
+- Database
+- CRUD
+- Permissions
+- Search
+- Pagination
+
+---
+
+## Project 3 — REST API
+
+Build:
+
+- Users
+- Authentication
+- CRUD endpoints
+- JSON
+- Validation
+- Pagination
+- Error handling
+- API documentation
+
+---
+
+## Project 4 — Full Application
+
+Build something involving:
+
+- Django
+- PostgreSQL
+- JavaScript
+- REST API
+- Authentication
+- Authorisation
+- File uploads
+- Background tasks
+- Caching
+- Deployment
+
+At this point you're moving beyond tutorials and building genuine software.
+
+---
+
+# Professional Web Development Checklist
+
+Before calling yourself comfortable with web development, you should understand:
+
+Web fundamentals:
+- HTTP
+- HTTPS
+- DNS
+- URLs
+- Requests
+- Responses
+- Headers
+- Status codes
+- Cookies
+- Sessions
+
+Frontend:
+- HTML
+- CSS
+- Flexbox
+- Grid
+- Responsive design
+- JavaScript
+- DOM
+- Events
+- Fetch API
+- Async/await
+
+Python:
+- Django
+- FastAPI
+- Flask
+- Routing
+- Views
+- Templates
+- Middleware
+- ORM
+- Forms
+- Validation
+
+APIs:
+- REST
+- JSON
+- CRUD
+- Authentication
+- Authorisation
+- JWT
+- API keys
+- Pagination
+- Rate limiting
+- Webhooks
+- API versioning
+- OpenAPI
+
+Security:
+- HTTPS
+- Password hashing
+- CSRF
+- XSS
+- SQL injection
+- CORS
+- Secure cookies
+- Input validation
+- Secret management
+
+Production:
+- Deployment
+- WSGI
+- ASGI
+- Reverse proxies
+- PostgreSQL
+- Environment variables
+- Logging
+- Monitoring
+- Caching
+- Background tasks
+- Backups
+
+---
+
+# Final Goal
+
+You should eventually be able to take an idea such as:
+
+"I want to build a website where users can register, create posts, comment, upload images, receive notifications and interact with other users."
+
+and independently design and build it.
+
+You should understand:
+
+Browser
+    ↓
+HTML / CSS / JavaScript
+    ↓
+HTTP / HTTPS
+    ↓
+Django / FastAPI
+    ↓
+Authentication / Authorisation
+    ↓
+Business Logic
+    ↓
+ORM
+    ↓
+PostgreSQL
+    ↓
+Deployment
+
+You should also understand what happens underneath the framework rather than treating Django or FastAPI as magic.
+
+The ultimate goal is to be able to build a complete web application from scratch, expose functionality through a properly designed API, secure it, connect it to a real database, optimise it, and deploy it so real users can access it.

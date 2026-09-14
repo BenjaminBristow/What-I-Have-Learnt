@@ -1,0 +1,887 @@
+
+a deeper dive into how Python actually works underneath your code.
+
+## Objects
+
+in Python, everything is an object.
+
+this includes:
+- integers
+- strings
+- lists
+- functions
+- classes
+- modules
+- `None`
+- `True` and `False`
+
+every object has:
+- a type
+- an identity
+- a value
+
+example:
+
+x = 10
+
+`10` is an object, and `x` is a name referring to that object.
+
+you can check its type with:
+
+print(type(x))
+
+result:
+
+<class 'int'>
+
+## References
+
+variables in Python are names that refer to objects rather than boxes that contain values.
+
+example:
+
+x = [1, 2, 3]
+y = x
+
+both `x` and `y` refer to the same list.
+
+changing the list through one name affects the other:
+
+y.append(4)
+
+print(x)
+
+result:
+
+[1, 2, 3, 4]
+
+this happens because `x` and `y` reference the same object.
+
+## Identity
+
+identity determines whether two names refer to the exact same object.
+
+use `is` to compare identity.
+
+example:
+
+x = [1, 2, 3]
+y = x
+z = [1, 2, 3]
+
+print(x is y)
+print(x is z)
+
+result:
+
+True
+False
+
+`x` and `y` reference the same object.
+
+`z` contains the same values but is a different object.
+
+## id()
+
+`id()` returns an integer that uniquely identifies an object during its lifetime.
+
+example:
+
+x = [1, 2, 3]
+
+print(id(x))
+
+two names referencing the same object have the same identity:
+
+x = [1, 2, 3]
+y = x
+
+print(id(x) == id(y))
+
+result:
+
+True
+
+the exact number returned by `id()` is implementation-dependent.
+
+## == vs is
+
+`==` checks whether two objects have equal values.
+
+`is` checks whether they are the same object.
+
+example:
+
+x = [1, 2, 3]
+y = [1, 2, 3]
+
+print(x == y)
+print(x is y)
+
+result:
+
+True
+False
+
+use `==` when comparing values.
+
+use `is` when checking identity.
+
+a common use of `is` is checking for `None`:
+
+if value is None:
+    print("no value")
+
+## Mutability
+
+a mutable object can be changed after it has been created.
+
+common mutable objects include:
+- lists
+- dictionaries
+- sets
+- most user-defined objects
+
+example:
+
+numbers = [1, 2, 3]
+
+numbers.append(4)
+
+the same list object has been changed.
+
+## Immutability
+
+an immutable object cannot be changed after it has been created.
+
+common immutable objects include:
+- integers
+- floats
+- booleans
+- strings
+- tuples
+- frozensets
+- bytes
+
+example:
+
+x = 10
+
+x = x + 1
+
+this does not change the original integer object.
+
+instead, Python creates or reuses an integer object representing `11` and makes `x` refer to it.
+
+## Mutable vs immutable objects
+
+this difference becomes important when objects are passed to functions.
+
+example:
+
+def add_item(items):
+    items.append("apple")
+
+numbers = ["banana"]
+
+add_item(numbers)
+
+print(numbers)
+
+result:
+
+["banana", "apple"]
+
+the function changed the existing list.
+
+with an immutable object:
+
+def add_one(number):
+    number += 1
+
+x = 10
+
+add_one(x)
+
+print(x)
+
+result:
+
+10
+
+the integer could not be changed, so the function's local name was simply rebound.
+
+## Namespaces
+
+a namespace is a mapping between names and objects.
+
+examples include:
+- local namespaces
+- global namespaces
+- module namespaces
+- class namespaces
+- built-in namespace
+
+a namespace prevents different names from accidentally conflicting.
+
+example:
+
+x = 10
+
+the current namespace contains a name `x` that refers to the integer object `10`.
+
+you can inspect some namespaces using `globals()` and `locals()`.
+
+example:
+
+x = 10
+
+print(globals()["x"])
+
+result:
+
+10
+
+## Scope
+
+scope determines where a name can be accessed.
+
+Python has several important scopes:
+- local
+- enclosing
+- global
+- built-in
+
+these form the LEGB rule.
+
+## LEGB
+
+LEGB stands for:
+
+L = Local
+E = Enclosing
+G = Global
+B = Built-in
+
+when Python sees a name, it searches these scopes in this order.
+
+example:
+
+x = "global"
+
+def outer():
+
+    x = "enclosing"
+
+    def inner():
+
+        x = "local"
+        print(x)
+
+    inner()
+
+outer()
+
+result:
+
+local
+
+Python finds the local `x` first.
+
+## Local scope
+
+names created inside a function normally belong to that function's local scope.
+
+example:
+
+def hello():
+
+    message = "hello"
+
+    print(message)
+
+hello()
+
+`message` cannot normally be accessed outside the function.
+
+## Enclosing scope
+
+an enclosing scope occurs when one function is defined inside another.
+
+example:
+
+def outer():
+
+    x = 10
+
+    def inner():
+        print(x)
+
+    inner()
+
+outer()
+
+`inner()` can access `x` from the enclosing `outer()` function.
+
+## Global scope
+
+names created at module level belong to the global namespace.
+
+example:
+
+x = 10
+
+def show():
+    print(x)
+
+show()
+
+the function can read the global variable.
+
+to modify a global variable inside a function, use `global`:
+
+x = 10
+
+def change():
+    global x
+    x = 20
+
+change()
+
+print(x)
+
+result:
+
+20
+
+using global variables heavily is usually best avoided because it makes code harder to manage.
+
+## Built-in scope
+
+the built-in namespace contains names provided by Python itself.
+
+examples:
+
+print()
+len()
+sum()
+list()
+str()
+int()
+
+if Python cannot find a name in local, enclosing or global scope, it checks the built-in namespace.
+
+## Garbage collection
+
+Python automatically manages memory and removes objects that are no longer needed.
+
+this is called garbage collection.
+
+example:
+
+x = [1, 2, 3]
+
+del x
+
+after `x` is deleted, the list may become eligible for cleanup if nothing else references it.
+
+Python handles the actual memory cleanup automatically.
+
+## Reference counting
+
+CPython primarily tracks how many references point to each object.
+
+example:
+
+x = [1, 2, 3]
+
+y = x
+
+the list now has another reference.
+
+if one reference is removed:
+
+del y
+
+the object still has `x` referring to it.
+
+when the reference count reaches zero, CPython can usually immediately deallocate the object.
+
+## Reference cycles
+
+reference counting alone cannot handle every situation.
+
+for example, two objects can reference each other:
+
+a = []
+b = []
+
+a.append(b)
+b.append(a)
+
+even if the original names are removed, the objects still reference each other.
+
+Python's cyclic garbage collector can detect and clean up unreachable reference cycles.
+
+## Memory management
+
+CPython manages memory automatically.
+
+the interpreter:
+- allocates memory for objects
+- tracks objects
+- manages object lifetimes
+- reuses memory where possible
+- frees memory when objects are no longer needed
+
+Python programmers normally do not manually allocate and free memory like they would in C.
+
+## Special / dunder methods
+
+dunder methods are methods with names surrounded by double underscores.
+
+examples:
+
+__init__()
+__str__()
+__repr__()
+__len__()
+__eq__()
+__add__()
+__iter__()
+__next__()
+
+they allow objects to interact with Python's built-in operations.
+
+example:
+
+class Person:
+
+    def __init__(self, name):
+        self.name = name
+
+    def __str__(self):
+        return self.name
+
+person = Person("Ben")
+
+print(person)
+
+Python effectively uses `person.__str__()` when converting the object to a string.
+
+## Attribute lookup
+
+when you access:
+
+object.attribute
+
+Python follows rules to find the attribute.
+
+for normal objects, lookup involves:
+- the object's class and its method resolution order
+- descriptors
+- the object's instance dictionary
+- class attributes
+- inherited attributes
+
+the exact process is more complicated than simply checking `object.__dict__`.
+
+example:
+
+class Person:
+
+    species = "human"
+
+person = Person()
+
+print(person.species)
+
+`species` is found on the class rather than stored directly on `person`.
+
+## __dict__
+
+many Python objects store their instance attributes in a dictionary called `__dict__`.
+
+example:
+
+class Person:
+
+    def __init__(self, name):
+        self.name = name
+
+person = Person("Ben")
+
+print(person.__dict__)
+
+result:
+
+{'name': 'Ben'}
+
+not every Python object has a `__dict__`.
+
+for example, classes using `__slots__` can avoid a normal instance dictionary.
+
+## Descriptors
+
+a descriptor is an object that controls attribute access.
+
+descriptors can implement:
+
+__get__()
+__set__()
+__delete__()
+
+example:
+
+class Descriptor:
+
+    def __get__(self, instance, owner):
+        return "hello"
+
+class Example:
+
+    value = Descriptor()
+
+example = Example()
+
+print(example.value)
+
+descriptors are a major part of Python's object model.
+
+they are used by:
+- properties
+- methods
+- class methods
+- static methods
+- many frameworks
+
+## __getattribute__
+
+`__getattribute__()` is called whenever an attribute is accessed on an object.
+
+example:
+
+class Example:
+
+    def __getattribute__(self, name):
+
+        print("accessing:", name)
+
+        return object.__getattribute__(self, name)
+
+example = Example()
+
+example.value
+
+`__getattribute__()` is extremely powerful because it can intercept almost every normal attribute lookup.
+
+be careful when overriding it because incorrectly accessing attributes inside it can cause infinite recursion.
+
+## __getattr__
+
+`__getattr__()` is called only when normal attribute lookup fails.
+
+example:
+
+class Example:
+
+    def __getattr__(self, name):
+        return "attribute does not exist"
+
+example = Example()
+
+print(example.hello)
+
+result:
+
+attribute does not exist
+
+the difference is:
+
+`__getattribute__()` → called for every attribute access
+
+`__getattr__()` → called only when normal lookup fails
+
+## __getattribute__ vs __getattr__
+
+example:
+
+class Example:
+
+    def __getattribute__(self, name):
+        print("trying:", name)
+        return object.__getattribute__(self, name)
+
+    def __getattr__(self, name):
+        print("missing:", name)
+        return None
+
+example = Example()
+
+print(example.value)
+
+`__getattribute__()` runs first.
+
+if it cannot find the attribute, `__getattr__()` can provide a fallback.
+
+## Python bytecode
+
+Python source code is not normally executed directly by the CPU.
+
+in CPython, source code is compiled into bytecode.
+
+example:
+
+def add(a, b):
+    return a + b
+
+CPython converts the function into bytecode instructions.
+
+the Python virtual machine then executes those instructions.
+
+the exact bytecode is an implementation detail and can change between Python versions.
+
+## dis
+
+the `dis` module can show the bytecode generated for Python code.
+
+example:
+
+import dis
+
+def add(a, b):
+    return a + b
+
+dis.dis(add)
+
+this might display instructions such as:
+
+LOAD_FAST
+LOAD_FAST
+BINARY_OP
+RETURN_VALUE
+
+the exact instructions depend on the Python version.
+
+`dis` is useful for understanding how Python executes code internally.
+
+## Bytecode is not machine code
+
+Python bytecode is not the same thing as CPU machine code.
+
+the general CPython process is:
+
+Python source
+↓
+bytecode
+↓
+CPython interpreter
+↓
+machine-level operations
+
+modern CPython can also specialise bytecode and optimise execution at runtime.
+
+## Frames
+
+a frame represents the execution state of a function or other Python code block.
+
+a frame contains information such as:
+- local variables
+- global namespace
+- built-in namespace
+- current instruction position
+- execution context
+- reference to the previous frame
+
+you can inspect the current frame using the `inspect` module.
+
+example:
+
+import inspect
+
+def example():
+    frame = inspect.currentframe()
+    print(frame)
+
+example()
+
+frames are an important part of how Python keeps track of running code.
+
+## Call stack
+
+when functions call other functions, Python maintains a call stack.
+
+example:
+
+def third():
+    print("third")
+
+def second():
+    third()
+
+def first():
+    second()
+
+first()
+
+the call stack becomes roughly:
+
+first()
+    ↓
+second()
+    ↓
+third()
+
+when `third()` finishes, Python returns to `second()`.
+
+when `second()` finishes, Python returns to `first()`.
+
+## Recursion and the call stack
+
+recursive functions create additional stack frames.
+
+example:
+
+def countdown(n):
+
+    if n == 0:
+        return
+
+    print(n)
+
+    countdown(n - 1)
+
+countdown(3)
+
+the stack grows as the function calls itself.
+
+Python has a recursion limit to prevent the call stack from growing indefinitely.
+
+you can inspect it with:
+
+import sys
+
+print(sys.getrecursionlimit())
+
+## CPython
+
+CPython is the standard and most widely used implementation of Python.
+
+it is written primarily in C.
+
+CPython:
+- parses Python code
+- compiles it into bytecode
+- executes the bytecode
+- manages Python objects
+- manages memory
+- implements the Python runtime
+
+other Python implementations exist, such as PyPy and Jython.
+
+this means that some internal behaviour discussed here is specifically about CPython rather than Python as a language specification.
+
+## CPython objects
+
+internally, CPython represents Python objects using C structures.
+
+conceptually, objects contain information such as:
+- their type
+- information needed for memory management
+- their actual data
+
+for example, a Python integer is represented internally by a CPython object containing information needed to represent that integer.
+
+you normally do not interact with these C structures directly.
+
+## Python's object model
+
+Python's object model connects many of these concepts.
+
+when you write:
+
+person.name
+
+Python performs attribute lookup.
+
+when you write:
+
+len(person)
+
+Python looks for the appropriate special method.
+
+when you write:
+
+for item in person:
+
+Python uses the iteration protocol.
+
+when you write:
+
+person + other:
+
+Python can use `__add__()`.
+
+when you write:
+
+with resource:
+
+Python uses the context manager protocol.
+
+these behaviours are largely controlled through Python's data model and special methods.
+
+## Putting it all together
+
+when you write:
+
+class Person:
+
+    def __init__(self, name):
+        self.name = name
+
+    def __str__(self):
+        return self.name
+
+person = Person("Ben")
+
+print(person)
+
+many things happen underneath:
+
+1. Python creates a class object.
+2. `Person` becomes a name referring to that class object.
+3. `Person("Ben")` creates an instance.
+4. `__init__()` initializes the instance.
+5. `self.name` creates an attribute on the instance.
+6. `person` becomes a name referring to the instance.
+7. `print()` needs a string representation.
+8. Python uses the object's string representation behaviour.
+9. `__str__()` returns `"Ben"`.
+10. `print()` displays the result.
+
+the simple-looking code therefore relies on Python's object model, namespaces, references, attribute lookup and special methods.
+
+## Goal
+
+understand what Python is actually doing underneath your code.
+
+you should understand:
+- everything in Python is an object
+- variables are names referring to objects
+- identity and equality are different
+- mutable and immutable objects behave differently
+- namespaces store name-to-object mappings
+- Python searches names using LEGB
+- CPython uses reference counting and cyclic garbage collection
+- Python manages memory automatically
+- dunder methods connect objects to built-in Python behaviour
+- attribute lookup involves classes, instances and descriptors
+- `__getattribute__()` intercepts attribute access
+- `__getattr__()` provides a fallback for missing attributes
+- Python source is compiled into bytecode in CPython
+- `dis` can inspect bytecode
+- frames represent active execution contexts
+- the call stack tracks nested function calls
+- CPython is an implementation of Python written primarily in C
+
+once you understand these concepts, Python stops feeling like a collection of special rules and starts to make sense as one connected object model.

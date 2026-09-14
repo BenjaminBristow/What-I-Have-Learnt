@@ -1,0 +1,201 @@
+## Defining functions
+
+a function is a reusable block of code that runs when you call it by name
+defined using def, followed by a name and parentheses
+example: def greet():
+print("hello") greet()
+result hello
+functions let you avoid repeating the same code over and over, and make programs easier to read and test in pieces
+
+## Parameters
+
+the named variables listed in a function's definition, act as placeholders for values that will get passed in
+example: def greet(name):
+print("hello " + name)
+here name is the parameter — it doesn't have a real value until the function actually gets called
+
+## Arguments
+
+the actual values passed in when calling a function, they fill in the parameters
+example: greet("Ben")
+result hello Ben
+"Ben" here is the argument — parameters and arguments get used interchangeably in casual conversation but technically parameters are the placeholders, arguments are the real values
+
+## Return values
+
+what a function hands back to whatever called it, using the return keyword
+without a return statement, a function returns None by default
+example: def add(a, b):
+return a + b total = add(2, 3)
+print(total)
+result 5
+a function stops running the moment it hits a return statement, anything written after it inside that function never runs
+print() displays something on screen but doesn't hand a value back to be used elsewhere — return does
+
+## Scope
+
+scope is about where in the program a variable can actually be seen and used
+a variable created inside a function only exists inside that function — trying to use it outside raises an error
+example: def my_func():
+x = 5
+print(x) my_func()
+print(x) raises NameError, x doesn't exist out here
+
+## Local/global variables
+
+local variable: created inside a function, only exists while that function is running, disappears once it finishes
+global variable: created outside any function, at the top level of the script, accessible everywhere
+example: count = 0 this is global def increment():
+local_var = 1 this is local
+print(count) can read the global fine increment()
+a function can read a global variable by default, but trying to change it directly inside without saying so creates a new local variable instead, leaving the original global untouched. the global keyword is needed to actually modify it: def increment():
+global count
+count += 1
+
+## Default arguments
+
+lets a parameter fall back to a preset value if nothing's passed in for it when the function gets called
+example: def greet(name="friend"):
+print("hello " + name) greet()
+result hello friend greet("Ben")
+result hello Ben
+default arguments always have to come after any parameters without a default
+
+## Keyword arguments
+
+passing arguments by naming the parameter directly, instead of relying on their position
+example: def describe(name, age):
+print(name, "is", age) describe(age=20, name="Ben")
+result Ben is 20
+since each argument is explicitly labelled, the order stops mattering, which also makes the function call easier to read at a glance
+
+## *args
+
+lets a function accept any number of extra positional arguments, collected into a tuple
+example: def add_all(*args):
+return sum(args) add_all(1, 2, 3)
+result 6 add_all(1, 2, 3, 4, 5)
+result 15
+the name args is just convention, the single asterisk in front of it is what actually matters
+
+## **kwargs
+
+lets a function accept any number of extra keyword arguments, collected into a dictionary
+example: def show_info(**kwargs):
+print(kwargs) show_info(name="Ben", age=20)
+result {'name': 'Ben', 'age': 20}
+kwargs is also just convention, the double asterisk is what matters
+both args and kwargs are handy when you don't know in advance exactly how many arguments will get passed in
+
+## Lambda functions
+
+a small, unnamed function defined in a single line, using the lambda keyword instead of def
+example: square = lambda x: x ** 2
+square(5)
+result 25
+equivalent to writing: def square(x):
+return x ** 2
+lambdas are meant for short, throwaway functions, usually passed straight into something else rather than saved and reused
+
+## Functions as objects
+
+in python, functions are values just like numbers or strings — they can be stored in a variable, passed into another function, or returned from one
+example: def shout(text):
+return text.upper() my_function = shout
+my_function("hello")
+result HELLO
+this is what makes higher-order functions possible, since a function can be treated as just another piece of data
+
+## Higher-order functions
+
+a function that either takes another function as an argument, returns a function, or both
+example: def apply_twice(func, value):
+return func(func(value)) def add_one(x):
+return x + 1 apply_twice(add_one, 5)
+result 7
+map, filter, and sorted with a key argument are all built-in examples of this pattern
+
+## Recursion
+
+a function that calls itself, working towards a base case that stops it calling forever
+example: def factorial(n):
+if n == 1:
+return 1
+return n * factorial(n - 1) factorial(4)
+result 24
+every recursive function needs a base case, a condition where it stops calling itself, or it runs forever and eventually crashes with a RecursionError
+anything recursion can do, a loop can usually also do — recursion just tends to fit better for problems naturally defined in terms of smaller versions of themselves, like tree structures
+
+## Functional programming basics
+
+a style of writing code built around functions that take input and return output without changing anything outside themselves
+a pure function always gives the same output for the same input, and doesn't rely on or modify anything outside its own scope
+example of a pure function versus one that isn't: def pure_add(a, b):
+return a + b always predictable, no side effects total = 0
+def impure_add(a):
+global total
+total += a changes something outside the function, less predictable
+python isn't a strictly functional language like some others, but tools like map, filter, and lambda let you write in that style when it fits
+
+## map
+
+applies a function to every item in a sequence, returns a map object which can be turned into a list
+example: nums = [1, 2, 3]
+doubled = list(map(lambda x: x * 2, nums))
+result [2, 4, 6]
+
+## filter
+
+keeps only the items from a sequence where a function returns True, drops the rest
+example: nums = [1, 2, 3, 4, 5, 6]
+evens = list(filter(lambda x: x % 2 == 0, nums))
+result [2, 4, 6]
+
+## reduce
+
+rolls a sequence down into a single value by repeatedly applying a function to pairs of items
+not built in by default, needs importing from functools
+example: from functools import reduce
+nums = [1, 2, 3, 4]
+total = reduce(lambda a, b: a + b, nums)
+result 10
+works through the list like this: ((1+2)+3)+4
+
+## zip
+
+pairs up items from two or more sequences, position by position
+example: names = ["Ben", "Sam"]
+ages = [20, 22]
+list(zip(names, ages))
+result [('Ben', 20), ('Sam', 22)]
+stops as soon as the shortest sequence runs out, even if the others still have items left
+
+## enumerate
+
+loops over a sequence while also keeping track of the index of each item, without manually managing a counter
+example: fruits = ["apple", "banana", "cherry"]
+for index, fruit in enumerate(fruits):
+print(index, fruit) result
+0 apple
+1 banana
+2 cherry
+
+## any
+
+checks a sequence and returns True if at least one item is truthy, False if every item is falsy
+example: nums = [0, 0, 3, 0]
+any(nums)
+result True nums = [0, 0, 0]
+any(nums)
+result False
+
+## all
+
+checks a sequence and returns True only if every single item is truthy, False if even one isn't
+example: nums = [1, 2, 3]
+all(nums)
+result True nums = [1, 0, 3]
+all(nums)
+result False
+any and all are especially handy combined with a generator expression, checking a condition across a whole list without writing a manual loop: all(x > 0 for x in [1, 2, 3])
+result True

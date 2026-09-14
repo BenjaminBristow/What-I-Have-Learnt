@@ -1,0 +1,835 @@
+## Advanced Python Language Features
+
+these are features that make python powerful and flexible. they are useful when writing larger programs, frameworks, libraries, and more advanced code.
+
+## Iterables
+
+an iterable is any object that can be looped over with a `for` loop.
+
+common iterables include:
+- lists
+- tuples
+- strings
+- dictionaries
+- sets
+- ranges
+- files
+
+example:
+
+numbers = [1, 2, 3]
+
+for number in numbers:
+    print(number)
+
+you can use `iter()` to get an iterator from an iterable.
+
+iterator = iter(numbers)
+
+## Iterators
+
+an iterator is an object that produces values one at a time.
+
+use `next()` to get the next value:
+
+numbers = iter([10, 20, 30])
+
+print(next(numbers))
+print(next(numbers))
+print(next(numbers))
+
+result:
+
+10
+20
+30
+
+when there are no more values, `next()` raises `StopIteration`.
+
+a `for` loop automatically handles this process for you.
+
+## Generators
+
+a generator is a special type of iterator that produces values lazily.
+
+generators are useful when working with large amounts of data because they do not need to store every value in memory at once.
+
+example:
+
+def numbers():
+    yield 1
+    yield 2
+    yield 3
+
+for number in numbers():
+    print(number)
+
+result:
+
+1
+2
+3
+
+generators are created using `yield`.
+
+## yield
+
+`yield` temporarily pauses a function and returns a value.
+
+when the generator is continued, it starts from where it stopped.
+
+example:
+
+def count():
+    yield 1
+    yield 2
+    yield 3
+
+generator = count()
+
+print(next(generator))
+print(next(generator))
+print(next(generator))
+
+result:
+
+1
+2
+3
+
+unlike `return`, `yield` does not completely terminate the function.
+
+## Generator expressions
+
+generator expressions are similar to list comprehensions but use parentheses instead of square brackets.
+
+list comprehension:
+
+numbers = [x * 2 for x in range(5)]
+
+generator expression:
+
+numbers = (x * 2 for x in range(5))
+
+a list stores all values immediately.
+
+a generator produces values when they are needed.
+
+this is useful for large datasets.
+
+## Decorators
+
+a decorator is a function that modifies or extends the behaviour of another function without changing its original code.
+
+example:
+
+def decorator(function):
+
+    def wrapper():
+        print("before")
+        function()
+        print("after")
+
+    return wrapper
+
+@decorator
+def hello():
+    print("hello")
+
+hello()
+
+result:
+
+before
+hello
+after
+
+`@decorator` is shorthand for:
+
+hello = decorator(hello)
+
+decorators are commonly used for:
+- logging
+- authentication
+- timing
+- validation
+- caching
+- permissions
+- framework functionality
+
+## Decorators with arguments
+
+decorators often need to work with functions that accept different arguments.
+
+use `*args` and `**kwargs` to handle them.
+
+example:
+
+def decorator(function):
+
+    def wrapper(*args, **kwargs):
+        print("running function")
+        return function(*args, **kwargs)
+
+    return wrapper
+
+@decorator
+def add(a, b):
+    return a + b
+
+print(add(2, 3))
+
+## functools.wraps
+
+when creating decorators, use `functools.wraps` to preserve information about the original function.
+
+example:
+
+from functools import wraps
+
+def decorator(function):
+
+    @wraps(function)
+    def wrapper(*args, **kwargs):
+        return function(*args, **kwargs)
+
+    return wrapper
+
+this preserves things such as the function's name and documentation.
+
+## Closures
+
+a closure occurs when an inner function remembers variables from the surrounding function even after the surrounding function has finished.
+
+example:
+
+def multiplier(x):
+
+    def multiply(y):
+        return x * y
+
+    return multiply
+
+double = multiplier(2)
+
+print(double(5))
+
+result:
+
+10
+
+`multiply()` remembers the value of `x`.
+
+closures are useful for:
+- decorators
+- maintaining state
+- creating specialised functions
+- hiding data
+
+## Context managers
+
+a context manager controls setup and cleanup around a block of code.
+
+the most common example is opening a file.
+
+example:
+
+with open("data.txt", "r") as file:
+    contents = file.read()
+
+the file is automatically closed when the `with` block finishes.
+
+context managers are useful when resources need to be cleaned up automatically.
+
+examples:
+- files
+- database connections
+- locks
+- network connections
+- temporary resources
+
+## with
+
+`with` is used with context managers.
+
+general structure:
+
+with resource as variable:
+    # use resource
+
+the context manager normally provides:
+
+`__enter__()` - runs when entering the block
+
+`__exit__()` - runs when leaving the block
+
+example:
+
+class Example:
+
+    def __enter__(self):
+        print("starting")
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        print("finished")
+
+with Example():
+    print("inside")
+
+result:
+
+starting
+inside
+finished
+
+## contextlib
+
+`contextlib` provides tools for creating and working with context managers.
+
+one useful tool is `@contextmanager`.
+
+example:
+
+from contextlib import contextmanager
+
+@contextmanager
+def example():
+
+    print("starting")
+
+    yield
+
+    print("finished")
+
+with example():
+    print("inside")
+
+the code before `yield` runs when entering the context.
+
+the code after `yield` runs when leaving it.
+
+## * unpacking
+
+`*` can unpack an iterable.
+
+example:
+
+numbers = [1, 2, 3]
+
+print(*numbers)
+
+result:
+
+1 2 3
+
+you can also use `*` when creating collections.
+
+example:
+
+numbers = [1, 2, 3]
+more_numbers = [4, 5]
+
+combined = [*numbers, *more_numbers]
+
+result:
+
+[1, 2, 3, 4, 5]
+
+`*args` collects positional arguments into a tuple.
+
+example:
+
+def add(*numbers):
+    return sum(numbers)
+
+print(add(1, 2, 3, 4))
+
+result:
+
+10
+
+## ** unpacking
+
+`**` is used to unpack dictionaries into keyword arguments or another dictionary.
+
+example:
+
+person = {
+    "name": "Ben",
+    "age": 20
+}
+
+print({**person, "course": "Computer Science"})
+
+result:
+
+{'name': 'Ben', 'age': 20, 'course': 'Computer Science'}
+
+`**kwargs` collects keyword arguments into a dictionary.
+
+example:
+
+def show(**details):
+    print(details)
+
+show(name="Ben", age=20)
+
+result:
+
+{'name': 'Ben', 'age': 20}
+
+## Pattern matching
+
+pattern matching uses `match` and `case` to compare values against different patterns.
+
+example:
+
+command = "start"
+
+match command:
+
+    case "start":
+        print("starting")
+
+    case "stop":
+        print("stopping")
+
+    case _:
+        print("unknown command")
+
+`_` acts as a catch-all pattern.
+
+pattern matching was introduced in Python 3.10.
+
+it can also match more complex structures such as tuples, lists, dictionaries and objects.
+
+## Pattern matching with values
+
+example:
+
+status = 404
+
+match status:
+
+    case 200:
+        print("success")
+
+    case 404:
+        print("not found")
+
+    case 500:
+        print("server error")
+
+    case _:
+        print("unknown")
+
+## Pattern matching with structures
+
+example:
+
+point = (10, 20)
+
+match point:
+
+    case (0, 0):
+        print("origin")
+
+    case (x, 0):
+        print("on x-axis")
+
+    case (0, y):
+        print("on y-axis")
+
+    case (x, y):
+        print("somewhere else")
+
+## Walrus operator :=
+
+the walrus operator allows you to assign a value while also using it in an expression.
+
+example:
+
+if (length := len("hello")) > 3:
+    print(length)
+
+result:
+
+5
+
+without the walrus operator:
+
+length = len("hello")
+
+if length > 3:
+    print(length)
+
+the walrus operator is useful when a value needs to be calculated and immediately tested or used.
+
+do not overuse it because normal assignment can sometimes be easier to read.
+
+## Advanced comprehensions
+
+comprehensions can contain conditions and multiple loops.
+
+example:
+
+numbers = [x for x in range(10) if x % 2 == 0]
+
+result:
+
+[0, 2, 4, 6, 8]
+
+nested comprehension:
+
+pairs = [(x, y) for x in range(3) for y in range(3)]
+
+result:
+
+[(0, 0), (0, 1), (0, 2),
+ (1, 0), (1, 1), (1, 2),
+ (2, 0), (2, 1), (2, 2)]
+
+dictionary comprehension:
+
+squares = {x: x ** 2 for x in range(5)}
+
+result:
+
+{0: 0, 1: 1, 2: 4, 3: 9, 4: 16}
+
+set comprehension:
+
+squares = {x ** 2 for x in range(5)}
+
+avoid making comprehensions unnecessarily complicated. normal loops are sometimes easier to understand.
+
+## Descriptors
+
+a descriptor is an object that controls what happens when an attribute is accessed, changed or deleted.
+
+descriptors can define:
+
+`__get__()` - controls reading an attribute
+
+`__set__()` - controls changing an attribute
+
+`__delete__()` - controls deleting an attribute
+
+example:
+
+class Descriptor:
+
+    def __get__(self, instance, owner):
+        return "value"
+
+class Example:
+    value = Descriptor()
+
+example = Example()
+
+print(example.value)
+
+descriptors are used internally by many parts of Python.
+
+properties, methods and many framework features use descriptor behaviour.
+
+## Properties
+
+a property allows a method to be accessed like an attribute.
+
+example:
+
+class Person:
+
+    def __init__(self, age):
+        self._age = age
+
+    @property
+    def age(self):
+        return self._age
+
+person = Person(20)
+
+print(person.age)
+
+although `age` looks like an attribute, Python actually calls the property method.
+
+## Property setters
+
+a property can also control how an attribute is changed.
+
+example:
+
+class Person:
+
+    def __init__(self, age):
+        self._age = age
+
+    @property
+    def age(self):
+        return self._age
+
+    @age.setter
+    def age(self, value):
+
+        if value < 0:
+            raise ValueError("age cannot be negative")
+
+        self._age = value
+
+person = Person(20)
+
+person.age = 21
+
+properties are useful for validation and controlling access to data.
+
+## Dunder methods
+
+dunder means "double underscore".
+
+dunder methods are special methods that allow your classes to interact with Python's built-in behaviour.
+
+examples:
+
+`__init__()` - initializes an object
+
+`__str__()` - controls `str(object)`
+
+`__repr__()` - controls the developer representation
+
+`__len__()` - controls `len(object)`
+
+`__eq__()` - controls `==`
+
+`__lt__()` - controls `<`
+
+`__add__()` - controls `+`
+
+`__iter__()` - makes an object iterable
+
+`__next__()` - controls iteration
+
+`__enter__()` - enters a context manager
+
+`__exit__()` - exits a context manager
+
+## __str__
+
+`__str__()` controls what is displayed when an object is converted to a string.
+
+example:
+
+class Person:
+
+    def __init__(self, name):
+        self.name = name
+
+    def __str__(self):
+        return self.name
+
+person = Person("Ben")
+
+print(person)
+
+result:
+
+Ben
+
+## __repr__
+
+`__repr__()` provides a representation intended to be useful when debugging or inspecting an object.
+
+example:
+
+class Person:
+
+    def __init__(self, name):
+        self.name = name
+
+    def __repr__(self):
+        return f"Person({self.name!r})"
+
+person = Person("Ben")
+
+print(repr(person))
+
+## __len__
+
+`__len__()` allows an object to work with `len()`.
+
+example:
+
+class Team:
+
+    def __init__(self, members):
+        self.members = members
+
+    def __len__(self):
+        return len(self.members)
+
+team = Team(["Ben", "Sam", "Tom"])
+
+print(len(team))
+
+result:
+
+3
+
+## __eq__
+
+`__eq__()` controls equality using `==`.
+
+example:
+
+class Person:
+
+    def __init__(self, name):
+        self.name = name
+
+    def __eq__(self, other):
+        return self.name == other.name
+
+person1 = Person("Ben")
+person2 = Person("Ben")
+
+print(person1 == person2)
+
+result:
+
+True
+
+## Operator overloading
+
+dunder methods can change how operators behave for your own classes.
+
+example:
+
+class Point:
+
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    def __add__(self, other):
+        return Point(
+            self.x + other.x,
+            self.y + other.y
+        )
+
+point1 = Point(2, 3)
+point2 = Point(4, 5)
+
+point3 = point1 + point2
+
+print(point3.x)
+print(point3.y)
+
+result:
+
+6
+8
+
+this is called operator overloading.
+
+## __iter__ and __next__
+
+you can make your own objects iterable by implementing the iterator protocol.
+
+example:
+
+class Count:
+
+    def __init__(self, maximum):
+        self.current = 0
+        self.maximum = maximum
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+
+        if self.current >= self.maximum:
+            raise StopIteration
+
+        self.current += 1
+
+        return self.current
+
+counter = Count(3)
+
+for number in counter:
+    print(number)
+
+result:
+
+1
+2
+3
+
+`__iter__()` returns an iterator.
+
+`__next__()` returns the next value.
+
+`StopIteration` tells Python that iteration has finished.
+
+## Python data model
+
+many Python operations are actually implemented using special methods.
+
+for example:
+
+`len(x)` → `x.__len__()`
+
+`x + y` → `x.__add__(y)`
+
+`x == y` → `x.__eq__(y)`
+
+`str(x)` → `x.__str__()`
+
+`repr(x)` → `x.__repr__()`
+
+`for item in x` → `x.__iter__()`
+
+understanding the data model allows you to make your own objects behave naturally like built-in Python objects.
+
+## When to use advanced features
+
+these features are powerful, but they should not be used just because they exist.
+
+use them when they make code:
+- clearer
+- more reusable
+- more efficient
+- easier to maintain
+- easier to integrate with Python's built-in behaviour
+
+avoid unnecessary complexity.
+
+a simple loop is often better than an extremely complicated comprehension.
+
+a normal function is sometimes better than a decorator.
+
+a normal class is sometimes better than a descriptor.
+
+the goal is not to use every advanced feature, but to understand when each one is appropriate.
+
+## Goal
+
+be able to understand and use Python's advanced language features confidently.
+
+you should understand:
+- how iteration works internally
+- how generators produce values lazily
+- how `yield` preserves state
+- how decorators modify functions
+- how closures retain surrounding variables
+- how context managers handle resources
+- how `*` and `**` unpack data
+- how pattern matching works
+- when to use the walrus operator
+- how advanced comprehensions work
+- how descriptors control attribute behaviour
+- how properties work internally
+- how dunder methods allow custom objects to integrate with Python
+- how Python's data model connects all of these features

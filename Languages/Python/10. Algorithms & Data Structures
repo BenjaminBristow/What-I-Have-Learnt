@@ -1,0 +1,1328 @@
+
+algorithms and data structures are essential for solving programming problems efficiently.
+
+a data structure determines how data is organised.
+
+an algorithm determines how that data is processed.
+
+the goal is not just to make code work, but to make it work efficiently.
+
+## Arrays / Lists
+
+an array stores multiple values in an ordered structure.
+
+Python's `list` is a dynamic array.
+
+example:
+
+numbers = [10, 20, 30, 40]
+
+print(numbers[0])
+
+result:
+
+10
+
+common operations:
+
+`numbers[i]` - access an element
+
+`append()` - add to the end
+
+`insert()` - add at a position
+
+`pop()` - remove an element
+
+`remove()` - remove a value
+
+`len()` - get the number of elements
+
+accessing an element by index is usually `O(1)`.
+
+searching for a value is usually `O(n)`.
+
+inserting or deleting near the beginning is usually `O(n)` because elements may need to be shifted.
+
+## Linked Lists
+
+a linked list consists of nodes where each node stores:
+- a value
+- a reference to the next node
+
+example:
+
+class Node:
+
+    def __init__(self, value):
+        self.value = value
+        self.next = None
+
+node1 = Node(10)
+node2 = Node(20)
+
+node1.next = node2
+
+linked lists allow efficient insertion and deletion when you already have the relevant node.
+
+accessing an element by position is `O(n)` because you must follow the links.
+
+types include:
+
+singly linked list → each node points to the next node
+
+doubly linked list → each node points forwards and backwards
+
+## Stacks
+
+a stack follows LIFO:
+
+Last In, First Out
+
+example:
+
+stack = []
+
+stack.append(10)
+stack.append(20)
+stack.append(30)
+
+print(stack.pop())
+
+result:
+
+30
+
+common stack operations:
+
+`push` → add an item
+
+`pop` → remove the top item
+
+`peek` → view the top item
+
+stacks are useful for:
+- undo systems
+- function calls
+- expression parsing
+- parentheses problems
+- depth-first search
+- backtracking
+
+Python lists work well as stacks.
+
+## Queues
+
+a queue follows FIFO:
+
+First In, First Out
+
+example:
+
+from collections import deque
+
+queue = deque()
+
+queue.append("A")
+queue.append("B")
+queue.append("C")
+
+print(queue.popleft())
+
+result:
+
+A
+
+common queue operations:
+
+`enqueue` → add to the back
+
+`dequeue` → remove from the front
+
+queues are useful for:
+- task processing
+- scheduling
+- breadth-first search
+- waiting systems
+
+use `collections.deque` rather than repeatedly removing from the beginning of a list.
+
+## Hash Tables
+
+a hash table stores key-value pairs and uses a hash function to determine where values are stored.
+
+Python's `dict` is a hash table.
+
+example:
+
+person = {
+    "name": "Ben",
+    "age": 20
+}
+
+print(person["name"])
+
+dictionary lookup is usually `O(1)` on average.
+
+hash tables are extremely useful for:
+- fast lookups
+- counting
+- grouping
+- caching
+- detecting duplicates
+- mapping one value to another
+
+## Hashing
+
+a hash function converts an object into a hash value.
+
+Python provides:
+
+hash("hello")
+
+hashable objects can generally be used as dictionary keys or set elements.
+
+examples:
+
+- strings
+- integers
+- tuples containing hashable values
+
+mutable objects such as lists cannot normally be dictionary keys because their contents can change.
+
+## Sets
+
+a set stores unique values.
+
+example:
+
+numbers = {1, 2, 3, 3, 4}
+
+print(numbers)
+
+result:
+
+{1, 2, 3, 4}
+
+sets are useful for:
+- removing duplicates
+- membership checks
+- set operations
+
+membership is usually `O(1)` on average.
+
+example:
+
+numbers = {1, 2, 3, 4}
+
+if 3 in numbers:
+    print("found")
+
+useful operations:
+
+`union`
+
+`intersection`
+
+`difference`
+
+`symmetric_difference`
+
+## Trees
+
+a tree is a hierarchical data structure made from nodes.
+
+a tree normally contains:
+- a root
+- parent nodes
+- child nodes
+- leaves
+
+example:
+
+        10
+       /  \
+      5    15
+     / \
+    2   7
+
+trees are useful for:
+- hierarchical data
+- searching
+- databases
+- file systems
+- parsing
+- decision-making
+
+## Binary Trees
+
+a binary tree is a tree where each node has at most two children.
+
+example:
+
+class Node:
+
+    def __init__(self, value):
+        self.value = value
+        self.left = None
+        self.right = None
+
+a binary tree does not automatically have sorted values.
+
+## Binary Search Trees
+
+a binary search tree follows the rule:
+
+left subtree values < node value < right subtree values
+
+example:
+
+        10
+       /  \
+      5    15
+     / \     \
+    2   7     20
+
+searching can be very efficient when the tree is balanced.
+
+average search:
+
+`O(log n)`
+
+worst case:
+
+`O(n)`
+
+a completely unbalanced tree can behave like a linked list.
+
+## Tree Traversal
+
+common tree traversal methods include:
+
+in-order
+
+pre-order
+
+post-order
+
+level-order
+
+in-order traversal of a binary search tree produces values in sorted order.
+
+example:
+
+def inorder(node):
+
+    if node is None:
+        return
+
+    inorder(node.left)
+
+    print(node.value)
+
+    inorder(node.right)
+
+## Heaps
+
+a heap is a tree-based structure designed to efficiently access the smallest or largest element.
+
+a min-heap keeps the smallest element at the top.
+
+Python provides `heapq`.
+
+example:
+
+import heapq
+
+numbers = [5, 2, 8, 1, 3]
+
+heapq.heapify(numbers)
+
+print(heapq.heappop(numbers))
+
+result:
+
+1
+
+common operations:
+
+insert → `O(log n)`
+
+remove minimum → `O(log n)`
+
+view minimum → `O(1)`
+
+heaps are commonly used for:
+- priority queues
+- scheduling
+- finding the largest/smallest values
+- Dijkstra's algorithm
+
+## Graphs
+
+a graph consists of:
+- vertices/nodes
+- edges connecting them
+
+example:
+
+    A
+   / \
+  B   C
+  |   |
+  D---E
+
+graphs can be:
+
+directed → edges have a direction
+
+undirected → edges have no direction
+
+weighted → edges have costs
+
+unweighted → edges have no costs
+
+graphs are useful for:
+- maps
+- social networks
+- dependency systems
+- computer networks
+- games
+- route finding
+
+## Graph Representations
+
+an adjacency list stores each node's neighbours.
+
+example:
+
+graph = {
+    "A": ["B", "C"],
+    "B": ["A", "D"],
+    "C": ["A", "E"],
+    "D": ["B", "E"],
+    "E": ["C", "D"]
+}
+
+an adjacency matrix stores connections in a 2D structure.
+
+adjacency lists are usually more memory-efficient for sparse graphs.
+
+## Tries
+
+a trie is a tree designed for storing strings.
+
+example:
+
+storing:
+
+cat
+car
+care
+
+shares common prefixes.
+
+a trie can efficiently support:
+- prefix searches
+- autocomplete
+- dictionary lookups
+- spell checking
+
+searching is approximately `O(k)` where `k` is the length of the word.
+
+## Searching
+
+searching means finding a particular value in a collection.
+
+common searching algorithms include:
+
+linear search
+
+binary search
+
+## Linear Search
+
+linear search checks elements one at a time.
+
+example:
+
+numbers = [4, 7, 2, 9, 5]
+
+target = 9
+
+for i in range(len(numbers)):
+
+    if numbers[i] == target:
+        print(i)
+        break
+
+time complexity:
+
+`O(n)`
+
+linear search works on unsorted data.
+
+## Binary Search
+
+binary search repeatedly halves the search space.
+
+the data must be sorted.
+
+example:
+
+numbers = [1, 3, 5, 7, 9, 11]
+
+target = 7
+
+left = 0
+right = len(numbers) - 1
+
+while left <= right:
+
+    middle = (left + right) // 2
+
+    if numbers[middle] == target:
+        print("found")
+        break
+
+    elif numbers[middle] < target:
+        left = middle + 1
+
+    else:
+        right = middle - 1
+
+time complexity:
+
+`O(log n)`
+
+binary search is much faster than linear search for large sorted datasets.
+
+## Sorting
+
+sorting arranges data into a particular order.
+
+common sorting algorithms include:
+
+bubble sort
+
+selection sort
+
+insertion sort
+
+merge sort
+
+quicksort
+
+heap sort
+
+Python's built-in `sort()` and `sorted()` use Timsort.
+
+example:
+
+numbers = [5, 2, 8, 1, 3]
+
+numbers.sort()
+
+print(numbers)
+
+result:
+
+[1, 2, 3, 5, 8]
+
+## Bubble Sort
+
+bubble sort repeatedly compares neighbouring elements and swaps them when they are in the wrong order.
+
+example:
+
+numbers = [5, 2, 4, 1]
+
+for i in range(len(numbers)):
+
+    for j in range(len(numbers) - i - 1):
+
+        if numbers[j] > numbers[j + 1]:
+
+            numbers[j], numbers[j + 1] = numbers[j + 1], numbers[j]
+
+time complexity:
+
+worst case → `O(n²)`
+
+average case → `O(n²)`
+
+best case → `O(n)` with an optimisation that detects whether any swaps occurred
+
+bubble sort is mainly useful for learning algorithm fundamentals rather than real-world sorting.
+
+## Insertion Sort
+
+insertion sort builds a sorted section one element at a time.
+
+time complexity:
+
+worst case → `O(n²)`
+
+average case → `O(n²)`
+
+best case → `O(n)`
+
+it can work well on small or nearly sorted datasets.
+
+## Merge Sort
+
+merge sort uses divide and conquer.
+
+it:
+1. splits the list
+2. recursively sorts each half
+3. merges the sorted halves
+
+time complexity:
+
+best → `O(n log n)`
+
+average → `O(n log n)`
+
+worst → `O(n log n)`
+
+merge sort requires additional space for the merging process.
+
+## Quicksort
+
+quicksort chooses a pivot and partitions the data around it.
+
+average time:
+
+`O(n log n)`
+
+worst case:
+
+`O(n²)`
+
+good pivot selection can make quicksort very efficient.
+
+## Two Pointers
+
+the two-pointer technique uses two positions to process a sequence efficiently.
+
+example:
+
+numbers = [1, 2, 3, 4, 6]
+
+target = 6
+
+left = 0
+right = len(numbers) - 1
+
+while left < right:
+
+    total = numbers[left] + numbers[right]
+
+    if total == target:
+        print(left, right)
+        break
+
+    elif total < target:
+        left += 1
+
+    else:
+        right -= 1
+
+two pointers can often reduce an `O(n²)` approach to `O(n)`.
+
+it is especially useful for sorted arrays and strings.
+
+## Sliding Window
+
+sliding window maintains a range of elements and moves it through a sequence.
+
+example:
+
+numbers = [1, 2, 3, 4, 5]
+
+window_size = 3
+
+window_sum = sum(numbers[:window_size])
+
+maximum = window_sum
+
+for right in range(window_size, len(numbers)):
+
+    window_sum += numbers[right]
+    window_sum -= numbers[right - window_size]
+
+    maximum = max(maximum, window_sum)
+
+print(maximum)
+
+instead of recalculating every window from scratch, values are added and removed as the window moves.
+
+this can turn an `O(nk)` solution into `O(n)`.
+
+## Prefix Sums
+
+a prefix sum stores cumulative totals.
+
+example:
+
+numbers = [2, 4, 1, 5]
+
+prefix = [0]
+
+for number in numbers:
+    prefix.append(prefix[-1] + number)
+
+print(prefix)
+
+result:
+
+[0, 2, 6, 7, 12]
+
+this allows range sums to be calculated quickly.
+
+for example, the sum from index `left` to `right` can be calculated using:
+
+prefix[right + 1] - prefix[left]
+
+after building the prefix array:
+
+building → `O(n)`
+
+each range sum → `O(1)`
+
+## Recursion
+
+recursion occurs when a function calls itself.
+
+example:
+
+def factorial(n):
+
+    if n == 0:
+        return 1
+
+    return n * factorial(n - 1)
+
+print(factorial(5))
+
+result:
+
+120
+
+a recursive function needs a base case to stop the recursion.
+
+recursion is useful for:
+- trees
+- graphs
+- divide and conquer
+- backtracking
+- recursive mathematical problems
+
+## Backtracking
+
+backtracking explores possible solutions and reverses decisions when a path cannot produce a valid solution.
+
+general structure:
+
+def backtrack(state):
+
+    if solution_found(state):
+        return
+
+    for choice in choices:
+
+        make_choice(choice)
+
+        backtrack(state)
+
+        undo_choice(choice)
+
+common problems include:
+- permutations
+- combinations
+- Sudoku
+- N-Queens
+- maze solving
+- generating subsets
+
+## Breadth-First Search
+
+BFS explores a graph level by level.
+
+it normally uses a queue.
+
+example:
+
+from collections import deque
+
+def bfs(graph, start):
+
+    queue = deque([start])
+    visited = {start}
+
+    while queue:
+
+        node = queue.popleft()
+
+        print(node)
+
+        for neighbour in graph[node]:
+
+            if neighbour not in visited:
+
+                visited.add(neighbour)
+                queue.append(neighbour)
+
+BFS is useful for finding the shortest path in an unweighted graph.
+
+time complexity:
+
+`O(V + E)`
+
+where:
+
+`V` = number of vertices
+
+`E` = number of edges
+
+## Depth-First Search
+
+DFS explores as far as possible along one path before backtracking.
+
+it can use recursion or an explicit stack.
+
+example:
+
+def dfs(graph, node, visited):
+
+    if node in visited:
+        return
+
+    visited.add(node)
+
+    print(node)
+
+    for neighbour in graph[node]:
+
+        dfs(graph, neighbour, visited)
+
+visited = set()
+
+dfs(graph, "A", visited)
+
+time complexity:
+
+`O(V + E)`
+
+DFS is useful for:
+- exploring graphs
+- detecting cycles
+- connected components
+- topological sorting
+- backtracking
+- maze problems
+
+## Greedy Algorithms
+
+a greedy algorithm makes the best-looking choice at each step without reconsidering previous decisions.
+
+example:
+
+choosing the largest available coin when making change is a greedy strategy.
+
+greedy algorithms can be very efficient, but they do not always produce the optimal solution.
+
+they work when the problem has the appropriate properties that make local optimal choices lead to a global optimum.
+
+examples include:
+- activity selection
+- some scheduling problems
+- minimum spanning tree algorithms
+- Huffman coding
+
+## Divide and Conquer
+
+divide and conquer breaks a problem into smaller subproblems.
+
+general process:
+
+1. divide the problem
+2. solve the smaller problems
+3. combine the results
+
+examples:
+
+merge sort
+
+quicksort
+
+binary search
+
+many recursive algorithms use this approach.
+
+## Dynamic Programming
+
+dynamic programming solves problems by breaking them into overlapping subproblems and storing results so they do not need to be calculated repeatedly.
+
+two main approaches are:
+
+memoization → top-down recursion with caching
+
+tabulation → bottom-up table
+
+## Memoization
+
+memoization stores results of previously solved subproblems.
+
+example:
+
+from functools import cache
+
+@cache
+def fibonacci(n):
+
+    if n <= 1:
+        return n
+
+    return fibonacci(n - 1) + fibonacci(n - 2)
+
+print(fibonacci(50))
+
+without caching, recursive Fibonacci has exponential time complexity.
+
+with memoization, it becomes approximately:
+
+`O(n)`
+
+## Tabulation
+
+tabulation builds answers from the smallest subproblems upwards.
+
+example:
+
+def fibonacci(n):
+
+    if n <= 1:
+        return n
+
+    dp = [0] * (n + 1)
+
+    dp[1] = 1
+
+    for i in range(2, n + 1):
+        dp[i] = dp[i - 1] + dp[i - 2]
+
+    return dp[n]
+
+print(fibonacci(10))
+
+this avoids recursion and explicitly stores the results.
+
+## Big-O notation
+
+Big-O describes how an algorithm's resource usage grows as the input size increases.
+
+common complexities:
+
+`O(1)` → constant
+
+`O(log n)` → logarithmic
+
+`O(n)` → linear
+
+`O(n log n)` → linearithmic
+
+`O(n²)` → quadratic
+
+`O(n³)` → cubic
+
+`O(2ⁿ)` → exponential
+
+`O(n!)` → factorial
+
+generally, lower growth rates are better for large inputs.
+
+## O(1)
+
+constant time means the operation does not depend on the size of the input.
+
+example:
+
+numbers = [10, 20, 30, 40]
+
+print(numbers[2])
+
+accessing a list element by index is normally `O(1)`.
+
+## O(n)
+
+linear time grows proportionally with the input size.
+
+example:
+
+for number in numbers:
+    print(number)
+
+if the list doubles in size, roughly twice as many elements need to be processed.
+
+## O(log n)
+
+logarithmic algorithms reduce the problem size significantly at each step.
+
+binary search is the classic example.
+
+each step roughly halves the search space.
+
+## O(n log n)
+
+common efficient sorting algorithms operate in `O(n log n)` time.
+
+examples:
+
+merge sort
+
+average-case quicksort
+
+Timsort
+
+## O(n²)
+
+quadratic algorithms often involve nested loops over the same dataset.
+
+example:
+
+for i in range(n):
+
+    for j in range(n):
+
+        print(i, j)
+
+if `n` doubles, the number of operations grows by roughly four times.
+
+## Time complexity
+
+time complexity describes how the number of operations grows as input size increases.
+
+example:
+
+for number in numbers:
+    print(number)
+
+has:
+
+`O(n)`
+
+if you then add another independent loop:
+
+for number in numbers:
+    print(number)
+
+for number in numbers:
+    print(number)
+
+the total is still:
+
+`O(n)`
+
+because constants are ignored in Big-O.
+
+## Nested loops
+
+nested loops often multiply complexity.
+
+example:
+
+for i in range(n):
+
+    for j in range(n):
+
+        print(i, j)
+
+complexity:
+
+`O(n²)`
+
+but not every nested loop is automatically `O(n²)`.
+
+example:
+
+j = 0
+
+for i in range(n):
+
+    while j < n:
+        j += 1
+
+this can be `O(n)` because `j` only moves forward a total of `n` times.
+
+always analyse how many times each operation actually executes.
+
+## Space complexity
+
+space complexity describes how much additional memory an algorithm needs as the input grows.
+
+example:
+
+def duplicate(numbers):
+
+    result = []
+
+    for number in numbers:
+        result.append(number)
+
+    return result
+
+the additional list grows with the input size.
+
+space complexity:
+
+`O(n)`
+
+an algorithm can have low time complexity but high space complexity, or vice versa.
+
+## In-place algorithms
+
+an in-place algorithm uses very little additional memory.
+
+example:
+
+numbers.sort()
+
+the exact implementation details matter, but sorting can often be performed with limited additional memory.
+
+in-place algorithms are useful when memory usage matters.
+
+## Best case
+
+the best case describes the most favourable possible input.
+
+example:
+
+linear search finds the target immediately.
+
+best case:
+
+`O(1)`
+
+## Worst case
+
+the worst case describes the least favourable input.
+
+for linear search, the target may be at the end or not present.
+
+worst case:
+
+`O(n)`
+
+## Average case
+
+the average case describes expected performance across typical inputs.
+
+for linear search, a target found roughly halfway through the list takes approximately `O(n)` operations.
+
+Big-O usually focuses on asymptotic growth rather than exact operation counts.
+
+## Complexity comparison
+
+roughly from fastest-growing performance to slowest-growing performance:
+
+`O(1)`
+
+`O(log n)`
+
+`O(n)`
+
+`O(n log n)`
+
+`O(n²)`
+
+`O(n³)`
+
+`O(2ⁿ)`
+
+`O(n!)`
+
+for large inputs, the difference between these growth rates becomes enormous.
+
+## Choosing a data structure
+
+use a list when:
+- order matters
+- you need indexed access
+- duplicates are allowed
+
+use a set when:
+- values must be unique
+- fast membership checks are needed
+
+use a dictionary when:
+- you need key-value relationships
+- fast lookups are needed
+
+use a stack when:
+- you need LIFO behaviour
+
+use a queue when:
+- you need FIFO behaviour
+
+use a heap when:
+- you repeatedly need the smallest/largest priority
+
+use a tree when:
+- data is hierarchical
+- ordered searching is useful
+
+use a graph when:
+- objects have relationships with one another
+
+use a trie when:
+- prefix-based string searching is important
+
+## Problem-solving approach
+
+when given an unfamiliar programming problem:
+
+1. understand exactly what the input and output are
+2. work through small examples manually
+3. identify the important constraints
+4. choose an appropriate data structure
+5. create a simple brute-force solution first
+6. analyse its time and space complexity
+7. look for repeated work
+8. consider hashing, sorting or preprocessing
+9. look for patterns such as two pointers or sliding windows
+10. consider recursion, BFS or DFS for trees and graphs
+11. consider greedy or dynamic programming when appropriate
+12. test edge cases
+13. analyse the final complexity
+
+## Common coding patterns
+
+many programming problems can be recognised as variations of common patterns.
+
+hash map:
+
+use when you need fast lookup or counting.
+
+set:
+
+use when you need to detect duplicates or membership.
+
+two pointers:
+
+use when processing sequences from both ends or maintaining two positions.
+
+sliding window:
+
+use when dealing with contiguous subarrays or substrings.
+
+prefix sum:
+
+use when repeatedly calculating range totals.
+
+binary search:
+
+use when the search space is sorted or can be divided by a condition.
+
+stack:
+
+use for nested structures, undo behaviour and matching brackets.
+
+queue:
+
+use for level-by-level processing and BFS.
+
+DFS:
+
+use for exploring paths, components and recursive structures.
+
+BFS:
+
+use for shortest paths in unweighted graphs and level-order exploration.
+
+heap:
+
+use when repeatedly selecting the smallest or largest item.
+
+backtracking:
+
+use when exploring many possible choices.
+
+dynamic programming:
+
+use when problems contain overlapping subproblems and optimal substructure.
+
+## Brute force vs optimisation
+
+a brute-force solution tries every possible option.
+
+this is often useful as a starting point because it gives you a correct baseline.
+
+example:
+
+finding whether two numbers add to a target can be done with nested loops:
+
+for i in range(len(numbers)):
+
+    for j in range(i + 1, len(numbers)):
+
+        if numbers[i] + numbers[j] == target:
+            print(i, j)
+
+complexity:
+
+`O(n²)`
+
+using a set or dictionary can reduce this to approximately:
+
+`O(n)`
+
+the important skill is recognising where the repeated work can be removed.
+
+## Constraints matter
+
+the input size often tells you which algorithms are possible.
+
+rough guideline:
+
+small input → brute force may be acceptable
+
+large input → usually need `O(n)` or `O(n log n)`
+
+very large input → even `O(n log n)` may need careful implementation
+
+exponential or factorial algorithms are usually only practical for small inputs unless there are strong optimisations or special constraints.
+
+always look at the constraints before choosing an approach.
+
+## Goal
+
+solve unfamiliar programming problems efficiently.
+
+you should be able to:
+
+- choose appropriate data structures
+- understand how lists, linked lists, stacks and queues work
+- use dictionaries and sets for fast lookup
+- understand trees, heaps and graphs
+- recognise when a trie is useful
+- perform linear and binary search
+- understand common sorting algorithms
+- recognise two-pointer problems
+- recognise sliding-window problems
+- use prefix sums
+- use recursion and backtracking
+- implement BFS and DFS
+- understand greedy algorithms
+- understand divide and conquer
+- solve dynamic programming problems
+- calculate time complexity
+- calculate space complexity
+- understand best, worst and average cases
+- recognise common coding patterns
+- optimise brute-force solutions
+- choose algorithms based on input constraints
+
+the ultimate goal is to look at an unfamiliar problem and think:
+
+"what information do i need to store, what operations do i need to perform, and what is the most efficient way to do those operations?"

@@ -1,0 +1,585 @@
+1. Programming & Python Fundamentals
+
+Absolute beginner → comfortable writing basic programs
+
+What programming is
+How Python works
+Installing/running Python
+Variables
+Data types
+Type conversion
+Operators
+Input/output
+Comments
+Basic syntax
+Strings
+String formatting
+Boolean logic
+if / elif / else
+for loops
+while loops
+break, continue, pass
+Basic debugging
+
+Goal: Be able to write small programs without following tutorials.
+
+2. Python Data Structures
+Lists
+Tuples
+Sets
+Dictionaries
+Strings as sequences
+Indexing
+Slicing
+Nested data structures
+Mutability vs immutability
+Copying
+Membership
+Sorting
+Searching
+Unpacking
+Comprehensions
+List
+Dictionary
+Set
+Generator
+
+Goal: Be extremely comfortable manipulating data in Python.
+
+3. Functions & Problem Solving
+Defining functions
+Parameters
+Arguments
+Return values
+Scope
+Local/global variables
+Default arguments
+Keyword arguments
+*args
+**kwargs
+Lambda functions
+Functions as objects
+Higher-order functions
+Recursion
+Functional programming basics
+map
+filter
+reduce
+zip
+enumerate
+any
+all
+Problem solving
+Breaking problems down
+Writing algorithms
+Pseudocode
+Tracing programs
+Debugging logically
+Recognising common patterns
+
+Goal: Given an unfamiliar problem, know how to approach it.
+
+4. Errors, Exceptions & Debugging
+Syntax errors
+Runtime errors
+Logical errors
+Tracebacks
+try
+except
+else
+finally
+raise
+Custom exceptions
+Exception hierarchy
+Assertions
+Defensive programming
+Debuggers
+Breakpoints
+pdb
+Logging
+Reading error messages properly
+
+Goal: Stop being scared when your code breaks.
+
+5. Files, Modules & Python Projects
+Reading/writing files
+open()
+Context managers
+pathlib
+Directories
+File manipulation
+JSON
+CSV
+Regular expressions
+Modules
+Imports
+Packages
+__init__.py
+__name__
+__main__
+Project structure
+
+Goal: Build programs consisting of multiple files that interact properly.
+
+6. Object-Oriented Python
+Classes
+Objects
+Attributes
+Methods
+self
+__init__
+Instance vs class attributes
+Instance/class/static methods
+Properties
+Encapsulation
+Inheritance
+Polymorphism
+Abstraction
+Composition
+Multiple inheritance
+super()
+Method Resolution Order
+Abstract base classes
+Protocols
+
+Goal: Be able to design larger Python programs using appropriate abstractions.
+
+7. Advanced Python Language Features
+
+This is where you move from "I know Python" to "I understand Python."
+
+Iterables
+Iterators
+Generators
+yield
+Generator expressions
+Decorators
+Closures
+Context managers
+with
+contextlib
+* and ** unpacking
+Pattern matching
+Walrus operator
+Advanced comprehensions
+Descriptors
+Properties
+Dunder methods
+
+Goal: Understand the features that make Python Python.
+
+8. Python's Data Model & Internals
+
+A deeper dive into how Python actually works.
+
+Objects
+References
+Identity
+id()
+Mutability
+Immutability
+Namespaces
+Scope
+LEGB
+Garbage collection
+Reference counting
+Memory management
+Special/dunder methods
+Attribute lookup
+Descriptors
+__getattribute__
+__getattr__
+Python bytecode
+dis
+Frames
+Call stack
+CPython basics
+
+Goal: Understand what Python is actually doing underneath your code.
+
+9. Standard Library Mastery
+
+Learn the most useful parts of Python's standard library.
+
+Core
+math
+statistics
+random
+datetime
+time
+Data
+collections
+itertools
+functools
+operator
+heapq
+Files/system
+os
+sys
+pathlib
+shutil
+glob
+tempfile
+subprocess
+Data formats
+json
+csv
+sqlite3
+re
+Programming
+typing
+dataclasses
+enum
+logging
+argparse
+
+Goal: Before installing a package, know whether Python already provides what you need.
+
+10. Algorithms & Data Structures
+
+This is particularly important for you given your CS degree and coding-test preparation.
+
+Data structures
+Arrays/lists
+Linked lists
+Stacks
+Queues
+Hash tables
+Sets
+Trees
+Binary search trees
+Heaps
+Graphs
+Tries
+Algorithms
+Searching
+Sorting
+Binary search
+Two pointers
+Sliding window
+Prefix sums
+Recursion
+Backtracking
+BFS
+DFS
+Greedy algorithms
+Divide and conquer
+Dynamic programming
+Complexity
+Big-O
+Time complexity
+Space complexity
+Best/worst/average case
+
+Goal: Solve unfamiliar programming problems efficiently.
+
+11. Professional Python Development
+
+Now start writing Python like you'd encounter in an actual software job.
+
+Code style
+PEP 8
+Type hints
+Docstrings
+Documentation
+Clean code
+Refactoring
+Code review
+Project organisation
+Configuration
+Environment variables
+.gitignore
+Tooling
+pip
+venv
+pyproject.toml
+Dependency management
+Ruff
+Black
+mypy
+Pyright
+Git
+Git
+GitHub
+Branches
+Commits
+Pull requests
+Merge conflicts
+Releases
+
+Goal: Produce maintainable, professional-quality Python.
+
+12. Testing & Software Quality
+Unit testing
+Integration testing
+End-to-end testing
+unittest
+pytest
+Fixtures
+Parameterised tests
+Mocking
+Test coverage
+Test-driven development
+Assertions
+Continuous integration
+
+Goal: Be able to confidently change your code without breaking everything.
+
+13. Databases & SQL
+SQL
+Tables
+Rows
+Columns
+Primary keys
+Foreign keys
+CRUD
+SELECT
+INSERT
+UPDATE
+DELETE
+JOINs
+GROUP BY
+HAVING
+Subqueries
+CTEs
+Window functions
+Indexes
+Constraints
+Transactions
+Python
+SQLite
+PostgreSQL
+Database drivers
+ORMs
+Django ORM
+Query optimisation
+
+Goal: Build programs that persist and efficiently retrieve real data.
+
+14. Web Development & APIs
+Web fundamentals
+HTTP
+HTTPS
+DNS
+Requests/responses
+Headers
+Cookies
+Sessions
+HTML
+CSS
+JavaScript fundamentals
+Python web development
+Django
+FastAPI
+Flask
+APIs
+REST
+JSON APIs
+Authentication
+Authorisation
+JWT
+Pagination
+Rate limiting
+Webhooks
+API versioning
+
+Goal: Build and deploy proper web applications and APIs.
+
+For you specifically, this is where I'd put a lot of attention because of your Rambling On Django project.
+
+15. Networking, Concurrency & Async Python
+Networking
+TCP/IP
+UDP
+Sockets
+Ports
+DNS
+HTTP
+HTTPS
+Concurrency
+Processes
+Threads
+Thread safety
+Locks
+Race conditions
+Thread pools
+Multiprocessing
+Async
+async
+await
+asyncio
+Event loops
+Coroutines
+Tasks
+Futures
+Async generators
+Key concepts
+Concurrency vs parallelism
+CPU-bound vs I/O-bound
+
+Goal: Build programs that can efficiently handle lots of work simultaneously.
+
+16. Performance & Advanced Python
+Profiling
+Benchmarking
+timeit
+cProfile
+tracemalloc
+Memory optimisation
+Algorithm optimisation
+Lazy evaluation
+Caching
+Multiprocessing
+GIL
+CPU vs I/O performance
+Efficient data structures
+Vectorisation
+
+Then go deeper:
+
+CPython internals
+Bytecode
+Interpreter
+Garbage collector
+Reference counting
+C extensions
+Cython
+ctypes
+cffi
+
+Goal: Understand why Python programs are slow/fast and how to optimise them intelligently.
+
+17. Deployment, DevOps & Cloud
+Linux
+Bash
+SSH
+Servers
+Processes
+Environment variables
+Docker
+Docker Compose
+Nginx
+Gunicorn
+CI/CD
+GitHub Actions
+Deployment
+Monitoring
+Logging
+Cloud computing
+AWS/Azure/GCP
+Databases in production
+Reverse proxies
+DNS
+SSL/TLS
+
+Goal: Take your Python application from:
+
+"My computer"
+
+to:
+
+"The internet"
+18. Data Science, AI & Machine Learning
+Data
+NumPy
+Pandas
+Matplotlib
+SciPy
+Jupyter
+Mathematics
+Algebra
+Statistics
+Probability
+Vectors
+Matrices
+Calculus
+Machine learning
+Regression
+Classification
+Clustering
+Decision trees
+Random forests
+SVM
+PCA
+Feature engineering
+Model evaluation
+Cross-validation
+Deep learning
+Neural networks
+Backpropagation
+Gradient descent
+CNNs
+RNNs
+Transformers
+PyTorch
+AI engineering
+LLM APIs
+Embeddings
+Vector databases
+RAG
+Agents
+Tool calling
+Model evaluation
+Fine-tuning
+
+Goal: Be able to use Python for serious data/AI work.
+
+19. Software Architecture & Large Systems
+
+This is where you start thinking beyond individual programs.
+
+SOLID
+Design patterns
+Dependency injection
+Clean architecture
+Layered architecture
+Domain-driven design
+Microservices
+Monoliths
+Modular monoliths
+Event-driven architecture
+Message queues
+Caching
+Distributed systems
+Scalability
+Reliability
+Fault tolerance
+
+Goal: Design systems that remain manageable when they become huge.
+
+20. Python Mastery & Language Development
+
+Python language
+Python grammar
+AST
+Parsing
+Compilation
+Bytecode
+Import system
+Descriptors
+Metaclasses
+Object model
+Memory management
+Python ecosystem
+PEPs
+Python language design
+Packaging ecosystem
+Open-source development
+CPython
+Read CPython source
+Build CPython
+Modify CPython
+Write C extensions
+Submit Python patches
+Ultimate projects
+
+Build:
+
+Your own Python interpreter
+Your own Python package
+A serious open-source project
+A compiler/interpreter
+A high-performance Python application
+Contributions to major Python projects
+
+Goal: Don't just use Python — understand how the language itself works.

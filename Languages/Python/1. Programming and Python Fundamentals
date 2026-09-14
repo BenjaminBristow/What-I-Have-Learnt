@@ -1,0 +1,168 @@
+## Variables
+
+a name that points to a value stored in memory, so you can reuse it without retyping the value every time
+created just by assigning something to a name, no need to declare a type first
+example: age = 20
+name = "Ben"
+is_student = True
+naming rules: can't start with a number, can't contain spaces, case-sensitive (age and Age are different variables), can't be a reserved word like for or if
+convention in python is snake_case for variable names, not camelCase
+
+## Data types
+
+the different kinds of values python works with, each behaving differently
+the core ones: x = 5 int
+y = 3.14 float
+name = "Ben" str
+is_on = True bool
+check what type something is with type(): type(5) result <class 'int'>
+type("hi") result <class 'str'>
+knowing the type matters because operations behave differently depending on it — plus adds numbers but joins strings together
+
+## Type conversion
+
+switching a value from one type to another, done with functions named after the target type
+example: int("5") result 5, string to int
+str(5) result "5", int to string
+float("3.14") result 3.14
+int(3.9) result 3, chops off the decimal, doesn't round
+comes up constantly with user input, since input() always returns a string, even if someone types a number: age = int(input("Enter your age: "))
+converting something that isn't actually valid raises an error: int("hello") raises ValueError
+
+## Operators
+
+symbols that perform an operation on values
+arithmetic: 5 + 2 result 7
+5 - 2 result 3
+5 * 2 result 10
+5 / 2 result 2.5, always returns a float
+5 // 2 result 2, floor division, drops the remainder
+5 % 2 result 1, modulus, gives the remainder
+5 ** 2 result 25, exponent
+comparison, always returns a boolean: 5 == 2 result False
+5 != 2 result True
+5 > 2 result True
+assignment shortcuts: x = 5
+x += 1 same as x = x + 1
+x -= 1
+x *= 2
+
+## Input/output
+
+print() sends output to the screen
+input() pauses the program and waits for the user to type something, then returns it as a string
+example: name = input("What's your name? ")
+print("Hello, " + name)
+print() can take multiple values separated by commas, and adds spaces between them automatically: print("Age:", 20) result Age: 20
+
+## Comments
+
+lines in the code that python ignores completely, meant for humans reading the code
+single line starts with a hash symbol:
+this calculates the total
+total = price * quantity
+multi-line comments aren't a real thing in python, but a triple-quoted string not assigned to anything is often used the same way
+good comments explain why something's done a certain way, not just what the line does — the code already shows what it does
+
+## Basic syntax
+
+python doesn't use curly braces or semicolons to mark blocks of code — it uses indentation
+everything inside a block (an if statement, a loop, a function) has to be indented consistently, usually 4 spaces
+example: if True:
+print("this is inside the block")
+print("this is not")
+mixing tabs and spaces, or getting the indentation level wrong, causes an IndentationError — one of the most common early mistakes
+a colon marks the start of a block, always followed by an indented line underneath
+
+## Strings
+
+text, wrapped in either single or double quotes — python doesn't care which, as long as it's consistent on each one a = 'hello'
+b = "hello"
+combine strings with plus: "hello" + " " + "world" result "hello world"
+useful built-in methods: "hello".upper() result "HELLO"
+"HELLO".lower() result "hello"
+" hi ".strip() result "hi", removes surrounding whitespace
+"a,b,c".split(",") result ["a", "b", "c"]
+",".join(["a", "b"]) result "a,b"
+strings are immutable, so all these methods return a new string rather than changing the original
+
+## String formatting
+
+building a string that has variables plugged into it
+the modern way is an f-string, put an f right before the opening quote: name = "Ben"
+age = 20
+print(f"{name} is {age} years old")
+result Ben is 20 years old
+can do more than just insert values — calculations work inside the braces too: print(f"Next year you'll be {age + 1}")
+older methods you'll still see in other people's code: "{} is {}".format(name, age) the .format() method
+"%s is %s" % (name, age) percent formatting, older style
+
+## Boolean logic
+
+True and False, used to control the flow of a program
+combined with logical operators: True and False result False, both need to be true
+True or False result True, only one needs to be true
+not True result False, flips it
+values other than actual booleans get treated as "truthy" or "falsy" when checked in a condition — 0, empty string, empty list, and None all count as falsy, pretty much everything else counts as truthy if []:
+print("won't print, empty list is falsy")
+
+## if / elif / else
+
+controls which block of code runs, based on a condition
+example: age = 20 if age < 13:
+print("child")
+elif age < 20:
+print("teenager")
+else:
+print("adult")
+only one branch runs — python checks each condition top to bottom and stops at the first one that's true
+elif and else are both optional, an if on its own is perfectly valid
+
+## for loops
+
+repeats a block of code once for each item in a sequence
+example: for letter in "abc":
+print(letter)
+result a, b, c printed on separate lines
+looping a set number of times uses range(): for i in range(5):
+print(i)
+result 0 1 2 3 4
+range(start, stop, step) works the same way slicing does — start is included, stop isn't range(2, 10, 2) result 2, 4, 6, 8
+
+## while loops
+
+repeats a block of code for as long as a condition stays true
+example: count = 0
+while count < 5:
+print(count)
+count += 1
+unlike a for loop, there's no automatic limit — forgetting to update the condition inside the loop causes an infinite loop that never stops on its own
+generally reach for a for loop when you know how many times to repeat something, and a while loop when you're waiting for a condition to change
+
+## break, continue, pass
+
+three keywords for controlling a loop's flow from the inside
+break stops the loop immediately, skips everything left, even in later iterations for i in range(10):
+if i == 3:
+break
+print(i)
+result 0 1 2
+continue skips just the rest of this iteration, then moves on to the next one for i in range(5):
+if i == 2:
+continue
+print(i)
+result 0 1 3 4
+pass does literally nothing, just a placeholder so python doesn't complain about an empty block if True:
+pass todo: fill this in later
+
+## Basic debugging
+
+reading the error message properly is step one — python's traceback tells you the exact line and the type of error, like NameError, TypeError, IndentationError
+the error is almost always at or just above the line number given, not somewhere random
+print statements dropped in at key points are the simplest way to check what a variable actually holds at that point in the program print(f"DEBUG: x = {x}")
+common early mistakes worth checking for first:
+mismatched indentation
+using a single equals sign (assignment) where a double equals sign (comparison) was meant
+off-by-one errors in loops or slicing
+forgetting that input() returns a string, not a number
+most editors (including VS Code) have a proper debugger built in that lets you pause the program and step through it line by line — worth learning once print statements start feeling limiting

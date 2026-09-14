@@ -1,0 +1,819 @@
+
+This section is about understanding how programs communicate over networks and how Python can handle multiple tasks efficiently.
+
+You don't need to become a networking/concurrency expert immediately. The most important thing is understanding when to use processes, threads or async code.
+
+---
+
+# Networking
+
+## TCP/IP
+
+TCP/IP is the collection of protocols that underpins the internet.
+
+A simplified model:
+
+Application
+    ↓
+TCP/UDP
+    ↓
+IP
+    ↓
+Network hardware
+
+IP handles addressing and routing data between machines.
+
+TCP and UDP handle communication between applications.
+
+---
+
+## TCP
+
+TCP = Transmission Control Protocol.
+
+TCP provides:
+
+- Reliable delivery
+- Ordered data
+- Error detection
+- Retransmission
+- Connection-based communication
+
+Typical uses:
+
+- HTTP/HTTPS
+- Web applications
+- APIs
+- File transfers
+
+Think:
+
+TCP = reliable communication.
+
+---
+
+## UDP
+
+UDP = User Datagram Protocol.
+
+UDP is connectionless and does not guarantee delivery or ordering.
+
+Advantages:
+
+- Lower overhead
+- Often faster
+- Useful when speed matters more than guaranteed delivery
+
+Common uses:
+
+- Online games
+- Live video/audio
+- DNS
+- Real-time applications
+
+Think:
+
+UDP = fast communication where occasional lost packets may be acceptable.
+
+---
+
+## TCP vs UDP
+
+TCP:
+
+    Reliable
+    Ordered
+    Connection-based
+    More overhead
+
+UDP:
+
+    No delivery guarantee
+    No ordering guarantee
+    Connectionless
+    Lower overhead
+
+---
+
+## IP Addresses
+
+An IP address identifies a device/interface on a network.
+
+IPv4 example:
+
+192.168.1.10
+
+IPv6 example:
+
+2001:db8::1
+
+Private IP addresses are commonly used inside local networks.
+
+Public IP addresses are used for communication over the internet.
+
+---
+
+## Ports
+
+A port identifies a particular network service on a machine.
+
+Example:
+
+192.168.1.10:8000
+
+Here:
+
+192.168.1.10
+    IP address
+
+8000
+    Port
+
+Common ports:
+
+80
+    HTTP
+
+443
+    HTTPS
+
+22
+    SSH
+
+53
+    DNS
+
+Ports allow one computer to run many network services simultaneously.
+
+---
+
+## Sockets
+
+A socket provides a programming interface for network communication.
+
+A simplified socket connection can be thought of as:
+
+IP address + Port + Protocol
+
+Python example:
+
+import socket
+
+s = socket.socket(
+    socket.AF_INET,
+    socket.SOCK_STREAM
+)
+
+s.connect(("example.com", 80))
+
+The socket can then be used to send and receive data.
+
+You don't need to use raw sockets for normal web development, but understanding them helps explain how networking works underneath higher-level libraries.
+
+---
+
+## DNS
+
+DNS converts domain names into IP addresses.
+
+Example:
+
+example.com
+    ↓
+DNS
+    ↓
+93.184.216.34
+
+Python can perform DNS lookups:
+
+import socket
+
+ip = socket.gethostbyname("example.com")
+
+print(ip)
+
+---
+
+## HTTP and HTTPS
+
+HTTP operates at the application layer and is used to communicate with web servers.
+
+HTTPS is HTTP protected by TLS.
+
+Typical flow:
+
+DNS
+    ↓
+TCP
+    ↓
+TLS
+    ↓
+HTTPS
+    ↓
+HTTP request/response
+
+You don't normally need to manually implement this stack because libraries and frameworks handle it.
+
+---
+
+# Concurrency
+
+Concurrency means dealing with multiple tasks during overlapping periods of time.
+
+For example:
+
+Task A ────────
+       Task B ────────
+              Task C ────────
+
+The tasks don't necessarily execute at exactly the same time.
+
+---
+
+# Parallelism
+
+Parallelism means multiple tasks are literally executing at the same time, usually on different CPU cores.
+
+Example:
+
+CPU Core 1 → Task A
+CPU Core 2 → Task B
+CPU Core 3 → Task C
+
+---
+
+## Concurrency vs Parallelism
+
+Concurrency:
+
+    Multiple tasks are being managed/interleaved.
+
+Parallelism:
+
+    Multiple tasks execute simultaneously.
+
+A program can be concurrent without being parallel.
+
+---
+
+# Processes
+
+A process is an independent running program with its own memory space.
+
+Example:
+
+Process 1
+    Own memory
+
+Process 2
+    Own memory
+
+Processes provide strong isolation.
+
+Python can create multiple processes using:
+
+multiprocessing
+
+---
+
+## Multiprocessing
+
+Multiprocessing allows Python to use multiple processes.
+
+Example:
+
+from multiprocessing import Process
+
+def work():
+    print("Working")
+
+p = Process(target=work)
+
+p.start()
+p.join()
+
+This can provide true parallel execution for CPU-heavy work.
+
+Useful for:
+
+- CPU-heavy calculations
+- Image processing
+- Data processing
+- Computational workloads
+
+---
+
+# Threads
+
+A process can contain multiple threads.
+
+Example:
+
+Process
+    ├── Thread 1
+    ├── Thread 2
+    └── Thread 3
+
+Threads share the same process memory.
+
+This makes communication easier, but also creates potential safety problems.
+
+---
+
+## Threading
+
+Python provides:
+
+import threading
+
+Example:
+
+import threading
+
+def work():
+    print("Working")
+
+thread = threading.Thread(target=work)
+
+thread.start()
+thread.join()
+
+---
+
+## Thread Safety
+
+Thread-safe code behaves correctly when accessed by multiple threads simultaneously.
+
+Example problem:
+
+Two threads modify the same variable.
+
+Thread A:
+
+read value = 10
+
+Thread B:
+
+read value = 10
+
+Thread A:
+
+write 11
+
+Thread B:
+
+write 11
+
+Expected:
+
+12
+
+Actual:
+
+11
+
+This is a race condition.
+
+---
+
+## Race Conditions
+
+A race condition occurs when the result depends on the timing/order of concurrent operations.
+
+They can be extremely difficult to reproduce and debug.
+
+Example:
+
+Thread A:
+    Read balance
+
+Thread B:
+    Read balance
+
+Thread A:
+    Withdraw money
+
+Thread B:
+    Withdraw money
+
+Both may incorrectly believe enough money exists.
+
+---
+
+## Locks
+
+A lock prevents multiple threads from entering a critical section simultaneously.
+
+Example:
+
+import threading
+
+lock = threading.Lock()
+
+with lock:
+    # Only one thread at a time
+    shared_value += 1
+
+The locked section is called a critical section.
+
+---
+
+## Thread Pools
+
+Instead of creating threads manually, you can use a thread pool.
+
+Python provides:
+
+from concurrent.futures import ThreadPoolExecutor
+
+Example:
+
+from concurrent.futures import ThreadPoolExecutor
+
+def square(x):
+    return x * x
+
+with ThreadPoolExecutor(max_workers=4) as executor:
+    results = executor.map(square, [1, 2, 3, 4])
+
+Thread pools are useful when you have many similar tasks, particularly I/O-bound work.
+
+---
+
+# CPU-Bound vs I/O-Bound
+
+This distinction is extremely important.
+
+## CPU-Bound
+
+The program spends most of its time using the CPU.
+
+Examples:
+
+- Large mathematical calculations
+- Image processing
+- Video encoding
+- Complex algorithms
+- Data processing
+
+Typical solutions:
+
+    Multiprocessing
+    Optimised algorithms
+    Native extensions
+    Sometimes specialised libraries
+
+---
+
+## I/O-Bound
+
+The program spends most of its time waiting for something else.
+
+Examples:
+
+- HTTP requests
+- Database queries
+- Reading files
+- Network communication
+- Waiting for APIs
+
+Typical solutions:
+
+    Asyncio
+    Threads
+    Async HTTP libraries
+    Connection pooling
+
+---
+
+# Python's GIL
+
+In traditional CPython implementations, the Global Interpreter Lock (GIL) restricts execution of Python bytecode by multiple threads within the same interpreter.
+
+This means threads generally aren't the standard solution for speeding up CPU-bound pure-Python work.
+
+Threads are still very useful for I/O-bound tasks because while one thread waits for I/O, another can run.
+
+For CPU-heavy work, multiprocessing is often more appropriate.
+
+Note: modern Python versions also have optional/free-threaded CPython builds, so the GIL should not be treated as an eternal rule of Python. The important practical skill is understanding which concurrency model your Python runtime and workload support.
+
+---
+
+# Async Python
+
+Async programming is particularly useful for I/O-bound work.
+
+Instead of creating a separate thread for every waiting operation, a single event loop can manage many tasks.
+
+Example:
+
+Task A
+    ↓
+Waiting for network
+    ↓
+Event loop runs Task B
+    ↓
+Waiting for database
+    ↓
+Event loop runs Task C
+
+This can handle many concurrent I/O operations efficiently.
+
+---
+
+# async
+
+`async` defines a coroutine function.
+
+Example:
+
+async def hello():
+    print("Hello")
+
+Calling it does not immediately execute the function normally.
+
+It creates a coroutine object.
+
+---
+
+# await
+
+`await` waits for an asynchronous operation.
+
+Example:
+
+async def get_data():
+    result = await some_async_operation()
+    return result
+
+While the operation is waiting, the event loop can work on other tasks.
+
+---
+
+# asyncio
+
+`asyncio` is Python's standard library for asynchronous programming.
+
+Example:
+
+import asyncio
+
+async def main():
+    print("Hello")
+    await asyncio.sleep(1)
+    print("World")
+
+asyncio.run(main())
+
+---
+
+# Event Loop
+
+The event loop manages asynchronous tasks.
+
+Simplified:
+
+Event Loop
+    ↓
+Run Task A
+    ↓
+Task A waits for I/O
+    ↓
+Run Task B
+    ↓
+Task B waits for I/O
+    ↓
+Resume Task A
+    ↓
+Resume Task B
+
+The event loop is central to asyncio.
+
+---
+
+# Coroutines
+
+A coroutine is an asynchronous function that can pause and resume.
+
+Example:
+
+async def download():
+    await network_request()
+
+The `await` allows the coroutine to yield control while waiting.
+
+---
+
+# Tasks
+
+A task schedules a coroutine to run on the event loop.
+
+Example:
+
+import asyncio
+
+async def work():
+    await asyncio.sleep(1)
+    return "Done"
+
+async def main():
+    task = asyncio.create_task(work())
+
+    result = await task
+
+    print(result)
+
+asyncio.run(main())
+
+---
+
+# Running Tasks Concurrently
+
+Sequential:
+
+async def main():
+    await task1()
+    await task2()
+
+Task 2 starts after Task 1 finishes.
+
+Concurrent:
+
+async def main():
+    results = await asyncio.gather(
+        task1(),
+        task2()
+    )
+
+Both can make progress concurrently while waiting for I/O.
+
+---
+
+# Futures
+
+A Future represents a result that will become available later.
+
+You will encounter Futures when working with:
+
+- asyncio
+- concurrent.futures
+- asynchronous libraries
+
+You generally won't need to create Futures manually when starting out.
+
+The important idea is:
+
+Future = a placeholder for a result that isn't ready yet.
+
+---
+
+# Async Generators
+
+An async generator combines:
+
+async
+
+with:
+
+yield
+
+Example:
+
+async def numbers():
+    for i in range(5):
+        yield i
+
+Consume it with:
+
+async for number in numbers():
+    print(number)
+
+Useful when processing asynchronous streams of data without loading everything into memory at once.
+
+---
+
+# Async HTTP Example
+
+An asynchronous HTTP library can make many requests concurrently.
+
+Conceptually:
+
+async def fetch(url):
+    response = await client.get(url)
+    return response
+
+async def main():
+    results = await asyncio.gather(
+        fetch(url1),
+        fetch(url2),
+        fetch(url3)
+    )
+
+This is useful when the program spends most of its time waiting for network responses.
+
+---
+
+# Choosing the Right Approach
+
+Use normal synchronous code when:
+
+    The program is simple
+    There isn't significant concurrent work
+
+Use threads when:
+
+    Tasks are I/O-bound
+    You are working with blocking libraries
+    Async isn't necessary
+
+Use asyncio when:
+
+    You have lots of concurrent I/O
+    Libraries support async
+    You need high levels of I/O concurrency
+
+Use multiprocessing when:
+
+    Work is CPU-bound
+    You need true parallel CPU execution
+
+---
+
+# Quick Comparison
+
+Synchronous:
+
+Task A → Task B → Task C
+
+Threads:
+
+Thread A ─────
+Thread B ─────
+Thread C ─────
+
+Async:
+
+Event loop
+    ├── Task A → waiting
+    ├── Task B → waiting
+    └── Task C → waiting
+
+Multiprocessing:
+
+Process 1 → CPU core 1
+Process 2 → CPU core 2
+Process 3 → CPU core 3
+
+---
+
+# Important Mental Model
+
+The most important distinction to remember is:
+
+CPU-bound
+    → multiprocessing / parallelism
+
+I/O-bound
+    → threads or asyncio / concurrency
+
+Concurrency
+    → managing multiple tasks
+
+Parallelism
+    → executing multiple tasks simultaneously
+
+Threads
+    → multiple execution paths within a process
+
+Processes
+    → independent memory spaces
+
+asyncio
+    → cooperative concurrency managed by an event loop
+
+---
+
+# Final Goal
+
+You should eventually be able to look at a problem and decide:
+
+"Should this be synchronous, threaded, asynchronous or multiprocess?"
+
+For example:
+
+Download 10,000 web pages
+    → Async I/O
+
+Make thousands of blocking network requests using a library without async support
+    → Thread pool
+
+Process millions of CPU-heavy calculations
+    → Multiprocessing
+
+Simple script that only performs a few operations
+    → Normal synchronous Python
+
+The goal is not to use concurrency everywhere.
+
+The goal is to understand the workload and choose the simplest approach that handles it efficiently.

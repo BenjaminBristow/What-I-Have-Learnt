@@ -1,0 +1,70 @@
+
+Databases allow programs to store data permanently so it can be retrieved, changed and searched later.
+
+Python variables disappear when a program stops. A database lets your program persist data.
+
+A typical application might store:
+- Users
+- Products
+- Orders
+- Messages
+- Posts
+- Payments
+- Scores
+- Settings
+
+The two major areas to understand are:
+- SQL -> the language used to work with relational databases
+- Python database tools -> how Python programs communicate with databases
+
+---
+
+## Relational Databases
+
+A relational database stores information in tables.
+
+Example:
+
+USERS
+
+| id | name | email |
+|---|---|---|
+| 1 | Ben | ben@example.com |
+| 2 | Alice | alice@example.com |
+| 3 | Tom | tom@example.com |
+
+ORDERS
+
+| id | user_id | product | price |
+|---|---|---|---|
+| 1 | 1 | Laptop | 1000 |
+| 2 | 1 | Mouse | 30 |
+| 3 | 2 | Keyboard | 80 |
+
+The tables can be related using keys.
+
+---
+
+## Tables
+
+A table stores one type of entity.
+
+Examples:
+- users
+- products
+- orders
+- messages
+- courses
+
+Each table contains:
+- Columns -> describe the data
+- Rows -> individual records
+
+Example:
+
+```sql
+CREATE TABLE users (
+    id INTEGER,
+    name TEXT,
+    email TEXT
+);

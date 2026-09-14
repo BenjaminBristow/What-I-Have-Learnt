@@ -1,0 +1,128 @@
+## Installing Python
+
+means putting the interpreter onto your machine so it can actually run code
+get it from python.org — has installers for windows and mac
+windows: tick the "Add Python to PATH" checkbox during install, otherwise your terminal won't recognise the python command
+mac: sometimes has an old system version already on there that isn't meant for you to use, install your own instead:
+bash
+  brew install python
+linux: usually comes preinstalled already
+check it worked:
+bash
+  python --version
+  python3 --version
+
+## Python interpreter
+
+the program that reads your code and runs it, line by line
+different from something like C++ where the whole program gets compiled into machine code before anything runs
+python reads and executes as it goes — that's why it's called an interpreted language
+the standard version everyone uses is called CPython
+two ways to use it:
+type code straight into it interactively
+point it at a file and let it run the whole thing top to bottom
+
+## Running .py files
+
+.py is the file extension for a plain python script
+open a terminal in the same folder the file's in and run:
+bash
+  python filename.py
+example — a file called hello.py containing:
+python
+  print("Hello, world!")
+
+running it prints that line straight to the terminal
+
+clicking a "run" button in an editor does this exact same thing, just without typing the command yourself
+
+## REPL
+
+stands for Read-Eval-Print Loop, python's interactive mode
+type python with no filename after it and you get a >>> prompt
+type one line at a time, see the result immediately:
+  >>> 2 + 2
+  4
+good for quick tests, but nothing typed in there gets saved anywhere
+exit with exit(), or ctrl+d on mac/linux, ctrl+z then enter on windows
+
+## Terminal
+
+a text-only way of controlling your computer instead of clicking through folders and icons
+also called command line, command prompt, shell — all the same idea
+windows: Command Prompt or PowerShell
+mac/linux: Terminal
+most code editors have one built in too
+commands you'll use constantly:
+cd foldername — move into a folder
+cd .. — move back up a folder
+ls (or dir on windows) — list what's in the current folder
+pwd — check which folder you're currently in
+
+## VS Code
+
+a free code editor from microsoft, downloadable at code.visualstudio.com
+on its own it's just a text editor, but extensions turn it into a proper setup for python
+comes with syntax highlighting, autocomplete, a run button
+has a terminal built right in — open with ctrl + backtick, or View → Terminal
+
+## Python extensions
+
+extensions add the actual python functionality to VS Code — on its own it doesn't know anything special about python
+the one to grab: Python, made by microsoft
+pulls in Pylance alongside it automatically for smarter autocomplete and error checking
+install by:
+clicking the extensions icon in the sidebar (or ctrl+shift+x)
+searching "python"
+hitting install
+
+## python vs python3
+
+on some machines, typing python opens an old version, while python3 gives the one you actually want
+other machines point python straight at the newer version already
+check both instead of guessing:
+bash
+  python --version
+  python3 --version
+use whichever one gives back a 3.x result
+
+## pip
+
+python's built in package manager — pulls in code other people have written so you're not building everything from zero
+comes bundled with python automatically
+commands you'll actually use:
+bash
+  pip install requests
+  pip list
+  pip uninstall requests
+  pip install --upgrade pip
+everything it installs comes from PyPI, a massive public library of free python packages
+
+## Python versions
+
+version numbers follow major.minor.micro, e.g. 3.12.4
+major (2 → 3): big changes, old code isn't guaranteed to still work
+minor (3.11 → 3.12): new features, generally stays backward compatible
+micro (3.12.1 → 3.12.2): small bug and security fixes, always safe to update
+matters because some syntax or libraries only work on certain versions
+check yours with:
+bash
+  python --version
+
+## pipenv
+
+worth not mixing up with pyenv — pyenv manages which python version you're running, pipenv manages packages and virtual environments for a specific project
+basically merges pip and virtualenv into one tool
+instead of a requirements.txt file, it creates:
+a Pipfile — human readable, lists what your project depends on
+a Pipfile.lock — exact versions actually installed, so someone else pulling your project gets identical results
+commands you'd use:
+bash
+  pipenv install requests
+  pipenv install pytest --dev
+  pipenv shell
+  pipenv run python script.py
+pipenv install grabs a package and adds it to the Pipfile
+--dev flag is for packages only needed while developing (like testing tools), not to run the project itself
+pipenv shell drops you into the project's virtual environment
+pipenv run runs something inside that environment without fully activating it first

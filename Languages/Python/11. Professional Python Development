@@ -1,0 +1,992 @@
+
+professional Python development is about more than making code work.
+
+good professional code should be:
+- readable
+- maintainable
+- testable
+- documented
+- consistent
+- easy for other developers to understand
+- easy to change without breaking other parts of the program
+
+## Code Style
+
+code style refers to the conventions used when writing Python.
+
+consistent style makes code easier to read and review.
+
+example:
+
+good:
+
+def calculate_total(price, quantity):
+    return price * quantity
+
+less readable:
+
+def calculateTotal(p,q): return p*q
+
+Python has widely accepted style conventions defined by PEP 8.
+
+## PEP 8
+
+PEP 8 is Python's main style guide.
+
+important conventions include:
+
+use 4 spaces for indentation
+
+use lowercase names with underscores for functions and variables:
+
+user_name = "Ben"
+
+calculate_total()
+
+use PascalCase for classes:
+
+class ShoppingCart:
+    pass
+
+use uppercase names for constants:
+
+MAX_RETRIES = 3
+
+keep lines reasonably short
+
+use blank lines to separate logical sections
+
+use spaces around operators:
+
+total = price + tax
+
+rather than:
+
+total=price+tax
+
+PEP 8 is a guideline rather than a rule that every project must follow exactly.
+
+## Naming
+
+good names make code easier to understand.
+
+bad:
+
+x = 20
+
+good:
+
+age = 20
+
+bad:
+
+def f(x):
+    return x * 2
+
+better:
+
+def double_number(number):
+    return number * 2
+
+names should describe what something represents.
+
+avoid unnecessary abbreviations.
+
+## Type Hints
+
+type hints describe the expected types of values.
+
+example:
+
+def add(a: int, b: int) -> int:
+    return a + b
+
+type hints improve:
+- readability
+- editor support
+- documentation
+- static analysis
+- maintainability
+
+Python generally does not enforce type hints at runtime.
+
+## Type Hints for Variables
+
+example:
+
+name: str = "Ben"
+
+age: int = 20
+
+scores: list[int] = [10, 20, 30]
+
+users: dict[str, int] = {
+    "Ben": 20
+}
+
+## Optional Values
+
+a value can be allowed to be `None`.
+
+modern Python:
+
+def find_user(name: str) -> str | None:
+    ...
+
+this means the function returns either a string or `None`.
+
+older code may use:
+
+from typing import Optional
+
+def find_user(name: str) -> Optional[str]:
+    ...
+
+## Type Aliases
+
+type aliases give complex types a readable name.
+
+example:
+
+UserScores = dict[str, list[int]]
+
+scores: UserScores = {}
+
+this can make complicated type hints easier to understand.
+
+## Generic Functions
+
+generics allow code to work with different types while preserving type information.
+
+example:
+
+from typing import TypeVar
+
+T = TypeVar("T")
+
+def first(items: list[T]) -> T:
+    return items[0]
+
+the same function can work with lists of different types.
+
+## Docstrings
+
+a docstring documents what a module, class or function does.
+
+example:
+
+def calculate_area(width: float, height: float) -> float:
+    """Return the area of a rectangle."""
+    return width * height
+
+access it with:
+
+print(calculate_area.__doc__)
+
+docstrings should explain what the code does and, when useful, its parameters, return value and exceptions.
+
+## Detailed Docstrings
+
+example:
+
+def divide(a: float, b: float) -> float:
+    """
+    Divide a by b.
+
+    Args:
+        a: The number being divided.
+        b: The number to divide by.
+
+    Returns:
+        The result of the division.
+
+    Raises:
+        ZeroDivisionError: If b is zero.
+    """
+
+    return a / b
+
+different projects may use different documentation styles.
+
+## Documentation
+
+documentation explains how to use a project.
+
+useful documentation can include:
+- what the project does
+- installation instructions
+- setup instructions
+- usage examples
+- configuration
+- API information
+- troubleshooting
+- development instructions
+
+a common place for project documentation is `README.md`.
+
+## README
+
+a good README often contains:
+
+# Project Name
+
+short description
+
+## Installation
+
+instructions for installing dependencies
+
+## Usage
+
+examples showing how to use the program
+
+## Configuration
+
+environment variables or settings
+
+## Development
+
+instructions for contributors
+
+## Testing
+
+how to run tests
+
+## Clean Code
+
+clean code is code that is easy to understand and modify.
+
+good clean code generally has:
+- meaningful names
+- small focused functions
+- clear responsibilities
+- minimal duplication
+- sensible abstractions
+- predictable behaviour
+
+avoid writing code that is clever simply for the sake of being clever.
+
+## Single Responsibility
+
+a function or class should have a clear responsibility.
+
+bad:
+
+def process_order(order):
+    calculate_price()
+    save_to_database()
+    send_email()
+    generate_invoice()
+
+this function is doing several unrelated jobs.
+
+better:
+
+def calculate_order_price(order):
+    ...
+
+def save_order(order):
+    ...
+
+def send_order_email(order):
+    ...
+
+def generate_invoice(order):
+    ...
+
+small focused functions are generally easier to test and maintain.
+
+## DRY
+
+DRY means:
+
+Don't Repeat Yourself.
+
+avoid duplicating the same logic throughout a project.
+
+bad:
+
+total1 = price1 * 1.2
+total2 = price2 * 1.2
+total3 = price3 * 1.2
+
+better:
+
+def add_tax(price):
+    return price * 1.2
+
+however, do not force unrelated code into a shared function just to avoid a small amount of duplication.
+
+## Refactoring
+
+refactoring means improving the internal structure of code without changing its intended behaviour.
+
+examples:
+- splitting large functions
+- renaming variables
+- removing duplication
+- simplifying complex logic
+- improving project structure
+- replacing poor abstractions
+
+example:
+
+before:
+
+def process(x):
+    a = x * 1.2
+    b = a + 5
+    return b
+
+after:
+
+def calculate_total(price):
+    return price * 1.2 + 5
+
+the behaviour remains the same, but the purpose is clearer.
+
+## Code Review
+
+code review is the process of having other developers examine code before it becomes part of the main project.
+
+reviewers commonly look for:
+- bugs
+- security issues
+- poor design
+- unclear code
+- unnecessary complexity
+- missing tests
+- performance problems
+- style problems
+
+good code reviews focus on improving the code rather than criticising the person.
+
+## Project Organisation
+
+a project should have a clear structure.
+
+example:
+
+my_project/
+    pyproject.toml
+    README.md
+    .gitignore
+    src/
+        my_project/
+            __init__.py
+            main.py
+            models.py
+            services.py
+    tests/
+        test_main.py
+
+the exact structure can vary depending on the project.
+
+## Modules
+
+split large programs into logical modules.
+
+example:
+
+project/
+    users.py
+    orders.py
+    payments.py
+    main.py
+
+then import what you need:
+
+from users import create_user
+from orders import create_order
+
+modules should generally have clear responsibilities.
+
+## Packages
+
+a package groups related modules together.
+
+example:
+
+project/
+    shop/
+        __init__.py
+        users.py
+        orders.py
+        payments.py
+
+this allows:
+
+from shop.users import create_user
+
+modern Python can also use namespace packages without `__init__.py`, but traditional packages commonly include it.
+
+## Configuration
+
+configuration contains values that may change between environments.
+
+examples:
+- database URLs
+- API keys
+- debug settings
+- ports
+- external service URLs
+
+do not hard-code secrets directly into source code.
+
+bad:
+
+API_KEY = "my-secret-key"
+
+## Environment Variables
+
+environment variables allow configuration to be supplied outside the code.
+
+example:
+
+import os
+
+api_key = os.environ.get("API_KEY")
+
+you can check whether a value exists:
+
+if api_key is None:
+    raise RuntimeError("API_KEY is not configured")
+
+environment variables are useful for:
+- API keys
+- passwords
+- database URLs
+- environment-specific settings
+- deployment configuration
+
+## .env Files
+
+during local development, projects often use a `.env` file to store local environment variables.
+
+example:
+
+API_KEY=abc123
+DEBUG=True
+
+a package such as `python-dotenv` can load these values.
+
+never commit secrets to Git.
+
+## .gitignore
+
+`.gitignore` tells Git which files should not be tracked.
+
+example:
+
+__pycache__/
+*.pyc
+.venv/
+.env
+.pytest_cache/
+.vscode/
+
+common things to ignore include:
+- virtual environments
+- secret configuration
+- cache files
+- compiled Python files
+- IDE settings
+- generated files
+
+## pip
+
+`pip` is Python's package installer.
+
+install a package:
+
+pip install requests
+
+upgrade a package:
+
+pip install --upgrade requests
+
+remove a package:
+
+pip uninstall requests
+
+show installed packages:
+
+pip list
+
+show information about a package:
+
+pip show requests
+
+## requirements.txt
+
+`requirements.txt` can list project dependencies.
+
+example:
+
+requests==2.32.5
+flask==3.1.2
+
+install them with:
+
+pip install -r requirements.txt
+
+modern Python projects often use `pyproject.toml` instead of relying solely on `requirements.txt`.
+
+## Virtual Environments
+
+a virtual environment isolates a project's Python packages from the system Python installation.
+
+create one:
+
+python -m venv .venv
+
+activate on Windows:
+
+.venv\Scripts\activate
+
+activate on macOS/Linux:
+
+source .venv/bin/activate
+
+deactivate it with:
+
+deactivate
+
+each project can have its own dependencies and versions.
+
+## Why use virtual environments
+
+without virtual environments, different projects can interfere with each other's packages.
+
+example:
+
+project A needs:
+
+Django 5
+
+project B needs:
+
+Django 6
+
+separate environments allow both projects to have their required versions.
+
+## pyproject.toml
+
+`pyproject.toml` is the modern configuration file for Python projects.
+
+it can contain:
+- project metadata
+- dependencies
+- build configuration
+- tool configuration
+- formatting configuration
+- linting configuration
+- testing configuration
+
+example:
+
+[project]
+name = "my-project"
+version = "1.0.0"
+description = "Example Python project"
+requires-python = ">=3.12"
+
+the exact contents depend on the tools and project.
+
+## Dependency Management
+
+dependencies are external packages your project requires.
+
+good dependency management means:
+- knowing what your project depends on
+- specifying compatible versions
+- keeping dependencies updated
+- avoiding unnecessary packages
+- separating development dependencies from runtime dependencies where appropriate
+
+large projects may use tools such as Poetry, uv or PDM for dependency management.
+
+## Dependency Pinning
+
+you can specify exact versions:
+
+requests==2.32.5
+
+or version ranges:
+
+requests>=2.32,<3
+
+exact strategies depend on the project's requirements.
+
+pinning can improve reproducibility but also means dependencies need to be deliberately updated.
+
+## Ruff
+
+Ruff is a fast Python linter and code-quality tool.
+
+it can detect things such as:
+- unused imports
+- style problems
+- common bugs
+- questionable code
+- formatting issues
+
+example command:
+
+ruff check .
+
+Ruff can also format code:
+
+ruff format .
+
+Ruff can replace the need for several separate tools in many projects.
+
+## Black
+
+Black is an opinionated Python code formatter.
+
+example:
+
+black .
+
+Black automatically reformats Python code into a consistent style.
+
+the main idea is:
+
+you spend less time arguing about formatting and more time reviewing actual code.
+
+Ruff also provides a formatter, so projects may use Ruff instead of Black.
+
+## mypy
+
+mypy is a static type checker for Python.
+
+example:
+
+def add(a: int, b: int) -> int:
+    return a + b
+
+result = add("hello", 5)
+
+mypy can detect that the arguments do not match the declared types.
+
+type checking happens before the program runs.
+
+## Pyright
+
+Pyright is another static type checker for Python.
+
+it is commonly integrated into editors such as VS Code.
+
+example:
+
+def add(a: int, b: int) -> int:
+    return a + b
+
+result = add("hello", 5)
+
+Pyright can report the type error before the program is executed.
+
+mypy and Pyright solve similar problems but have different implementations and configuration options.
+
+## Tooling together
+
+a professional project might use:
+
+Ruff → linting and formatting
+
+mypy or Pyright → type checking
+
+pytest → testing
+
+Git → version control
+
+a virtual environment → dependency isolation
+
+pyproject.toml → project and tool configuration
+
+these tools automate many quality checks.
+
+## Git
+
+Git is a distributed version control system.
+
+it tracks changes to files over time.
+
+common commands:
+
+git init
+
+git status
+
+git add
+
+git commit
+
+git log
+
+git branch
+
+git switch
+
+git merge
+
+git pull
+
+git push
+
+## Git repository
+
+a Git repository contains the history of a project.
+
+initialise one:
+
+git init
+
+check its state:
+
+git status
+
+Git then tracks changes made to files.
+
+## Commits
+
+a commit records a snapshot of changes.
+
+example:
+
+git add .
+
+git commit -m "Add user authentication"
+
+good commit messages describe what changed.
+
+avoid vague messages such as:
+
+"stuff"
+
+"changes"
+
+"fixed things"
+
+## Branches
+
+branches allow developers to work on different changes independently.
+
+create a branch:
+
+git switch -c feature/login
+
+switch branches:
+
+git switch main
+
+a common workflow is:
+
+main
+    |
+    └── feature/login
+
+the feature is developed separately before being merged.
+
+## GitHub
+
+GitHub is a platform for hosting Git repositories and collaborating with other developers.
+
+you can use it for:
+- storing projects
+- collaboration
+- issue tracking
+- code review
+- pull requests
+- releases
+- open-source development
+
+## Push and pull
+
+push sends local commits to a remote repository:
+
+git push
+
+pull retrieves changes from the remote repository:
+
+git pull
+
+clone downloads an existing repository:
+
+git clone <repository-url>
+
+## Pull Requests
+
+a pull request proposes merging changes into another branch.
+
+typical workflow:
+
+1. create a branch
+2. make changes
+3. commit changes
+4. push the branch
+5. create a pull request
+6. review the code
+7. fix requested changes
+8. merge the pull request
+
+pull requests are central to professional collaborative development.
+
+## Merge Conflicts
+
+a merge conflict occurs when Git cannot automatically combine changes.
+
+example:
+
+developer A changes:
+
+print("hello")
+
+developer B changes the same line to:
+
+print("hi")
+
+Git cannot automatically decide which version should remain.
+
+you must manually resolve the conflict.
+
+after resolving:
+
+git add .
+
+git commit
+
+## Releases
+
+a release represents a particular version of a project.
+
+versions commonly use semantic versioning:
+
+MAJOR.MINOR.PATCH
+
+example:
+
+1.4.2
+
+MAJOR → breaking changes
+
+MINOR → new backwards-compatible features
+
+PATCH → backwards-compatible bug fixes
+
+for example:
+
+1.0.0 → first stable release
+
+1.1.0 → new feature
+
+1.1.1 → bug fix
+
+2.0.0 → breaking change
+
+## Git Tags
+
+Git tags can identify specific versions.
+
+example:
+
+git tag v1.0.0
+
+git push origin v1.0.0
+
+GitHub can then use the tag as the basis for a release.
+
+## Professional Development Workflow
+
+a typical workflow might look like:
+
+1. create or clone the repository
+2. create a virtual environment
+3. install dependencies
+4. understand the project structure
+5. create a feature branch
+6. write the code
+7. add type hints
+8. write tests
+9. run the linter
+10. run the formatter
+11. run the type checker
+12. review the changes
+13. commit the changes
+14. push the branch
+15. open a pull request
+16. respond to review comments
+17. merge the changes
+18. release when appropriate
+
+## Code Quality Checklist
+
+before considering code finished, ask:
+
+- is the code easy to understand?
+- are names meaningful?
+- are functions focused?
+- are type hints useful?
+- are important functions documented?
+- is duplicated logic avoided?
+- are errors handled appropriately?
+- are tests included?
+- does the code follow the project's style?
+- does the linter pass?
+- does the type checker pass?
+- are secrets excluded from Git?
+- are dependencies managed correctly?
+
+## Professional Python Project
+
+a modern project might look like:
+
+my_project/
+    pyproject.toml
+    README.md
+    .gitignore
+    .venv/
+    src/
+        my_project/
+            __init__.py
+            main.py
+            models.py
+            services.py
+    tests/
+        test_main.py
+
+`.venv/` would normally be ignored by Git.
+
+## Goal
+
+produce maintainable, professional-quality Python.
+
+you should be able to:
+
+- follow PEP 8 and project-specific style rules
+- write meaningful names and clean code
+- use type hints effectively
+- write useful docstrings
+- document projects clearly
+- refactor code safely
+- participate in code reviews
+- organise larger Python projects
+- separate configuration from source code
+- use environment variables safely
+- create an appropriate `.gitignore`
+- create and use virtual environments
+- install and manage dependencies
+- understand `pip`
+- understand `pyproject.toml`
+- use Ruff
+- understand Black
+- use mypy or Pyright
+- use Git confidently
+- create branches
+- make useful commits
+- create and review pull requests
+- resolve merge conflicts
+- create releases
+
+the ultimate goal is to write Python that another developer can open months later and immediately understand, run, test, modify and maintain.

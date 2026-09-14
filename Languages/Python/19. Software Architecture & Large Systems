@@ -1,0 +1,1340 @@
+
+Software architecture is about deciding how a large application should be structured.
+
+At a beginner level you think:
+
+    "How do I write this function?"
+
+At an advanced level you start thinking:
+
+    "How should the entire system be organised?"
+
+Architecture becomes increasingly important as applications grow.
+
+    Small program
+        ↓
+    Multiple modules
+        ↓
+    Large application
+        ↓
+    Multiple services
+        ↓
+    Distributed system
+
+The goal is not to make everything complicated.
+
+The goal is to make complexity manageable.
+
+---
+
+## SOLID
+
+SOLID is a collection of five principles for designing maintainable object-oriented software.
+
+    S → Single Responsibility Principle
+    O → Open/Closed Principle
+    L → Liskov Substitution Principle
+    I → Interface Segregation Principle
+    D → Dependency Inversion Principle
+
+---
+
+## Single Responsibility Principle
+
+A class or module should have one clear responsibility.
+
+Bad:
+
+    class User:
+        create_account()
+        send_email()
+        generate_invoice()
+        save_to_database()
+
+This class is responsible for too many unrelated things.
+
+Better:
+
+    User
+        ↓
+    UserService
+        ↓
+    EmailService
+        ↓
+    InvoiceService
+        ↓
+    UserRepository
+
+Each component has a clearer responsibility.
+
+The idea is:
+
+    One component
+        ↓
+    One main reason to change
+
+---
+
+## Open/Closed Principle
+
+Software should be:
+
+    Open for extension
+    Closed for modification
+
+You should ideally be able to add new behaviour without constantly changing existing, tested code.
+
+For example, instead of:
+
+    if payment_type == "card":
+        ...
+
+    elif payment_type == "paypal":
+        ...
+
+    elif payment_type == "bitcoin":
+        ...
+
+you might define a common payment interface and create separate implementations.
+
+    Payment
+      ├── CardPayment
+      ├── PayPalPayment
+      └── BitcoinPayment
+
+New payment methods can then be added without rewriting the entire payment system.
+
+---
+
+## Liskov Substitution Principle
+
+Objects of a subclass should be usable wherever the parent type is expected without breaking the program.
+
+Conceptually:
+
+    Parent
+      ↑
+    Child
+
+If code expects the parent, replacing it with the child should still work correctly.
+
+Bad inheritance often occurs when a subclass technically fits the class hierarchy but does not actually behave like the parent.
+
+The principle encourages meaningful abstractions rather than inheritance just for the sake of reusing code.
+
+---
+
+## Interface Segregation Principle
+
+Classes should not be forced to depend on interfaces they do not need.
+
+Instead of creating one enormous interface:
+
+    EverythingInterface
+        print()
+        scan()
+        fax()
+        email()
+        copy()
+        ...
+
+split it into smaller responsibilities:
+
+    Printable
+    Scannable
+    Faxable
+    Emailable
+
+Components only implement what they actually need.
+
+---
+
+## Dependency Inversion Principle
+
+High-level code should not depend directly on low-level implementation details.
+
+Instead:
+
+    High-level logic
+          ↓
+      abstraction
+          ↓
+    Low-level implementation
+
+For example:
+
+    OrderService
+          ↓
+    PaymentProcessor
+          ↓
+    StripePayment
+
+The order system depends on the concept of payment processing rather than being permanently tied to one specific payment provider.
+
+---
+
+# Design Patterns
+
+Design patterns are common solutions to recurring software-design problems.
+
+They are not pieces of code that must always be copied.
+
+They are reusable design ideas.
+
+Common patterns include:
+
+    Factory
+    Strategy
+    Observer
+    Adapter
+    Decorator
+    Command
+    Repository
+    Singleton
+
+---
+
+## Factory Pattern
+
+A factory creates objects without requiring the calling code to know exactly how they are constructed.
+
+Example:
+
+    class AnimalFactory:
+
+        @staticmethod
+        def create(animal_type):
+            if animal_type == "dog":
+                return Dog()
+
+            if animal_type == "cat":
+                return Cat()
+
+The caller can simply do:
+
+    animal = AnimalFactory.create("dog")
+
+Factories are useful when object creation becomes complicated.
+
+---
+
+## Strategy Pattern
+
+The Strategy pattern allows you to swap algorithms or behaviours.
+
+Example:
+
+    PaymentStrategy
+        ├── CardPayment
+        ├── PayPalPayment
+        └── BankTransfer
+
+The application can choose the strategy at runtime.
+
+This avoids large collections of:
+
+    if
+    elif
+    elif
+    elif
+
+---
+
+## Observer Pattern
+
+The Observer pattern allows objects to react when something happens.
+
+Conceptually:
+
+    Event
+      ↓
+    ┌───────────┬───────────┬───────────┐
+    ↓           ↓           ↓
+    Email      Logging     Analytics
+
+For example:
+
+    User registers
+        ↓
+    Registration event
+        ↓
+    Send welcome email
+    Record analytics
+    Create notification
+
+This is closely related to event-driven systems.
+
+---
+
+## Adapter Pattern
+
+An adapter allows incompatible interfaces to work together.
+
+Example:
+
+    Your application
+          ↓
+       Adapter
+          ↓
+    External API
+
+If an external service has an awkward interface, an adapter can hide that complexity from the rest of your application.
+
+---
+
+## Decorator Pattern
+
+A decorator adds behaviour to an object without modifying its underlying implementation.
+
+Python has built-in decorator syntax:
+
+    @login_required
+    def dashboard():
+        ...
+
+The function's behaviour is effectively wrapped with additional functionality.
+
+Decorators are particularly useful for:
+
+    Authentication
+    Logging
+    Caching
+    Validation
+    Permissions
+
+---
+
+## Repository Pattern
+
+A repository separates application logic from data-access logic.
+
+Instead of:
+
+    Service
+      ↓
+    SQL everywhere
+
+you can use:
+
+    Service
+      ↓
+    Repository
+      ↓
+    Database
+
+Example:
+
+    user = user_repository.get_by_id(123)
+
+The service does not need to know exactly how the database query works.
+
+This can make systems easier to test and change.
+
+---
+
+# Dependency Injection
+
+Dependency injection means providing an object with the dependencies it needs rather than having it create them itself.
+
+Without dependency injection:
+
+    class OrderService:
+
+        def __init__(self):
+            self.database = PostgreSQLDatabase()
+
+The class is tightly coupled to PostgreSQL.
+
+With dependency injection:
+
+    class OrderService:
+
+        def __init__(self, database):
+            self.database = database
+
+Now you can provide:
+
+    PostgreSQLDatabase
+
+or:
+
+    MockDatabase
+
+This is particularly useful for testing.
+
+Conceptually:
+
+    Dependency
+        ↓
+    Inject into component
+        ↓
+    Component uses it
+
+Dependency injection can be done through:
+
+    - Constructor arguments
+    - Function arguments
+    - Framework dependency systems
+
+---
+
+# Clean Architecture
+
+Clean Architecture separates business logic from external details.
+
+A simplified structure:
+
+    ┌──────────────────────────────┐
+    │      External systems       │
+    │  Web / Database / APIs      │
+    └──────────────┬───────────────┘
+                   ↓
+    ┌──────────────────────────────┐
+    │       Application logic      │
+    └──────────────┬───────────────┘
+                   ↓
+    ┌──────────────────────────────┐
+    │        Domain logic          │
+    └──────────────────────────────┘
+
+The central business logic should not depend heavily on:
+
+    - Databases
+    - Web frameworks
+    - UI
+    - External APIs
+
+Instead, those systems depend on the application's core.
+
+The benefit is that business logic becomes easier to:
+
+    - Test
+    - Change
+    - Reuse
+    - Maintain
+
+---
+
+# Layered Architecture
+
+Layered architecture separates an application into layers.
+
+A common example:
+
+    Presentation
+         ↓
+    Application
+         ↓
+    Domain
+         ↓
+    Data Access
+         ↓
+    Database
+
+For a web application:
+
+    HTTP request
+        ↓
+    View / Controller
+        ↓
+    Service
+        ↓
+    Repository
+        ↓
+    Database
+
+Each layer has a clear responsibility.
+
+---
+
+## Presentation Layer
+
+Responsible for interacting with the outside world.
+
+Examples:
+
+    HTTP endpoints
+    Web pages
+    CLI
+    API responses
+
+It should generally avoid containing large amounts of business logic.
+
+---
+
+## Application Layer
+
+Coordinates application operations.
+
+Example:
+
+    CreateOrder
+    RegisterUser
+    ProcessPayment
+
+It determines what needs to happen.
+
+---
+
+## Domain Layer
+
+Contains the core business rules.
+
+Example:
+
+    An order cannot be completed if it has no items.
+
+This logic should ideally not care whether the application is using:
+
+    Django
+    PostgreSQL
+    REST
+    GraphQL
+
+---
+
+## Data Access Layer
+
+Responsible for storing and retrieving information.
+
+Examples:
+
+    Repositories
+    Database queries
+    ORM operations
+
+---
+
+# Domain-Driven Design
+
+Domain-Driven Design, or DDD, focuses architecture around the business domain.
+
+Instead of starting with:
+
+    "What database tables do I need?"
+
+you start with:
+
+    "What does the business actually do?"
+
+Important concepts include:
+
+    Entities
+    Value objects
+    Aggregates
+    Repositories
+    Domain services
+    Bounded contexts
+    Ubiquitous language
+
+---
+
+## Entities
+
+An entity is an object whose identity matters.
+
+Example:
+
+    User
+    Order
+    Product
+
+Two users might have identical names but are still different users.
+
+Their identity matters.
+
+---
+
+## Value Objects
+
+A value object represents a value rather than an independently identifiable entity.
+
+Examples:
+
+    Money
+    Address
+    DateRange
+    EmailAddress
+
+Two value objects with the same values can often be considered equivalent.
+
+---
+
+## Aggregates
+
+An aggregate groups related domain objects together and defines a consistency boundary.
+
+For example:
+
+    Order
+      ├── OrderItem
+      ├── OrderItem
+      └── OrderItem
+
+The Order may be the aggregate root.
+
+External code interacts with the aggregate root rather than directly manipulating every internal object.
+
+---
+
+## Bounded Contexts
+
+Large businesses often contain different areas with different meanings.
+
+For example:
+
+    Online shop
+        ├── Sales
+        ├── Payments
+        ├── Shipping
+        └── Customer Support
+
+The word "customer" might mean slightly different things in different areas.
+
+A bounded context allows each area to have its own model and terminology.
+
+---
+
+# Monoliths
+
+A monolith is an application where most or all functionality exists within one deployable application.
+
+Example:
+
+    ┌─────────────────────────────┐
+    │       Web Application       │
+    │                             │
+    │ Users                       │
+    │ Orders                      │
+    │ Payments                    │
+    │ Products                    │
+    │ Notifications               │
+    └─────────────────────────────┘
+
+Advantages:
+
+    - Simple deployment
+    - Easy local development
+    - Simple communication
+    - Easier debugging
+    - Fewer infrastructure problems
+
+Disadvantages:
+
+    - Can become difficult to maintain
+    - Large deployments affect the whole application
+    - Components can become tightly coupled
+
+A monolith is not automatically bad.
+
+For many applications, it is the best starting architecture.
+
+---
+
+# Modular Monoliths
+
+A modular monolith keeps one deployable application but separates it into strong internal modules.
+
+Example:
+
+    Application
+      ├── Users
+      ├── Orders
+      ├── Payments
+      ├── Products
+      └── Notifications
+
+Each module has clear boundaries.
+
+This gives you:
+
+    Simplicity of a monolith
+          +
+    Structure of separate components
+
+A modular monolith is often an excellent architecture before considering microservices.
+
+---
+
+# Microservices
+
+Microservices split an application into independently deployable services.
+
+Example:
+
+    User Service
+         │
+    Order Service
+         │
+    Payment Service
+         │
+    Notification Service
+
+Each service may have:
+
+    Its own code
+    Its own deployment
+    Its own database
+    Its own scaling requirements
+
+Communication may happen through:
+
+    HTTP APIs
+    Message queues
+    Events
+
+---
+
+## Advantages of Microservices
+
+    - Services can scale independently
+    - Teams can work independently
+    - Individual services can be deployed separately
+    - Different technologies can potentially be used
+
+---
+
+## Disadvantages of Microservices
+
+    - Much more infrastructure
+    - Network failures
+    - Distributed debugging
+    - Data consistency becomes harder
+    - Deployment becomes more complicated
+    - Monitoring becomes more important
+    - More operational overhead
+
+Do not choose microservices simply because they sound more advanced.
+
+For many projects:
+
+    Modular monolith > unnecessary microservices
+
+---
+
+# Event-Driven Architecture
+
+In an event-driven system, components communicate by publishing and responding to events.
+
+Example:
+
+    Order created
+          ↓
+       Event
+          ↓
+    ┌─────┼─────┬──────────┐
+    ↓     ↓     ↓          ↓
+    Email  Stock  Analytics  Shipping
+
+The components do not necessarily need to directly call each other.
+
+Example event:
+
+    {
+        "type": "OrderCreated",
+        "order_id": 123
+    }
+
+Other components can subscribe to that event.
+
+---
+
+# Message Queues
+
+A message queue allows one component to send work to another asynchronously.
+
+Example:
+
+    Application
+        ↓
+    Message Queue
+        ↓
+    Worker
+        ↓
+    Process task
+
+Examples of queue technologies include:
+
+    RabbitMQ
+    Amazon SQS
+    Kafka
+    Redis-based queues
+
+Useful for:
+
+    - Sending emails
+    - Background processing
+    - Image processing
+    - Large workloads
+    - Decoupling services
+
+Instead of making the user wait:
+
+    User
+      ↓
+    Request
+      ↓
+    Generate huge report
+      ↓
+    Wait...
+
+you can do:
+
+    User
+      ↓
+    Request
+      ↓
+    Queue task
+      ↓
+    Return immediately
+
+Then:
+
+    Worker
+      ↓
+    Generate report
+
+---
+
+# Caching
+
+Caching stores frequently needed data so it can be retrieved faster.
+
+Example:
+
+    Application
+        ↓
+      Cache
+        ↓
+    Database
+
+Without caching:
+
+    Request → Database → Response
+
+With caching:
+
+    Request → Cache → Response
+
+If the data is not cached:
+
+    Request
+       ↓
+     Cache
+       ↓
+    Database
+       ↓
+     Cache
+       ↓
+    Response
+
+Caching can reduce:
+
+    - Database load
+    - Response times
+    - Network requests
+    - Expensive computation
+
+But caching introduces complexity around:
+
+    Cache invalidation
+    Expiration
+    Stale data
+    Memory usage
+
+---
+
+# Distributed Systems
+
+A distributed system consists of multiple computers or services working together.
+
+Example:
+
+    Server A
+       ↓
+    Server B
+       ↓
+    Database
+       ↓
+    Cache
+       ↓
+    Queue
+
+The major difficulty is that networks are unreliable.
+
+You have to consider:
+
+    - Network failures
+    - Timeouts
+    - Duplicate requests
+    - Partial failures
+    - Data consistency
+    - Service availability
+    - Communication delays
+
+A distributed system is much more complicated than one program running on one computer.
+
+---
+
+# Scalability
+
+Scalability means being able to handle increasing amounts of work.
+
+For example:
+
+    100 users
+        ↓
+    1,000 users
+        ↓
+    100,000 users
+        ↓
+    1,000,000 users
+
+---
+
+## Vertical Scaling
+
+Make one machine more powerful.
+
+    Small server
+        ↓
+    More CPU
+    More RAM
+    More storage
+        ↓
+    Larger server
+
+Advantages:
+
+    - Simple
+    - Easy to implement
+
+Disadvantages:
+
+    - Hardware limits
+    - Can become expensive
+    - Still relies heavily on one machine
+
+---
+
+## Horizontal Scaling
+
+Add more machines.
+
+    Server 1 ─┐
+    Server 2 ─┤
+    Server 3 ─┤
+    Server 4 ─┘
+          ↓
+      Load Balancer
+
+Requests are distributed between servers.
+
+This can provide much greater scalability.
+
+---
+
+# Load Balancing
+
+A load balancer distributes traffic between multiple servers.
+
+Example:
+
+    Users
+       ↓
+    Load Balancer
+       ↓
+    ┌──────┬──────┬──────┐
+    ↓      ↓      ↓
+    App 1  App 2  App 3
+
+If one server becomes unavailable, traffic can potentially be directed elsewhere.
+
+---
+
+# Reliability
+
+Reliability means a system consistently performs its intended function.
+
+Important techniques:
+
+    - Testing
+    - Monitoring
+    - Backups
+    - Redundancy
+    - Health checks
+    - Error handling
+    - Timeouts
+    - Retry strategies
+
+Reliability is about preventing failures and recovering quickly when they occur.
+
+---
+
+# Fault Tolerance
+
+Fault tolerance means the system can continue operating even when components fail.
+
+Example:
+
+    Server 1 → FAILED
+
+    Server 2 → Still running
+    Server 3 → Still running
+
+The system remains available.
+
+Other examples:
+
+    Database replicas
+    Multiple application servers
+    Redundant storage
+    Queue persistence
+    Automatic failover
+
+The goal is:
+
+    Failure of one component
+            ↓
+    Does not necessarily mean
+    failure of the entire system
+
+---
+
+# Timeouts
+
+Never assume another service will respond immediately.
+
+Example:
+
+    Your application
+          ↓
+      API request
+          ↓
+      External service
+          ↓
+         ???
+
+If the external service never responds, your application could remain waiting indefinitely.
+
+Use timeouts:
+
+    request(..., timeout=5)
+
+This turns:
+
+    "Wait forever"
+
+into:
+
+    "Wait up to 5 seconds, then handle the failure."
+
+---
+
+# Retries
+
+Some failures are temporary.
+
+For example:
+
+    Request
+       ↓
+    Network failure
+       ↓
+    Retry
+       ↓
+    Success
+
+Retries should be used carefully.
+
+Repeatedly retrying a broken service can make the problem worse.
+
+Common techniques include:
+
+    Exponential backoff
+    Maximum retry count
+    Jitter
+
+---
+
+# Idempotency
+
+An operation is idempotent if performing it multiple times has the same intended final effect as performing it once.
+
+This becomes important when retries are involved.
+
+Example:
+
+    Create payment
+        ↓
+    Request succeeds
+        ↓
+    Response is lost
+        ↓
+    Client retries
+
+You do not want to accidentally charge the customer twice.
+
+An idempotency key can help:
+
+    payment_id = "abc123"
+
+If the same request arrives again:
+
+    "abc123 already processed"
+
+so the system does not repeat the operation.
+
+---
+
+# Observability
+
+Large systems need to make their internal behaviour visible.
+
+Three major areas are:
+
+    Logs
+    Metrics
+    Traces
+
+### Logs
+
+Tell you what happened.
+
+### Metrics
+
+Tell you numerical information.
+
+Examples:
+
+    CPU usage
+    Request rate
+    Error rate
+    Response time
+
+### Traces
+
+Follow a request through multiple services.
+
+Example:
+
+    User request
+        ↓
+    API
+        ↓
+    Order service
+        ↓
+    Payment service
+        ↓
+    Database
+
+Tracing helps identify where time or failures occur.
+
+---
+
+# Architecture Trade-offs
+
+There is rarely a single "best" architecture.
+
+Every architecture involves trade-offs.
+
+For example:
+
+    Monolith
+        + Simple
+        - Harder to scale independently
+
+    Microservices
+        + Independently scalable
+        - Much more complex
+
+    Cache
+        + Faster
+        - Stale-data problems
+
+    More replicas
+        + Better availability
+        - Higher cost
+
+    More abstraction
+        + More flexibility
+        - More complexity
+
+Good architects understand these trade-offs.
+
+---
+
+# How Architecture Evolves
+
+A realistic application might evolve like this:
+
+    Small Python application
+          ↓
+    Modular application
+          ↓
+    Modular monolith
+          ↓
+    Add caching
+          ↓
+    Add background workers
+          ↓
+    Add load balancing
+          ↓
+    Extract specific services if necessary
+          ↓
+    Distributed system
+
+You do not need to start with the final architecture.
+
+Architecture should evolve according to actual requirements.
+
+---
+
+# Architecture Decision Process
+
+When designing a system, ask:
+
+    1. What problem am I solving?
+
+    2. How much traffic will there be?
+
+    3. How much data will there be?
+
+    4. What needs to be highly available?
+
+    5. What can fail?
+
+    6. How quickly must the system respond?
+
+    7. Which components need to scale independently?
+
+    8. How complicated can the system reasonably be?
+
+    9. What will be easiest for the team to maintain?
+
+    10. What will the system look like in a few years?
+
+Do not choose technology first.
+
+Choose the architecture based on the problem.
+
+---
+
+# Simple vs Complex Architecture
+
+For a small application:
+
+    Django
+      ↓
+    PostgreSQL
+
+may be completely sufficient.
+
+A larger application might eventually become:
+
+    Load Balancer
+          ↓
+    ┌──────────────┐
+    │ App Servers  │
+    └──────┬───────┘
+           ↓
+    ┌──────────────┐
+    │   Services   │
+    └──────┬───────┘
+           ↓
+    ┌──────┼───────┐
+    ↓      ↓       ↓
+    DB    Cache   Queue
+           ↓
+         Workers
+
+The second architecture is not automatically better.
+
+It is only justified if the requirements make the extra complexity worthwhile.
+
+---
+
+# Key Architecture Principles
+
+Good architecture generally aims for:
+
+    High cohesion
+        Related things stay together.
+
+    Low coupling
+        Components depend on each other as little as possible.
+
+    Clear boundaries
+        Each component has a defined responsibility.
+
+    Separation of concerns
+        Different concerns are kept separate.
+
+    Testability
+        Components can be tested independently.
+
+    Maintainability
+        Changes do not require rewriting everything.
+
+    Scalability
+        The system can handle increasing demand.
+
+    Reliability
+        The system continues working correctly.
+
+    Observability
+        Problems can be detected and diagnosed.
+
+---
+
+# Final Goal
+
+You should be able to look at a large application and understand:
+
+    What each component does
+            ↓
+    Why it exists
+            ↓
+    How components communicate
+            ↓
+    Where data is stored
+            ↓
+    What happens when something fails
+            ↓
+    How the system scales
+            ↓
+    How the system is monitored
+
+You should understand:
+
+    - SOLID
+    - Design patterns
+    - Dependency injection
+    - Clean architecture
+    - Layered architecture
+    - Domain-driven design
+    - Monoliths
+    - Modular monoliths
+    - Microservices
+    - Event-driven architecture
+    - Message queues
+    - Caching
+    - Distributed systems
+    - Scalability
+    - Load balancing
+    - Reliability
+    - Fault tolerance
+    - Timeouts
+    - Retries
+    - Idempotency
+    - Observability
+
+The most important lesson is:
+
+    Good architecture is not about making a system as complicated as possible.
+
+    Good architecture is about managing complexity.
+
+Start simple.
+
+Add complexity only when the problem actually requires it.

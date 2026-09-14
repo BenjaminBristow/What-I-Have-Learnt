@@ -1,0 +1,869 @@
+
+testing is the process of checking that software behaves correctly.
+
+good tests help you:
+- find bugs
+- prevent regressions
+- safely refactor code
+- document expected behaviour
+- confidently add new features
+
+## Unit Testing
+
+a unit test tests a small, isolated part of a program.
+
+usually this means testing a single function or class method.
+
+example:
+
+def add(a, b):
+    return a + b
+
+def test_add():
+    assert add(2, 3) == 5
+
+unit tests should generally be:
+- fast
+- predictable
+- isolated
+- easy to understand
+
+## Integration Testing
+
+integration tests check that multiple parts of a system work correctly together.
+
+for example:
+
+application
+    ↓
+database
+    ↓
+external service
+
+a unit test might test the database function by itself.
+
+an integration test might check that the application can actually save and retrieve data from the database.
+
+## End-to-End Testing
+
+end-to-end testing checks an entire system from the user's perspective.
+
+example:
+
+user
+ ↓
+website
+ ↓
+login system
+ ↓
+database
+ ↓
+response
+
+an end-to-end test might:
+1. open the website
+2. enter a username
+3. enter a password
+4. click login
+5. check that the user reaches their account
+
+these tests provide strong confidence but are usually slower and more complicated than unit tests.
+
+## Testing Pyramid
+
+a useful way to think about testing is:
+
+        end-to-end
+       integration
+          unit
+
+you generally want:
+- lots of fast unit tests
+- fewer integration tests
+- fewer expensive end-to-end tests
+
+this is not an absolute rule, but it is a useful starting point.
+
+## unittest
+
+`unittest` is Python's built-in testing framework.
+
+example:
+
+import unittest
+
+def add(a, b):
+    return a + b
+
+class TestAdd(unittest.TestCase):
+
+    def test_add(self):
+        self.assertEqual(add(2, 3), 5)
+
+if __name__ == "__main__":
+    unittest.main()
+
+useful assertions include:
+
+`assertEqual()`
+
+`assertNotEqual()`
+
+`assertTrue()`
+
+`assertFalse()`
+
+`assertIsNone()`
+
+`assertIn()`
+
+`assertRaises()`
+
+## unittest assertions
+
+example:
+
+self.assertEqual(result, 10)
+
+self.assertTrue(result)
+
+self.assertFalse(result)
+
+self.assertIsNone(result)
+
+self.assertIn("Ben", names)
+
+to test an exception:
+
+with self.assertRaises(ValueError):
+    function_that_should_fail()
+
+## pytest
+
+`pytest` is a popular third-party Python testing framework.
+
+install it:
+
+pip install pytest
+
+a basic test:
+
+def add(a, b):
+    return a + b
+
+def test_add():
+    assert add(2, 3) == 5
+
+run tests with:
+
+pytest
+
+pytest automatically discovers files such as:
+
+test_example.py
+
+and functions such as:
+
+test_add()
+
+## Why pytest is popular
+
+pytest provides:
+- simple test syntax
+- powerful fixtures
+- parameterisation
+- useful failure messages
+- plugins
+- support for unittest tests
+- easy integration with modern Python projects
+
+for many modern Python projects, pytest is a strong default choice.
+
+## Assertions
+
+an assertion checks that something is true.
+
+example:
+
+assert 2 + 2 == 4
+
+if the condition is false, Python raises `AssertionError`.
+
+in tests:
+
+def test_add():
+    assert add(2, 3) == 5
+
+assertions should check the behaviour you actually expect.
+
+## Testing exceptions
+
+you should test that invalid input produces the expected error.
+
+pytest example:
+
+import pytest
+
+def divide(a, b):
+
+    if b == 0:
+        raise ValueError("cannot divide by zero")
+
+    return a / b
+
+def test_divide_by_zero():
+
+    with pytest.raises(ValueError):
+        divide(10, 0)
+
+you can also check the exception message when appropriate.
+
+## Fixtures
+
+fixtures provide reusable setup or test data.
+
+example:
+
+import pytest
+
+@pytest.fixture
+def numbers():
+    return [1, 2, 3]
+
+def test_sum(numbers):
+    assert sum(numbers) == 6
+
+pytest creates the fixture and passes it into the test automatically.
+
+fixtures are useful for:
+- test data
+- database setup
+- temporary files
+- shared configuration
+- reusable objects
+
+## Fixture setup and cleanup
+
+fixtures can perform setup before a test and cleanup afterwards.
+
+example:
+
+import pytest
+
+@pytest.fixture
+def database():
+
+    db = create_database()
+
+    yield db
+
+    db.close()
+
+the code before `yield` performs setup.
+
+the code after `yield` performs cleanup.
+
+## Fixture scopes
+
+fixtures can have different lifetimes.
+
+common scopes include:
+
+`function` → once per test
+
+`class` → once per test class
+
+`module` → once per module
+
+`session` → once for the entire test session
+
+example:
+
+@pytest.fixture(scope="module")
+def database():
+    return create_database()
+
+choose the scope carefully because sharing state between tests can make tests less isolated.
+
+## Parameterised Tests
+
+parameterised tests run the same test with multiple inputs.
+
+pytest example:
+
+import pytest
+
+@pytest.mark.parametrize(
+    "a, b, expected",
+    [
+        (1, 2, 3),
+        (5, 5, 10),
+        (10, 20, 30)
+    ]
+)
+def test_add(a, b, expected):
+    assert a + b == expected
+
+this avoids writing many nearly identical tests.
+
+## Parameterised edge cases
+
+parameterisation is particularly useful for testing edge cases.
+
+example:
+
+@pytest.mark.parametrize(
+    "value",
+    [
+        0,
+        1,
+        -1,
+        100,
+        -100
+    ]
+)
+def test_value(value):
+    assert process(value) is not None
+
+think about:
+- zero
+- negative numbers
+- empty values
+- very large values
+- duplicate values
+- boundary values
+- invalid input
+
+## Mocking
+
+mocking replaces a real dependency with a fake object during a test.
+
+this is useful when the real dependency is:
+- slow
+- unreliable
+- expensive
+- external
+- difficult to control
+
+examples:
+- APIs
+- databases
+- email services
+- payment systems
+- file systems
+
+## unittest.mock
+
+Python provides mocking tools through `unittest.mock`.
+
+example:
+
+from unittest.mock import Mock
+
+email_service = Mock()
+
+email_service.send("hello")
+
+email_service.send.assert_called_once_with("hello")
+
+## Mock return values
+
+example:
+
+from unittest.mock import Mock
+
+api = Mock()
+
+api.get_user.return_value = {
+    "name": "Ben"
+}
+
+user = api.get_user()
+
+print(user)
+
+result:
+
+{'name': 'Ben'}
+
+this allows you to control what a dependency returns.
+
+## Mocking with pytest
+
+pytest can use `unittest.mock` directly.
+
+example:
+
+from unittest.mock import patch
+
+@patch("module.requests.get")
+def test_get_user(mock_get):
+
+    mock_get.return_value.json.return_value = {
+        "name": "Ben"
+    }
+
+    result = get_user()
+
+    assert result["name"] == "Ben"
+
+patch the dependency where it is used, rather than automatically patching where it originally came from.
+
+## Mocking principles
+
+do not mock everything.
+
+mock external dependencies when necessary.
+
+if a function is simple and deterministic, it is usually better to test the real function.
+
+over-mocking can make tests:
+- fragile
+- complicated
+- tightly coupled to implementation details
+
+test behaviour rather than the exact internal implementation whenever possible.
+
+## Test Coverage
+
+test coverage measures how much of your code is executed by tests.
+
+example:
+
+pytest --cov
+
+coverage can measure:
+- lines
+- branches
+- functions
+- files
+
+high coverage does not automatically mean high-quality tests.
+
+example:
+
+def divide(a, b):
+    return a / b
+
+a test could execute the function without checking whether the result is correct.
+
+the code has been covered, but the behaviour has not necessarily been tested properly.
+
+## Coverage percentage
+
+a project might report:
+
+90% coverage
+
+this means roughly 90% of the measured code was executed by the tests.
+
+it does not mean:
+
+"90% of all bugs have been found."
+
+coverage is a useful metric, but it should not become the sole goal of testing.
+
+## Branch Coverage
+
+branch coverage checks whether different decision paths have been tested.
+
+example:
+
+def check_age(age):
+
+    if age >= 18:
+        return "adult"
+
+    return "minor"
+
+good tests should cover both branches:
+
+check_age(20)
+
+check_age(15)
+
+## Test-Driven Development
+
+Test-driven development, or TDD, means writing tests before implementing the feature.
+
+the typical cycle is:
+
+RED
+↓
+GREEN
+↓
+REFACTOR
+
+## TDD: Red
+
+first write a test for behaviour that does not yet exist.
+
+example:
+
+def test_add():
+
+    assert add(2, 3) == 5
+
+the test fails because `add()` has not been implemented.
+
+this is the red stage.
+
+## TDD: Green
+
+write the simplest implementation that makes the test pass.
+
+example:
+
+def add(a, b):
+    return a + b
+
+the test now passes.
+
+this is the green stage.
+
+## TDD: Refactor
+
+once the test passes, improve the implementation without changing its behaviour.
+
+example:
+
+remove duplication
+
+improve names
+
+simplify logic
+
+improve structure
+
+then run the tests again.
+
+the tests provide confidence that the refactoring did not break the behaviour.
+
+## TDD cycle
+
+the complete cycle is:
+
+write failing test
+        ↓
+implement minimum solution
+        ↓
+test passes
+        ↓
+refactor
+        ↓
+run tests again
+        ↓
+repeat
+
+TDD is a development technique, not a requirement for every project or every developer.
+
+## Test Naming
+
+test names should clearly explain what behaviour they check.
+
+bad:
+
+def test_1():
+    ...
+
+better:
+
+def test_login_fails_with_invalid_password():
+    ...
+
+good test names make failures much easier to understand.
+
+## Arrange, Act, Assert
+
+a common structure for tests is:
+
+Arrange
+Act
+Assert
+
+example:
+
+def test_add():
+
+    # Arrange
+    a = 2
+    b = 3
+
+    # Act
+    result = add(a, b)
+
+    # Assert
+    assert result == 5
+
+this keeps tests clear and easy to read.
+
+## Unit Test Example
+
+production code:
+
+def calculate_discount(price, percentage):
+
+    if percentage < 0 or percentage > 100:
+        raise ValueError("invalid percentage")
+
+    return price * (1 - percentage / 100)
+
+tests:
+
+def test_discount():
+
+    assert calculate_discount(100, 20) == 80
+
+def test_no_discount():
+
+    assert calculate_discount(100, 0) == 100
+
+def test_full_discount():
+
+    assert calculate_discount(100, 100) == 0
+
+def test_invalid_discount():
+
+    with pytest.raises(ValueError):
+        calculate_discount(100, 120)
+
+these tests cover normal behaviour and important edge cases.
+
+## Integration Test Example
+
+imagine a function saves a user to a database.
+
+a unit test might mock the database.
+
+an integration test might use a real test database:
+
+def test_create_user(database):
+
+    create_user(database, "Ben")
+
+    user = get_user(database, "Ben")
+
+    assert user.name == "Ben"
+
+this checks that multiple components work together.
+
+## End-to-End Test Example
+
+an end-to-end test might check an entire login process:
+
+1. open the application
+2. navigate to login
+3. enter credentials
+4. submit the form
+5. verify the account page appears
+
+this tests the system as a whole rather than individual functions.
+
+tools such as Playwright and Selenium are commonly used for browser-based end-to-end testing.
+
+## Continuous Integration
+
+continuous integration, or CI, automatically runs checks whenever code changes are pushed.
+
+a typical CI pipeline might:
+
+1. install dependencies
+2. run linting
+3. run formatting checks
+4. run type checking
+5. run unit tests
+6. generate coverage
+7. build the project
+
+if something fails, the developer is notified before the changes are merged.
+
+## GitHub Actions
+
+GitHub Actions can be used to create CI workflows.
+
+a workflow can automatically run tests whenever code is pushed or a pull request is opened.
+
+example structure:
+
+.github/
+    workflows/
+        tests.yml
+
+a workflow might run:
+
+pytest
+
+ruff check .
+
+mypy .
+
+this means every pull request can automatically be checked.
+
+## Regression Testing
+
+a regression is when previously working functionality becomes broken after a change.
+
+example:
+
+you modify the login system.
+
+the login feature still works, but password reset suddenly stops working.
+
+a regression test is a test that prevents the old bug from returning.
+
+every important bug fix should ideally have a test that would fail if the bug comes back.
+
+## Testing Edge Cases
+
+normal inputs are not enough.
+
+always consider:
+
+empty strings
+
+empty lists
+
+zero
+
+negative numbers
+
+very large numbers
+
+duplicate values
+
+missing values
+
+invalid types
+
+boundary values
+
+unexpected input
+
+example:
+
+def test_empty_list():
+
+    assert calculate_average([]) == 0
+
+if empty input is not valid, the test should instead verify that the correct exception is raised.
+
+## Test Isolation
+
+tests should ideally be independent.
+
+bad:
+
+test_a() changes global state
+
+test_b() relies on test_a()
+
+if `test_a()` fails, `test_b()` also fails.
+
+better:
+
+each test creates the state it needs.
+
+this makes tests:
+- predictable
+- easier to debug
+- safer to run in any order
+
+## Testing Private Implementation Details
+
+tests should generally focus on observable behaviour rather than implementation details.
+
+bad approach:
+
+testing exactly which internal helper functions were called when that behaviour is not important.
+
+better:
+
+test the result produced by the public interface.
+
+this allows you to refactor the implementation without rewriting every test.
+
+## Fast Tests
+
+tests should be fast enough to run frequently.
+
+unit tests should generally avoid unnecessary:
+- network requests
+- real external APIs
+- large databases
+- delays
+- file operations
+
+slow dependencies can often be replaced with fixtures or mocks.
+
+## Testing Strategy
+
+a professional project might use:
+
+many unit tests
+        ↓
+some integration tests
+        ↓
+a smaller number of end-to-end tests
+
+unit tests provide fast feedback.
+
+integration tests verify components work together.
+
+end-to-end tests verify that the complete system works.
+
+## Test Checklist
+
+when writing tests, ask:
+
+- what should happen with normal input?
+- what should happen with invalid input?
+- what are the edge cases?
+- what happens with empty input?
+- what happens at the boundaries?
+- what exceptions should be raised?
+- does the test check behaviour rather than implementation?
+- is the test independent?
+- is the test deterministic?
+- is the test easy to understand?
+
+## Testing Workflow
+
+a good development workflow is:
+
+1. write or change the code
+2. write tests for the expected behaviour
+3. run the tests
+4. fix failures
+5. run linting
+6. run type checking
+7. check coverage when appropriate
+8. refactor if necessary
+9. run the complete test suite
+10. commit the changes
+
+## Goal
+
+be able to confidently change your code without breaking everything.
+
+you should be able to:
+
+- understand unit testing
+- understand integration testing
+- understand end-to-end testing
+- use `unittest`
+- use `pytest`
+- write useful assertions
+- create and use fixtures
+- parameterise tests
+- mock external dependencies
+- understand test coverage
+- practise test-driven development
+- test exceptions and edge cases
+- prevent regressions
+- keep tests isolated and deterministic
+- understand the testing pyramid
+- set up continuous integration
+- automatically run tests through CI
+- understand when to use each type of test
+
+the ultimate goal is to make changes confidently because your test suite provides evidence that the existing behaviour still works.

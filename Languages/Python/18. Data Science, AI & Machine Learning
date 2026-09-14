@@ -1,0 +1,1424 @@
+
+Python is one of the main languages used for data science, machine learning and AI.
+
+The overall progression is:
+
+    Python
+        ↓
+    NumPy / Pandas
+        ↓
+    Data analysis + visualisation
+        ↓
+    Mathematics + statistics
+        ↓
+    Machine learning
+        ↓
+    Deep learning
+        ↓
+    AI engineering
+
+---
+
+## NumPy
+
+NumPy is the foundation of numerical computing in Python.
+
+It provides:
+
+    - Fast multidimensional arrays
+    - Mathematical operations
+    - Linear algebra
+    - Random number generation
+    - Numerical functions
+
+Example:
+
+    import numpy as np
+
+    numbers = np.array([1, 2, 3, 4])
+
+    print(numbers * 2)
+
+Result:
+
+    [2 4 6 8]
+
+Important concepts:
+
+    np.array()
+    shape
+    ndim
+    dtype
+    indexing
+    slicing
+    reshaping
+    broadcasting
+    vectorised operations
+    aggregations
+    linear algebra
+
+Example:
+
+    matrix = np.array([
+        [1, 2],
+        [3, 4]
+    ])
+
+    print(matrix.shape)
+
+    # (2, 2)
+
+NumPy is much faster than ordinary Python loops for many large numerical operations because much of the work happens in optimised compiled code.
+
+---
+
+## Pandas
+
+Pandas is used for working with structured data.
+
+The two main structures are:
+
+    Series
+        One-dimensional labelled data
+
+    DataFrame
+        Two-dimensional table
+
+Example:
+
+    import pandas as pd
+
+    data = pd.DataFrame({
+        "name": ["Alice", "Bob", "Charlie"],
+        "age": [20, 21, 19]
+    })
+
+    print(data)
+
+Useful operations:
+
+    data.head()
+    data.tail()
+    data.info()
+    data.describe()
+    data.shape
+    data.columns
+
+Filtering:
+
+    data[data["age"] > 20]
+
+Selecting columns:
+
+    data["name"]
+
+Creating columns:
+
+    data["age_next_year"] = data["age"] + 1
+
+Grouping:
+
+    data.groupby("department")["salary"].mean()
+
+Pandas is commonly used for:
+
+    - Cleaning data
+    - Analysing data
+    - Transforming data
+    - Loading CSV files
+    - Working with databases
+    - Preparing machine-learning datasets
+
+---
+
+## Matplotlib
+
+Matplotlib is used to visualise data.
+
+Example:
+
+    import matplotlib.pyplot as plt
+
+    x = [1, 2, 3, 4]
+    y = [2, 4, 3, 7]
+
+    plt.plot(x, y)
+    plt.xlabel("X")
+    plt.ylabel("Y")
+    plt.title("Example")
+    plt.show()
+
+Common visualisations:
+
+    Line charts
+    Bar charts
+    Scatter plots
+    Histograms
+    Box plots
+    Heatmaps
+
+Visualisation helps identify:
+
+    - Trends
+    - Outliers
+    - Correlations
+    - Distributions
+    - Patterns
+
+---
+
+## SciPy
+
+SciPy builds on NumPy and provides more advanced scientific computing functionality.
+
+Useful areas include:
+
+    - Optimisation
+    - Statistics
+    - Signal processing
+    - Numerical integration
+    - Linear algebra
+    - Scientific calculations
+
+Example:
+
+    from scipy import stats
+
+    result = stats.norm.pdf(0)
+
+SciPy becomes particularly useful when NumPy alone does not provide the scientific functionality you need.
+
+---
+
+## Jupyter
+
+Jupyter Notebook provides an interactive environment for writing and running Python alongside:
+
+    - Explanations
+    - Charts
+    - Tables
+    - Mathematical notation
+    - Code output
+
+Typical workflow:
+
+    Load data
+        ↓
+    Explore data
+        ↓
+    Clean data
+        ↓
+    Visualise data
+        ↓
+    Build model
+        ↓
+    Evaluate model
+
+Jupyter is particularly common in data science and machine learning experimentation.
+
+---
+
+# Mathematics
+
+You do not need to become a mathematician before learning machine learning.
+
+However, understanding the underlying mathematics makes ML much easier to understand.
+
+---
+
+## Algebra
+
+Important concepts:
+
+    Variables
+    Equations
+    Functions
+    Exponents
+    Logarithms
+    Rearranging equations
+
+Example:
+
+    y = 2x + 3
+
+If:
+
+    x = 4
+
+Then:
+
+    y = 11
+
+Algebra is used throughout machine learning.
+
+---
+
+## Statistics
+
+Statistics is used to understand data.
+
+Important concepts:
+
+    Mean
+    Median
+    Mode
+    Variance
+    Standard deviation
+    Percentiles
+    Distributions
+    Correlation
+    Covariance
+    Outliers
+
+Example:
+
+    numbers = [2, 4, 6, 8]
+
+    Mean = 5
+
+Variance and standard deviation describe how spread out the data is.
+
+---
+
+## Probability
+
+Probability describes uncertainty.
+
+Important concepts:
+
+    Probability
+    Conditional probability
+    Independent events
+    Probability distributions
+    Expected value
+    Bayes' theorem
+
+Example:
+
+    P(A | B)
+
+means:
+
+    "Probability of A given B."
+
+Probability is fundamental to many machine-learning and AI techniques.
+
+---
+
+## Vectors
+
+A vector is an ordered collection of numbers.
+
+Example:
+
+    v = [2, 4, 6]
+
+In machine learning, vectors commonly represent:
+
+    - Data points
+    - Features
+    - Model parameters
+    - Embeddings
+
+For example:
+
+    [age, height, weight]
+
+could represent one person.
+
+---
+
+## Matrices
+
+A matrix is a rectangular collection of numbers.
+
+Example:
+
+    [1 2 3]
+    [4 5 6]
+
+Matrices are fundamental to machine learning because datasets and neural-network operations can naturally be represented as matrices.
+
+Important concepts:
+
+    Matrix addition
+    Matrix multiplication
+    Transpose
+    Inverse
+    Determinant
+    Rank
+    Eigenvalues
+    Eigenvectors
+
+---
+
+## Calculus
+
+Calculus is particularly important for optimisation.
+
+Important concepts:
+
+    Derivatives
+    Partial derivatives
+    Gradients
+    Chain rule
+    Integrals
+
+The derivative tells us how a function changes.
+
+Machine learning uses derivatives to determine how model parameters should change to reduce error.
+
+---
+
+# Machine Learning
+
+Machine learning means creating systems that learn patterns from data rather than explicitly programming every rule.
+
+Basic workflow:
+
+    Data
+      ↓
+    Features
+      ↓
+    Model
+      ↓
+    Training
+      ↓
+    Predictions
+      ↓
+    Evaluation
+
+---
+
+## Supervised Learning
+
+Supervised learning uses labelled data.
+
+Example:
+
+    Input:
+        House size
+        Number of bedrooms
+        Location
+
+    Output:
+        House price
+
+The model learns:
+
+    inputs → known outputs
+
+Main supervised learning tasks:
+
+    Regression
+    Classification
+
+---
+
+## Regression
+
+Regression predicts a continuous numerical value.
+
+Examples:
+
+    House price
+    Temperature
+    Salary
+    Sales
+    Delivery time
+
+Simple example:
+
+    y = mx + b
+
+A model attempts to find a relationship between inputs and a numerical output.
+
+---
+
+## Classification
+
+Classification predicts a category.
+
+Examples:
+
+    Spam / Not spam
+    Cat / Dog
+    Fraud / Not fraud
+    Disease / No disease
+
+A model learns to assign observations to classes.
+
+Important concepts:
+
+    Binary classification
+    Multiclass classification
+    Decision boundaries
+    Probabilities
+    Classification thresholds
+
+---
+
+## Decision Trees
+
+A decision tree repeatedly splits data based on conditions.
+
+Example:
+
+    Is age > 30?
+        ↓
+       Yes
+        ↓
+    Income > £40k?
+       /      \
+     Yes       No
+
+Trees are easy to understand and can model nonlinear relationships.
+
+Important concepts:
+
+    Splits
+    Nodes
+    Leaves
+    Depth
+    Entropy
+    Gini impurity
+    Information gain
+
+---
+
+## Random Forests
+
+A random forest combines many decision trees.
+
+Conceptually:
+
+    Tree 1 ──┐
+    Tree 2 ──┤
+    Tree 3 ──┤
+    Tree 4 ──┤
+    Tree 5 ──┤
+             ↓
+        Final prediction
+
+Using many trees generally produces a more robust model than relying on one tree.
+
+Random forests are useful for:
+
+    - Classification
+    - Regression
+    - Feature importance
+    - Nonlinear relationships
+
+---
+
+## Support Vector Machines
+
+SVMs attempt to find a decision boundary that separates classes effectively.
+
+For simple data:
+
+    Class A     |     Class B
+       ● ● ●    |    ○ ○ ○
+       ● ● ●    |    ○ ○ ○
+
+The algorithm attempts to find a boundary with a large margin.
+
+Important concepts:
+
+    Hyperplanes
+    Margins
+    Support vectors
+    Kernels
+
+SVMs can work particularly well on smaller or medium-sized datasets.
+
+---
+
+## Clustering
+
+Clustering is an unsupervised-learning technique.
+
+There are no predefined labels.
+
+The algorithm attempts to discover groups within the data.
+
+Example:
+
+    Customer data
+          ↓
+    Clustering
+          ↓
+    Customer groups
+
+Common algorithm:
+
+    K-means
+
+Clustering can be used for:
+
+    - Customer segmentation
+    - Pattern discovery
+    - Data exploration
+    - Grouping similar observations
+
+---
+
+## PCA
+
+PCA = Principal Component Analysis.
+
+It is commonly used for dimensionality reduction.
+
+Imagine having:
+
+    100 features
+
+PCA attempts to represent much of the important variation using fewer dimensions.
+
+Conceptually:
+
+    100 dimensions
+          ↓
+         PCA
+          ↓
+    10 important components
+
+PCA can help with:
+
+    - Visualisation
+    - Noise reduction
+    - Dimensionality reduction
+    - Faster models
+
+PCA is closely connected to linear algebra and eigenvectors.
+
+---
+
+## Feature Engineering
+
+Features are the inputs given to a machine-learning model.
+
+Example:
+
+    Raw data:
+
+    date_of_birth
+    annual_salary
+    postcode
+
+Possible engineered features:
+
+    age
+    monthly_salary
+    region
+
+Feature engineering can involve:
+
+    - Creating new features
+    - Removing useless features
+    - Scaling
+    - Encoding categories
+    - Handling missing values
+    - Transforming distributions
+
+Good features can dramatically improve model performance.
+
+---
+
+## Model Evaluation
+
+A model needs to be evaluated on data it did not train on.
+
+Common classification metrics:
+
+    Accuracy
+    Precision
+    Recall
+    F1 score
+    ROC-AUC
+
+For regression:
+
+    MAE
+    MSE
+    RMSE
+    R²
+
+Example:
+
+    Accuracy =
+    correct predictions / total predictions
+
+Do not rely on accuracy alone when classes are heavily imbalanced.
+
+---
+
+## Training, Validation and Test Data
+
+A common split is:
+
+    Training data
+        ↓
+    Used to train model
+
+    Validation data
+        ↓
+    Used to tune choices
+
+    Test data
+        ↓
+    Final unbiased evaluation
+
+Example:
+
+    70% training
+    15% validation
+    15% testing
+
+The exact proportions depend on the problem.
+
+The important principle is:
+
+    Do not evaluate your model only on the data it trained on.
+
+---
+
+## Overfitting
+
+Overfitting occurs when a model learns the training data too closely.
+
+Conceptually:
+
+    Training performance → Excellent
+    New data performance → Poor
+
+The model has learned noise or specific details rather than general patterns.
+
+Underfitting is the opposite:
+
+    Training performance → Poor
+    New data performance → Poor
+
+The model is too simple to capture the underlying pattern.
+
+---
+
+## Cross-Validation
+
+Cross-validation gives a more reliable estimate of model performance.
+
+Example: 5-fold cross-validation
+
+    Dataset
+       ↓
+    ┌────┬────┬────┬────┬────┐
+    │ F1 │ F2 │ F3 │ F4 │ F5 │
+    └────┴────┴────┴────┴────┘
+
+Train on four folds.
+
+Test on the remaining fold.
+
+Repeat until every fold has been used as the validation fold.
+
+Then average the results.
+
+Cross-validation is particularly useful when datasets are not extremely large.
+
+---
+
+# Deep Learning
+
+Deep learning uses neural networks with many layers.
+
+Basic structure:
+
+    Input
+      ↓
+    Layer
+      ↓
+    Layer
+      ↓
+    Layer
+      ↓
+    Output
+
+Neural networks can learn highly complex relationships.
+
+---
+
+## Neural Networks
+
+A neuron receives inputs, applies weights and a bias, then passes the result through an activation function.
+
+Conceptually:
+
+    inputs
+       ↓
+    weighted sum
+       ↓
+    activation function
+       ↓
+    output
+
+A simplified neuron:
+
+    y = activation(w₁x₁ + w₂x₂ + b)
+
+A neural network contains many connected neurons.
+
+---
+
+## Activation Functions
+
+Activation functions introduce non-linearity.
+
+Common examples:
+
+    ReLU
+    Sigmoid
+    Tanh
+    Softmax
+
+ReLU:
+
+    ReLU(x) = max(0, x)
+
+Softmax is commonly used to convert outputs into class probabilities.
+
+---
+
+## Loss Functions
+
+A loss function measures how wrong a model's prediction is.
+
+Example:
+
+    Prediction = 80
+    Actual = 100
+
+The loss represents the error between them.
+
+The training process attempts to minimise this loss.
+
+Common losses:
+
+    Mean Squared Error
+    Cross-Entropy Loss
+    Binary Cross-Entropy
+
+---
+
+## Gradient Descent
+
+Gradient descent is an optimisation algorithm used to reduce the model's loss.
+
+Conceptually:
+
+    Calculate loss
+        ↓
+    Calculate gradient
+        ↓
+    Adjust parameters
+        ↓
+    Calculate loss again
+        ↓
+    Repeat
+
+The learning rate controls how large each update is.
+
+Too large:
+
+    Model may overshoot.
+
+Too small:
+
+    Training may be extremely slow.
+
+---
+
+## Backpropagation
+
+Backpropagation calculates how much each model parameter contributed to the error.
+
+Simplified:
+
+    Prediction
+        ↓
+      Loss
+        ↓
+    Backpropagation
+        ↓
+    Gradients
+        ↓
+    Update weights
+
+Backpropagation uses the chain rule from calculus.
+
+It allows neural networks with many layers to learn efficiently.
+
+---
+
+## CNNs
+
+CNN = Convolutional Neural Network.
+
+CNNs are particularly useful for image-related tasks.
+
+They use convolutional filters to detect patterns.
+
+Early layers might detect:
+
+    Edges
+    Shapes
+    Simple patterns
+
+Later layers can detect:
+
+    Objects
+    Faces
+    Complex structures
+
+Common applications:
+
+    - Image classification
+    - Object detection
+    - Computer vision
+
+---
+
+## RNNs
+
+RNN = Recurrent Neural Network.
+
+RNNs are designed for sequential data.
+
+Examples:
+
+    Text
+    Time series
+    Speech
+
+They maintain information from previous steps.
+
+However, traditional RNNs can struggle with long-term dependencies.
+
+LSTM and GRU networks were developed to improve this.
+
+---
+
+## Transformers
+
+Transformers are a major architecture behind modern AI systems.
+
+They use attention mechanisms to determine which parts of an input are important to each other.
+
+A simplified idea:
+
+    Input
+      ↓
+    Embeddings
+      ↓
+    Attention
+      ↓
+    Transformer layers
+      ↓
+    Output
+
+Transformers are used in:
+
+    - Large language models
+    - Machine translation
+    - Text generation
+    - Computer vision
+    - Speech
+    - Multimodal AI
+
+The key concept to understand is:
+
+    Attention allows the model to consider relationships
+    between different parts of the input.
+
+---
+
+## PyTorch
+
+PyTorch is one of the main Python frameworks for deep learning.
+
+Example:
+
+    import torch
+
+    x = torch.tensor([1.0, 2.0, 3.0])
+
+    print(x * 2)
+
+PyTorch provides:
+
+    - Tensors
+    - Automatic differentiation
+    - Neural-network layers
+    - Optimisers
+    - GPU acceleration
+    - Model training
+
+Typical workflow:
+
+    Dataset
+        ↓
+    DataLoader
+        ↓
+    Model
+        ↓
+    Loss function
+        ↓
+    Optimiser
+        ↓
+    Training loop
+        ↓
+    Evaluation
+
+---
+
+# AI Engineering
+
+AI engineering is about building real applications around AI models.
+
+This is different from simply training a model.
+
+Typical architecture:
+
+    Application
+        ↓
+    AI model/API
+        ↓
+    Data
+        ↓
+    Tools
+        ↓
+    Database
+        ↓
+    User
+
+---
+
+## LLM APIs
+
+LLMs can be accessed through APIs.
+
+Your Python application sends:
+
+    Prompt
+        ↓
+    API
+        ↓
+    LLM
+        ↓
+    Response
+
+Python can then use the response inside your application.
+
+Possible applications:
+
+    - Chatbots
+    - Coding assistants
+    - Document analysis
+    - Summarisation
+    - Search
+    - Content generation
+    - Data extraction
+
+---
+
+## Embeddings
+
+An embedding converts information into a vector representation.
+
+For example:
+
+    "Python is a programming language"
+                ↓
+            Embedding
+                ↓
+    [0.12, -0.43, 0.87, ...]
+
+Similar concepts tend to have similar vector representations.
+
+Embeddings can be used for:
+
+    - Semantic search
+    - Recommendation systems
+    - Document retrieval
+    - Similarity comparison
+    - RAG
+
+---
+
+## Vector Databases
+
+Vector databases store and search embeddings efficiently.
+
+Conceptually:
+
+    Document
+       ↓
+    Embedding
+       ↓
+    Vector database
+
+When a user asks a question:
+
+    Question
+       ↓
+    Embedding
+       ↓
+    Similarity search
+       ↓
+    Relevant documents
+
+Examples of vector databases/technologies include:
+
+    PostgreSQL + pgvector
+    FAISS
+    Qdrant
+    Milvus
+
+---
+
+## RAG
+
+RAG = Retrieval-Augmented Generation.
+
+It allows an LLM to use external information when generating an answer.
+
+Basic process:
+
+    User question
+          ↓
+    Create embedding
+          ↓
+    Search knowledge base
+          ↓
+    Retrieve relevant documents
+          ↓
+    Add documents to prompt
+          ↓
+    LLM
+          ↓
+    Answer
+
+RAG is useful when the model needs information that is:
+
+    - Private
+    - Frequently changing
+    - Specific to an organisation
+    - Too large to put directly into every prompt
+
+---
+
+## Agents
+
+An AI agent is a system where a model can decide what actions to take to accomplish a task.
+
+Instead of:
+
+    User → LLM → Answer
+
+you may have:
+
+    User
+      ↓
+    Agent
+      ↓
+    Decide action
+      ↓
+    Tool
+      ↓
+    Result
+      ↓
+    Agent
+      ↓
+    Final answer
+
+Agents can potentially:
+
+    - Search the web
+    - Query databases
+    - Call APIs
+    - Execute functions
+    - Read files
+    - Perform calculations
+
+The important concept is that the model is being used as part of a larger system rather than simply generating text.
+
+---
+
+## Tool Calling
+
+Tool calling allows an AI model to request that your application execute a specific function.
+
+Example:
+
+    User:
+    "What's the weather?"
+
+    Model:
+    Call get_weather(location="London")
+
+    Python application:
+    Executes function
+
+    Function:
+    Returns weather data
+
+    Model:
+    Uses result to answer user
+
+The model does not directly execute your Python function.
+
+Your application controls the tool and decides whether the requested action is allowed.
+
+---
+
+## Model Evaluation
+
+AI systems need systematic evaluation.
+
+Possible measurements:
+
+    Accuracy
+    Precision
+    Recall
+    Latency
+    Cost
+    Reliability
+    Hallucination rate
+    Task success rate
+
+For an LLM application, create a test dataset:
+
+    Input
+       ↓
+    Expected behaviour
+       ↓
+    Model output
+       ↓
+    Evaluation
+
+Do not assume that a model is good simply because a few examples look impressive.
+
+---
+
+## Fine-Tuning
+
+Fine-tuning means further training an existing model on a specific dataset.
+
+Conceptually:
+
+    Pre-trained model
+          ↓
+    Your training data
+          ↓
+    Fine-tuning
+          ↓
+    Specialised model
+
+Fine-tuning can be useful when you need a model to:
+
+    - Follow a particular style
+    - Perform a specific task
+    - Learn specialised patterns
+    - Produce consistent outputs
+
+However, fine-tuning is not always the best solution.
+
+Often:
+
+    Better prompting
+    +
+    RAG
+    +
+    Tool calling
+
+can solve the problem without training a model yourself.
+
+---
+
+# Typical Data Science Workflow
+
+A real data-science project might look like:
+
+    1. Define the problem
+            ↓
+    2. Collect data
+            ↓
+    3. Load data with Pandas
+            ↓
+    4. Explore data
+            ↓
+    5. Clean data
+            ↓
+    6. Visualise data
+            ↓
+    7. Engineer features
+            ↓
+    8. Split dataset
+            ↓
+    9. Train model
+            ↓
+    10. Evaluate model
+            ↓
+    11. Tune model
+            ↓
+    12. Test final model
+            ↓
+    13. Deploy model
+            ↓
+    14. Monitor performance
+
+---
+
+# Typical AI Engineering Workflow
+
+A modern AI application might look like:
+
+    User
+      ↓
+    Python application
+      ↓
+    LLM
+      ↓
+    ┌───────────────┐
+    │               │
+    RAG           Tools
+    │               │
+    ↓               ↓
+    Vector DB     APIs / Database
+    │               │
+    └───────┬───────┘
+            ↓
+         Response
+
+Python acts as the glue connecting the AI model to the rest of the application.
+
+---
+
+# Important Libraries
+
+Data science:
+
+    NumPy
+    Pandas
+    Matplotlib
+    SciPy
+    Jupyter
+
+Machine learning:
+
+    scikit-learn
+
+Deep learning:
+
+    PyTorch
+
+AI engineering commonly involves:
+
+    LLM provider SDKs
+    Embedding models
+    Vector databases
+    API frameworks
+    Database libraries
+
+You do not need to learn every AI library.
+
+The important thing is understanding the underlying concepts.
+
+---
+
+# What You Should Learn First
+
+A sensible order is:
+
+    Python
+      ↓
+    NumPy
+      ↓
+    Pandas
+      ↓
+    Matplotlib
+      ↓
+    Statistics + Probability
+      ↓
+    Linear Algebra
+      ↓
+    scikit-learn
+      ↓
+    Machine Learning
+      ↓
+    PyTorch
+      ↓
+    Deep Learning
+      ↓
+    Transformers
+      ↓
+    LLM APIs
+      ↓
+    Embeddings
+      ↓
+    RAG
+      ↓
+    Agents + Tool Calling
+      ↓
+    Evaluation + Deployment
+
+You do not need to master all the mathematics before writing your first machine-learning program.
+
+Learn the mathematics alongside the concepts that require it.
+
+---
+
+# Final Goal
+
+You should understand:
+
+    - How to manipulate numerical data
+    - How to clean and analyse datasets
+    - How to visualise data
+    - The statistics behind machine learning
+    - Basic probability
+    - Vectors and matrices
+    - How machine-learning models learn
+    - Regression
+    - Classification
+    - Clustering
+    - Decision trees and random forests
+    - SVMs
+    - PCA
+    - Feature engineering
+    - Model evaluation
+    - Cross-validation
+    - Overfitting and underfitting
+    - Neural networks
+    - Gradient descent
+    - Backpropagation
+    - CNNs
+    - RNNs
+    - Transformers
+    - PyTorch
+    - LLM APIs
+    - Embeddings
+    - Vector databases
+    - RAG
+    - Agents
+    - Tool calling
+    - Model evaluation
+    - Fine-tuning
+
+The overall goal is not just:
+
+    "I can use an AI library."
+
+It is:
+
+    "I understand the data, mathematics, models and engineering
+     needed to build useful AI systems with Python."
