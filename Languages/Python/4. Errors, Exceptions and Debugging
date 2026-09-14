@@ -1,158 +1,264 @@
-## Syntax errors
 
-happens when the code you've written doesn't follow python's grammar rules — a missing colon, mismatched brackets, a typo in a keyword
-python catches these before your code even starts running, since it can't parse the file properly in the first place
-example: if True
-print("hello") result SyntaxError: expected ':'
-these are usually the easiest to fix since python points almost exactly at the spot it got confused
+### Syntax Errors
 
-## Runtime errors
+- A syntax error means Python cannot understand the structure of my code.
 
-happens while the program is actually running, after it's already passed the syntax check
-the code is grammatically valid python, but something goes wrong when it actually executes
-example: x = 10 / 0
-result ZeroDivisionError: division by zero
-other common ones: TypeError, ValueError, IndexError, KeyError, AttributeError — each one describing a different kind of thing going wrong at the moment it happens
+if age >= 18
+    print("Adult")
 
-## Logical errors
+- The colon is missing.
+- Python normally reports this before the program can properly execute.
 
-the trickiest kind — the code runs fine, no error message at all, but it produces the wrong result because the logic itself is off
-example: def average(a, b):
-return a + b / 2 wrong, division happens before addition average(4, 6)
-result 7.0 instead of the expected 5.0
-fixing these means checking the logic step by step, usually with print statements or a debugger, since python has no way of knowing your intention was different from what you actually wrote
 
-## Tracebacks
+### Runtime Errors
 
-the block of text python prints out when an error happens, showing exactly where and why
-reads from bottom to top for the actual error, and top to bottom for the sequence of calls that led there
-example of what one looks like: Traceback (most recent call last):
-File "main.py", line 3, in <module>
-result = divide(10, 0)
-File "main.py", line 1, in divide
-return a / b
-ZeroDivisionError: division by zero
-the very last line is the actual error type and message, the lines above show the chain of function calls that got you there — always worth reading that last line first
+- A runtime error happens while the program is running.
+- These are usually represented by exceptions.
 
-## try
+Example:
 
-a block that lets you attempt code that might fail, without crashing the whole program if it does
-example: try:
-x = 10 / 0
-on its own a try block needs at least one except attached to it, otherwise python complains
+number = 10 / 0
 
-## except
+- This causes `ZeroDivisionError`.
 
-catches an error if one happens inside the matching try block, and runs its own code instead of letting the program crash
-example: try:
-x = 10 / 0
-except ZeroDivisionError:
-print("can't divide by zero")
-can catch specific error types, or catch anything at all with a bare except — though catching everything blindly is generally considered bad practice since it can hide bugs you actually wanted to know about
-can also grab the error object itself to inspect it: except ZeroDivisionError as e:
-print(e)
+Example:
 
-## else
+numbers = [1, 2, 3]
+print(numbers[10])
 
-inside a try block, an else clause runs only if the try block succeeded with no error at all
-example: try:
-x = 10 / 2
-except ZeroDivisionError:
-print("failed")
+- This causes `IndexError`.
+
+
+### Logical Errors
+
+- A logical error means the code runs but produces the wrong result.
+
+Example:
+
+def add(a, b):
+    return a - b
+
+- There is nothing syntactically wrong with the function.
+- It simply does the wrong thing.
+- Logical errors can be harder to find because Python does not automatically tell me that the result is wrong.
+
+
+### Tracebacks
+
+- A traceback shows where an exception happened and how the program got there.
+- I should learn to read tracebacks rather than panic when I see one.
+
+- The traceback normally contains:
+  - The file.
+  - The line number.
+  - The chain of function calls.
+  - The exception type.
+  - The error message.
+
+- The bottom of the traceback normally contains the most useful information about the actual exception.
+
+
+### try and except
+
+- `try` contains code that might cause an exception.
+- `except` handles the exception.
+
+try:
+    number = int(input("Enter a number: "))
+except ValueError:
+    print("That was not a valid number.")
+
+- I should normally catch specific exceptions rather than catching everything.
+
+
+### else
+
+- `else` runs if the `try` block completed without an exception.
+
+try:
+    number = int(input("Enter a number: "))
+except ValueError:
+    print("Invalid number")
 else:
-print("succeeded, x is", x) result succeeded, x is 5.0
-keeps the "what happens if it worked" code separate from the try block itself, so the except doesn't accidentally catch an error from that follow-up code too
+    print("You entered", number)
 
-## finally
 
-a block that always runs no matter what, whether the try succeeded, failed, or even if the except itself re-raises something
-example: try:
-x = 10 / 0
-except ZeroDivisionError:
-print("failed")
+### finally
+
+- `finally` runs whether an exception happened or not.
+
+try:
+    print("Trying")
+except:
+    print("Error")
 finally:
-print("this always runs")
-commonly used for cleanup work, like closing a file or a network connection, that needs to happen regardless of whether things went well
+    print("This always runs")
 
-## raise
+- `finally` is useful for cleanup.
 
-manually triggers an error yourself, instead of waiting for python to hit one naturally
-example: def set_age(age):
+
+### raise
+
+- `raise` lets me deliberately create an exception.
+
+age = -5
+
 if age < 0:
-raise ValueError("age can't be negative")
-return age set_age(-5)
-result ValueError: age can't be negative
-useful for catching bad input early and giving a clear, specific message, instead of letting the program fail confusingly somewhere further down the line
+    raise ValueError("Age cannot be negative")
 
-## Custom exceptions
+- This is useful when invalid data reaches a part of the program that cannot continue safely.
 
-your own error type, made by creating a class that inherits from Exception
-example: class NegativeAgeError(Exception):
-pass def set_age(age):
-if age < 0:
-raise NegativeAgeError("age can't be negative")
-worth doing when the built-in error types (ValueError, TypeError, and so on) don't really describe what actually went wrong in your specific program, and a more descriptive name would make debugging faster
 
-## Exception hierarchy
+### Custom Exceptions
 
-every exception type in python inherits from a common ancestor, BaseException, with Exception sitting just below it as the parent of almost everything you'll actually use
-specific errors branch off from there — ZeroDivisionError and OverflowError are both types of ArithmeticError, for instance
-example of what that means practically: try:
-x = 10 / 0
-except ArithmeticError:
-print("some kind of maths error")
-catching a broader category up the chain will also catch anything more specific underneath it, so except Exception catches almost anything, while except ZeroDivisionError only catches that one exact thing
+- I can create my own exception classes.
 
-## Assertions
+class InvalidAgeError(Exception):
+    pass
 
-a quick sanity check using the assert keyword — if the condition is false, it raises an AssertionError immediately
-example: def divide(a, b):
-assert b != 0, "b cannot be zero"
-return a / b divide(10, 0)
-result AssertionError: b cannot be zero
-meant for catching things that should never happen if the code's logic is correct — not for handling expected, normal errors like bad user input, which is what try/except is for instead
+- I can then raise it.
 
-## Defensive programming
+raise InvalidAgeError("Age is invalid")
 
-writing code that assumes things can and will go wrong, and checks for that ahead of time instead of just hoping for the best
-example: def get_first_item(items):
-if not items:
-return None
-return items[0]
-includes things like validating input before using it, checking a list isn't empty before indexing into it, and not assuming a file, a network request, or user input will always behave the way you expect
+- Custom exceptions are useful in larger programs where I want errors to clearly describe what went wrong.
 
-## Debuggers
 
-a tool that lets you pause a running program and look inside it, instead of guessing what's happening from print statements alone
-lets you step through code one line at a time, watch how variables change, and inspect the exact state of the program at the moment something goes wrong
-VS Code has one built in — set a breakpoint, hit run in debug mode, and it'll pause execution right there
+### Exception Hierarchy
 
-## Breakpoints
+- Python exceptions are organised into a hierarchy.
+- Most normal errors inherit from `Exception`.
 
-a marker you place on a specific line telling the debugger "pause the program here"
-in VS Code, click just to the left of the line number and a red dot appears
-once the program hits that line while running in debug mode, everything freezes there and you can inspect every variable currently in scope, then step forward one line at a time from that point
+Example:
 
-## pdb
+ValueError
+TypeError
+IndexError
+KeyError
+FileNotFoundError
+ZeroDivisionError
 
-python's built-in debugger, usable straight from the terminal without needing an editor with debugging support
-drop this line wherever you want execution to pause: import pdb; pdb.set_trace()
-once it hits that line, you get a small interactive prompt right there in the terminal where you can type variable names to inspect them, or commands like n to move to the next line, c to continue running, and q to quit out entirely
+- I can catch a general parent exception when appropriate.
 
-## Logging
+try:
+    ...
+except ValueError:
+    ...
 
-a more permanent, structured alternative to scattering print statements everywhere, especially useful once a program gets bigger
-example: import logging
+- Catching `Exception` is broader.
+
+try:
+    ...
+except Exception:
+    ...
+
+- I should avoid blindly using:
+
+except:
+
+- This can catch things I may not actually want to catch, including interrupts.
+
+
+### Assertions
+
+- `assert` checks that something is true.
+
+age = 20
+
+assert age >= 0
+
+- If the condition is False, Python raises `AssertionError`.
+
+assert age >= 0, "Age cannot be negative"
+
+- Assertions are useful for checking assumptions during development.
+- I should not rely on assertions for important user input validation or security checks because Python can disable assertions when running with optimisation.
+
+
+### Defensive Programming
+
+- Defensive programming means writing code that expects things to go wrong.
+- I should consider:
+  - Invalid input.
+  - Missing files.
+  - Empty lists.
+  - Incorrect types.
+  - Unexpected values.
+  - Network failures.
+  - User mistakes.
+- I should validate important assumptions and handle expected failures properly.
+
+
+### Debuggers
+
+- A debugger lets me pause a program and inspect what is happening.
+- Instead of adding lots of `print()` statements, I can stop the program at a specific point.
+- I can then inspect:
+  - Variables.
+  - Call stack.
+  - Current line.
+  - Program flow.
+
+
+### Breakpoints
+
+- A breakpoint tells the debugger to pause execution at a particular line.
+- I can then inspect the program before continuing.
+- Breakpoints are extremely useful for understanding why a variable has an unexpected value.
+
+
+### pdb
+
+- `pdb` is Python's built-in debugger.
+
+import pdb
+
+pdb.set_trace()
+
+- When execution reaches that line, I can inspect the program interactively.
+- Modern IDEs usually provide easier graphical debugging, but understanding `pdb` is still useful.
+
+
+### Logging
+
+- Logging records information about what a program is doing.
+- It is usually better than leaving lots of `print()` statements in a larger application.
+
+import logging
+
 logging.basicConfig(level=logging.INFO)
-logging.info("starting the program")
-logging.warning("something looks off")
-logging.error("something failed")
-has different severity levels (debug, info, warning, error, critical) so you can filter what actually gets shown, and unlike print statements, log lines can be switched off without deleting them from the code
 
-## Reading error messages properly
+logging.info("Program started")
+logging.warning("Something may be wrong")
+logging.error("Something went wrong")
 
-the error type itself (ValueError, KeyError, and so on) tells you the category of what went wrong before you even read the rest
-the message right after the error type usually spells out specifically what happened, worth reading in full rather than skimming past it
-the traceback's last line is the actual error, the lines above it show the path of function calls that led there — read bottom to top for the cause, top to bottom for the journey
-the line number given is almost always exactly where to look first, or occasionally the line just above it
-treating an error message as information rather than a wall of scary red text is most of what separates someone who gets stuck from someone who fixes it quickly
+- Common logging levels include:
+
+DEBUG
+INFO
+WARNING
+ERROR
+CRITICAL
+
+- Logging is especially useful for larger applications and programs running somewhere I cannot directly watch.
+
+
+### Reading Error Messages Properly
+
+- When I get an error, I should read it from the bottom of the traceback first.
+- I should identify:
+  - The exception type.
+  - The error message.
+  - The line that caused it.
+- Then I should look at the surrounding code.
+- I should ask:
+  - What did I expect?
+  - What actually happened?
+  - What value caused the problem?
+  - Why did that value occur?
+
+
+### Goal
+
+- I should stop being scared when my code breaks.
+- Errors are information.
+- I should be able to read an error message, understand what Python is telling me and systematically find the problem.

@@ -1,201 +1,478 @@
-## Defining functions
 
-a function is a reusable block of code that runs when you call it by name
-defined using def, followed by a name and parentheses
-example: def greet():
-print("hello") greet()
-result hello
-functions let you avoid repeating the same code over and over, and make programs easier to read and test in pieces
+### Defining Functions
 
-## Parameters
+- A function is a reusable block of code.
+- I define a function using `def`.
 
-the named variables listed in a function's definition, act as placeholders for values that will get passed in
-example: def greet(name):
-print("hello " + name)
-here name is the parameter — it doesn't have a real value until the function actually gets called
+def greet():
+    print("Hello")
 
-## Arguments
+- I call it using its name.
 
-the actual values passed in when calling a function, they fill in the parameters
-example: greet("Ben")
-result hello Ben
-"Ben" here is the argument — parameters and arguments get used interchangeably in casual conversation but technically parameters are the placeholders, arguments are the real values
+greet()
 
-## Return values
+- Functions stop me from repeating the same code.
 
-what a function hands back to whatever called it, using the return keyword
-without a return statement, a function returns None by default
-example: def add(a, b):
-return a + b total = add(2, 3)
-print(total)
-result 5
-a function stops running the moment it hits a return statement, anything written after it inside that function never runs
-print() displays something on screen but doesn't hand a value back to be used elsewhere — return does
 
-## Scope
+### Parameters and Arguments
 
-scope is about where in the program a variable can actually be seen and used
-a variable created inside a function only exists inside that function — trying to use it outside raises an error
-example: def my_func():
-x = 5
-print(x) my_func()
-print(x) raises NameError, x doesn't exist out here
+- A parameter is the variable defined in the function.
 
-## Local/global variables
+def greet(name):
+    print(f"Hello {name}")
 
-local variable: created inside a function, only exists while that function is running, disappears once it finishes
-global variable: created outside any function, at the top level of the script, accessible everywhere
-example: count = 0 this is global def increment():
-local_var = 1 this is local
-print(count) can read the global fine increment()
-a function can read a global variable by default, but trying to change it directly inside without saying so creates a new local variable instead, leaving the original global untouched. the global keyword is needed to actually modify it: def increment():
-global count
-count += 1
+- An argument is the actual value I pass into the function.
 
-## Default arguments
+greet("Ben")
 
-lets a parameter fall back to a preset value if nothing's passed in for it when the function gets called
-example: def greet(name="friend"):
-print("hello " + name) greet()
-result hello friend greet("Ben")
-result hello Ben
-default arguments always have to come after any parameters without a default
+- A function can have multiple parameters.
 
-## Keyword arguments
+def add(a, b):
+    return a + b
 
-passing arguments by naming the parameter directly, instead of relying on their position
-example: def describe(name, age):
-print(name, "is", age) describe(age=20, name="Ben")
-result Ben is 20
-since each argument is explicitly labelled, the order stops mattering, which also makes the function call easier to read at a glance
 
-## *args
+### Return Values
 
-lets a function accept any number of extra positional arguments, collected into a tuple
-example: def add_all(*args):
-return sum(args) add_all(1, 2, 3)
-result 6 add_all(1, 2, 3, 4, 5)
-result 15
-the name args is just convention, the single asterisk in front of it is what actually matters
+- `return` sends a value back from a function.
 
-## **kwargs
+def add(a, b):
+    return a + b
 
-lets a function accept any number of extra keyword arguments, collected into a dictionary
-example: def show_info(**kwargs):
-print(kwargs) show_info(name="Ben", age=20)
-result {'name': 'Ben', 'age': 20}
-kwargs is also just convention, the double asterisk is what matters
-both args and kwargs are handy when you don't know in advance exactly how many arguments will get passed in
+result = add(5, 3)
 
-## Lambda functions
+- `return` also stops the function immediately.
 
-a small, unnamed function defined in a single line, using the lambda keyword instead of def
-example: square = lambda x: x ** 2
+def check_age(age):
+    if age < 18:
+        return "Under 18"
+
+    return "Adult"
+
+- If a function reaches the end without returning anything, it returns `None`.
+
+
+### Scope
+
+- Scope determines where a variable can be accessed.
+- Variables created inside a function normally only exist inside that function.
+
+def test():
+    x = 10
+
+print(x)
+
+- This causes an error because `x` only exists inside `test()`.
+
+- Python follows the LEGB rule when looking for a variable:
+
+L = Local
+E = Enclosing
+G = Global
+B = Built-in
+
+- Python searches these scopes in that order.
+
+
+### Local and Global Variables
+
+- A local variable exists inside a function.
+
+def test():
+    number = 10
+
+- A global variable exists outside functions.
+
+number = 10
+
+def test():
+    print(number)
+
+- Functions can read global variables, but changing global variables from inside functions normally requires `global`.
+
+number = 10
+
+def change():
+    global number
+    number = 20
+
+- I should generally avoid relying heavily on global variables.
+- Passing values into functions and returning values is usually cleaner.
+
+
+### Default Arguments
+
+- Parameters can have default values.
+
+def greet(name="Ben"):
+    print(f"Hello {name}")
+
+- If I do not provide an argument, the default is used.
+
+greet()
+
+- I can override it.
+
+greet("John")
+
+- Important:
+  - Avoid using mutable objects such as lists or dictionaries as default arguments unless I specifically understand the behaviour.
+
+Bad:
+
+def add_item(item, items=[]):
+    items.append(item)
+    return items
+
+- The same list can be reused between calls.
+- A safer approach is:
+
+def add_item(item, items=None):
+    if items is None:
+        items = []
+
+    items.append(item)
+    return items
+
+
+### Keyword Arguments
+
+- I can pass arguments using their parameter names.
+
+def introduce(name, age):
+    print(name, age)
+
+introduce(name="Ben", age=20)
+
+- Keyword arguments make function calls easier to read.
+
+
+### *args
+
+- `*args` allows a function to accept any number of positional arguments.
+
+def add_all(*numbers):
+    return sum(numbers)
+
+add_all(1, 2, 3, 4)
+
+- Inside the function, `args` is a tuple.
+
+
+### **kwargs
+
+- `**kwargs` allows a function to accept any number of keyword arguments.
+
+def print_details(**details):
+    print(details)
+
+print_details(name="Ben", age=20)
+
+- Inside the function, `kwargs` is a dictionary.
+
+- The names `args` and `kwargs` are conventions.
+- The important parts are `*` and `**`.
+
+
+### Lambda Functions
+
+- A lambda is a small anonymous function.
+
+square = lambda x: x ** 2
+
 square(5)
-result 25
-equivalent to writing: def square(x):
-return x ** 2
-lambdas are meant for short, throwaway functions, usually passed straight into something else rather than saved and reused
 
-## Functions as objects
+- Lambdas are often used when I need a small function for another function.
 
-in python, functions are values just like numbers or strings — they can be stored in a variable, passed into another function, or returned from one
-example: def shout(text):
-return text.upper() my_function = shout
-my_function("hello")
-result HELLO
-this is what makes higher-order functions possible, since a function can be treated as just another piece of data
+numbers = [1, 2, 3]
 
-## Higher-order functions
+sorted(numbers, key=lambda x: -x)
 
-a function that either takes another function as an argument, returns a function, or both
-example: def apply_twice(func, value):
-return func(func(value)) def add_one(x):
-return x + 1 apply_twice(add_one, 5)
-result 7
-map, filter, and sorted with a key argument are all built-in examples of this pattern
+- If the function becomes complicated, I should normally use `def` instead.
 
-## Recursion
 
-a function that calls itself, working towards a base case that stops it calling forever
-example: def factorial(n):
-if n == 1:
-return 1
-return n * factorial(n - 1) factorial(4)
-result 24
-every recursive function needs a base case, a condition where it stops calling itself, or it runs forever and eventually crashes with a RecursionError
-anything recursion can do, a loop can usually also do — recursion just tends to fit better for problems naturally defined in terms of smaller versions of themselves, like tree structures
+### Functions as Objects
 
-## Functional programming basics
+- Functions are objects in Python.
+- This means I can store them in variables.
 
-a style of writing code built around functions that take input and return output without changing anything outside themselves
-a pure function always gives the same output for the same input, and doesn't rely on or modify anything outside its own scope
-example of a pure function versus one that isn't: def pure_add(a, b):
-return a + b always predictable, no side effects total = 0
-def impure_add(a):
-global total
-total += a changes something outside the function, less predictable
-python isn't a strictly functional language like some others, but tools like map, filter, and lambda let you write in that style when it fits
+def greet():
+    print("Hello")
 
-## map
+say_hello = greet
 
-applies a function to every item in a sequence, returns a map object which can be turned into a list
-example: nums = [1, 2, 3]
-doubled = list(map(lambda x: x * 2, nums))
-result [2, 4, 6]
+say_hello()
 
-## filter
+- I can pass functions to other functions.
 
-keeps only the items from a sequence where a function returns True, drops the rest
-example: nums = [1, 2, 3, 4, 5, 6]
-evens = list(filter(lambda x: x % 2 == 0, nums))
-result [2, 4, 6]
+def run_function(function):
+    function()
 
-## reduce
+run_function(greet)
 
-rolls a sequence down into a single value by repeatedly applying a function to pairs of items
-not built in by default, needs importing from functools
-example: from functools import reduce
-nums = [1, 2, 3, 4]
-total = reduce(lambda a, b: a + b, nums)
-result 10
-works through the list like this: ((1+2)+3)+4
+- I can also return functions from functions.
 
-## zip
 
-pairs up items from two or more sequences, position by position
-example: names = ["Ben", "Sam"]
-ages = [20, 22]
-list(zip(names, ages))
-result [('Ben', 20), ('Sam', 22)]
-stops as soon as the shortest sequence runs out, even if the others still have items left
+### Higher-Order Functions
 
-## enumerate
+- A higher-order function is a function that:
+  - Takes another function as an argument.
+  - Returns a function.
+  - Or both.
 
-loops over a sequence while also keeping track of the index of each item, without manually managing a counter
-example: fruits = ["apple", "banana", "cherry"]
-for index, fruit in enumerate(fruits):
-print(index, fruit) result
-0 apple
-1 banana
-2 cherry
+- Examples include:
 
-## any
+map()
+filter()
+sorted()
+any()
+all()
 
-checks a sequence and returns True if at least one item is truthy, False if every item is falsy
-example: nums = [0, 0, 3, 0]
-any(nums)
-result True nums = [0, 0, 0]
-any(nums)
-result False
+- Understanding this makes Python's functional programming features much easier to understand.
 
-## all
 
-checks a sequence and returns True only if every single item is truthy, False if even one isn't
-example: nums = [1, 2, 3]
-all(nums)
-result True nums = [1, 0, 3]
-all(nums)
-result False
-any and all are especially handy combined with a generator expression, checking a condition across a whole list without writing a manual loop: all(x > 0 for x in [1, 2, 3])
-result True
+### Recursion
+
+- Recursion is when a function calls itself.
+
+def countdown(n):
+    if n == 0:
+        return
+
+    print(n)
+    countdown(n - 1)
+
+- A recursive function needs a base case.
+- The base case tells it when to stop.
+- Without a base case, recursion can continue until Python raises a `RecursionError`.
+
+- Recursion can be useful for:
+  - Trees.
+  - Graphs.
+  - Divide-and-conquer algorithms.
+  - Problems that naturally contain smaller versions of themselves.
+
+- I should not use recursion just because I can.
+- A loop is often simpler for straightforward repetition.
+
+
+### Functional Programming Basics
+
+- Functional programming is a programming style where functions are treated as values and operations are often expressed by applying functions to data.
+- Python supports functional programming but is not purely functional.
+- Important concepts include:
+  - Functions as objects.
+  - Higher-order functions.
+  - `map()`.
+  - `filter()`.
+  - `reduce()`.
+  - Immutability.
+  - Pure functions.
+
+
+### map()
+
+- `map()` applies a function to every item in an iterable.
+
+numbers = [1, 2, 3]
+
+squares = map(lambda x: x ** 2, numbers)
+
+- `map()` returns an iterator.
+- I can convert it into a list.
+
+squares = list(map(lambda x: x ** 2, numbers))
+
+
+### filter()
+
+- `filter()` keeps items where a condition is True.
+
+numbers = [1, 2, 3, 4, 5]
+
+even = filter(lambda x: x % 2 == 0, numbers)
+
+even = list(even)
+
+- In many situations, a list comprehension is easier to read.
+
+
+### reduce()
+
+- `reduce()` repeatedly combines values to produce one result.
+- It comes from the `functools` module.
+
+from functools import reduce
+
+numbers = [1, 2, 3, 4]
+
+total = reduce(lambda a, b: a + b, numbers)
+
+- The result is:
+
+10
+
+- I should not use `reduce()` just to make code shorter.
+- A normal loop or built-in function such as `sum()` is often clearer.
+
+
+### zip()
+
+- `zip()` combines items from multiple iterables.
+
+names = ["Ben", "John"]
+ages = [20, 21]
+
+for name, age in zip(names, ages):
+    print(name, age)
+
+- `zip()` is very useful when I need to process multiple collections together.
+
+
+### enumerate()
+
+- `enumerate()` gives me both the index and the value.
+
+names = ["Ben", "John", "Sam"]
+
+for index, name in enumerate(names):
+    print(index, name)
+
+- I can choose a different starting index.
+
+for index, name in enumerate(names, start=1):
+    print(index, name)
+
+
+### any()
+
+- `any()` returns True if at least one value is True.
+
+numbers = [False, False, True]
+
+any(numbers)
+
+- It is useful when checking whether at least one item meets a condition.
+
+any(x > 10 for x in numbers)
+
+
+### all()
+
+- `all()` returns True only if every value is True.
+
+numbers = [True, True, True]
+
+all(numbers)
+
+- It is useful when checking whether every item meets a condition.
+
+all(x > 0 for x in numbers)
+
+
+### Breaking Problems Down
+
+- One of the most important programming skills is learning how to break a large problem into smaller problems.
+- Instead of asking:
+  "How do I write the whole program?"
+- I should ask:
+  - What information do I have?
+  - What information do I need?
+  - What steps need to happen?
+  - Can I split the problem into smaller functions?
+  - What should each function do?
+  - What data structures make sense?
+
+
+### Writing Algorithms
+
+- An algorithm is a sequence of steps used to solve a problem.
+- Before writing code, I should understand the steps.
+
+Example problem:
+- Find the largest number in a list.
+
+Possible algorithm:
+
+- Start with the first number as the largest.
+- Go through every number.
+- If the current number is larger, update the largest.
+- Return the largest number.
+
+
+### Pseudocode
+
+- Pseudocode is writing the logic in a simple human-readable form before writing actual code.
+
+Example:
+
+START
+    get list of numbers
+    set largest to first number
+
+    FOR every number:
+        IF number is greater than largest:
+            set largest to number
+
+    return largest
+END
+
+- Pseudocode helps me think about the algorithm without worrying about Python syntax.
+
+
+### Tracing Programs
+
+- Tracing means manually following what the program does.
+- I can create a table of variable values.
+
+Example:
+
+x = 0
+
+for i in range(3):
+    x += i
+
+- I can trace:
+
+i = 0 -> x = 0
+i = 1 -> x = 1
+i = 2 -> x = 3
+
+- Tracing is extremely useful when debugging loops and algorithms.
+
+
+### Debugging Logically
+
+- When code does not work, I should:
+  - Reproduce the problem.
+  - Read the error.
+  - Identify where the problem occurs.
+  - Check the values involved.
+  - Work backwards from the incorrect result.
+  - Test smaller parts.
+  - Fix one problem at a time.
+- I should avoid changing lots of code at once because then I do not know which change fixed or broke something.
+
+
+### Recognising Common Patterns
+
+- Many programming problems are based on common patterns.
+- Important patterns to eventually recognise include:
+  - Counting with dictionaries.
+  - Membership with sets.
+  - Two pointers.
+  - Sliding windows.
+  - Prefix sums.
+  - Binary search.
+  - Stacks.
+  - Queues.
+  - Recursion.
+  - Sorting.
+  - Hash maps.
+- The better I become at recognising patterns, the less time I spend trying random solutions.
+
+
+### Goal
+
+- Given an unfamiliar problem, I should know how to approach it.
+- I do not need to immediately know the exact answer.
+- I should be able to break the problem down, work out the algorithm and then turn that algorithm into Python.

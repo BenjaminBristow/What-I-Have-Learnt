@@ -1,168 +1,632 @@
-## Variables
 
-a name that points to a value stored in memory, so you can reuse it without retyping the value every time
-created just by assigning something to a name, no need to declare a type first
-example: age = 20
+### Variables
+
+- A variable is a name that stores a value.
+- I create a variable by giving it a name and assigning it a value.
+- Python does not require me to declare the variable's type first.
+
+Example:
+
 name = "Ben"
-is_student = True
-naming rules: can't start with a number, can't contain spaces, case-sensitive (age and Age are different variables), can't be a reserved word like for or if
-convention in python is snake_case for variable names, not camelCase
-
-## Data types
-
-the different kinds of values python works with, each behaving differently
-the core ones: x = 5 int
-y = 3.14 float
-name = "Ben" str
-is_on = True bool
-check what type something is with type(): type(5) result <class 'int'>
-type("hi") result <class 'str'>
-knowing the type matters because operations behave differently depending on it — plus adds numbers but joins strings together
-
-## Type conversion
-
-switching a value from one type to another, done with functions named after the target type
-example: int("5") result 5, string to int
-str(5) result "5", int to string
-float("3.14") result 3.14
-int(3.9) result 3, chops off the decimal, doesn't round
-comes up constantly with user input, since input() always returns a string, even if someone types a number: age = int(input("Enter your age: "))
-converting something that isn't actually valid raises an error: int("hello") raises ValueError
-
-## Operators
-
-symbols that perform an operation on values
-arithmetic: 5 + 2 result 7
-5 - 2 result 3
-5 * 2 result 10
-5 / 2 result 2.5, always returns a float
-5 // 2 result 2, floor division, drops the remainder
-5 % 2 result 1, modulus, gives the remainder
-5 ** 2 result 25, exponent
-comparison, always returns a boolean: 5 == 2 result False
-5 != 2 result True
-5 > 2 result True
-assignment shortcuts: x = 5
-x += 1 same as x = x + 1
-x -= 1
-x *= 2
-
-## Input/output
-
-print() sends output to the screen
-input() pauses the program and waits for the user to type something, then returns it as a string
-example: name = input("What's your name? ")
-print("Hello, " + name)
-print() can take multiple values separated by commas, and adds spaces between them automatically: print("Age:", 20) result Age: 20
-
-## Comments
-
-lines in the code that python ignores completely, meant for humans reading the code
-single line starts with a hash symbol:
-this calculates the total
-total = price * quantity
-multi-line comments aren't a real thing in python, but a triple-quoted string not assigned to anything is often used the same way
-good comments explain why something's done a certain way, not just what the line does — the code already shows what it does
-
-## Basic syntax
-
-python doesn't use curly braces or semicolons to mark blocks of code — it uses indentation
-everything inside a block (an if statement, a loop, a function) has to be indented consistently, usually 4 spaces
-example: if True:
-print("this is inside the block")
-print("this is not")
-mixing tabs and spaces, or getting the indentation level wrong, causes an IndentationError — one of the most common early mistakes
-a colon marks the start of a block, always followed by an indented line underneath
-
-## Strings
-
-text, wrapped in either single or double quotes — python doesn't care which, as long as it's consistent on each one a = 'hello'
-b = "hello"
-combine strings with plus: "hello" + " " + "world" result "hello world"
-useful built-in methods: "hello".upper() result "HELLO"
-"HELLO".lower() result "hello"
-" hi ".strip() result "hi", removes surrounding whitespace
-"a,b,c".split(",") result ["a", "b", "c"]
-",".join(["a", "b"]) result "a,b"
-strings are immutable, so all these methods return a new string rather than changing the original
-
-## String formatting
-
-building a string that has variables plugged into it
-the modern way is an f-string, put an f right before the opening quote: name = "Ben"
 age = 20
-print(f"{name} is {age} years old")
-result Ben is 20 years old
-can do more than just insert values — calculations work inside the braces too: print(f"Next year you'll be {age + 1}")
-older methods you'll still see in other people's code: "{} is {}".format(name, age) the .format() method
-"%s is %s" % (name, age) percent formatting, older style
+height = 6.0
 
-## Boolean logic
+- `name` stores a string.
+- `age` stores an integer.
+- `height` stores a float.
+- I can change the value of a variable later.
 
-True and False, used to control the flow of a program
-combined with logical operators: True and False result False, both need to be true
-True or False result True, only one needs to be true
-not True result False, flips it
-values other than actual booleans get treated as "truthy" or "falsy" when checked in a condition — 0, empty string, empty list, and None all count as falsy, pretty much everything else counts as truthy if []:
-print("won't print, empty list is falsy")
+age = 21
 
-## if / elif / else
+- Variable names should describe what the value represents.
+- Good:
+  user_name = "Ben"
+  student_age = 20
+- Bad:
+  x = "Ben"
+  a = 20
 
-controls which block of code runs, based on a condition
-example: age = 20 if age < 13:
-print("child")
-elif age < 20:
-print("teenager")
+- Variable names:
+  - Can contain letters, numbers and underscores.
+  - Cannot start with a number.
+  - Cannot contain spaces.
+  - Are case-sensitive.
+  - Should not use Python keywords.
+
+Example:
+
+user_name = "Ben"
+User_name = "John"
+
+- These are two different variables because Python is case-sensitive.
+
+
+### Data Types
+
+- A data type tells Python what kind of value something is.
+- The most important basic Python types are:
+
+int
+- Whole numbers.
+
+age = 20
+score = 100
+temperature = -5
+
+float
+- Numbers containing decimal values.
+
+height = 6.0
+price = 12.99
+
+str
+- Text.
+- Strings are surrounded by quotes.
+
+name = "Ben"
+message = 'Hello'
+
+bool
+- Represents True or False.
+
+is_student = True
+has_passed = False
+
+None
+- Represents the absence of a value.
+- It is different from 0, False and an empty string.
+
+result = None
+
+- I can check the type of a value using `type()`.
+
+type(20)
+type("Hello")
+type(True)
+
+- I can check whether something is a particular type using `isinstance()`.
+
+isinstance(20, int)
+isinstance("Hello", str)
+
+- `isinstance()` is usually better when I actually want to check a type.
+
+
+### Type Conversion
+
+- Type conversion means changing a value from one type into another.
+
+int()
+- Converts a value into an integer when possible.
+
+age = int("20")
+
+float()
+- Converts a value into a float.
+
+price = float("12.5")
+
+str()
+- Converts a value into a string.
+
+age = 20
+text = str(age)
+
+bool()
+- Converts a value into True or False.
+
+bool(1)       # True
+bool(0)       # False
+bool("Hello") # True
+bool("")      # False
+
+- Some conversions can fail.
+
+int("hello")
+
+- This causes a `ValueError` because "hello" cannot be converted into an integer.
+
+
+### Operators
+
+- Operators allow me to perform calculations and comparisons.
+
+Arithmetic operators:
+
++   addition
+-   subtraction
+*   multiplication
+/   division
+//  floor division
+%   remainder/modulo
+**  power
+
+Example:
+
+10 + 5
+10 - 5
+10 * 5
+10 / 5
+10 // 3
+10 % 3
+2 ** 3
+
+- `/` always produces a float.
+
+10 / 2      # 5.0
+
+- `//` performs floor division.
+
+10 // 3     # 3
+
+- `%` gives the remainder.
+
+10 % 3      # 1
+
+- `**` means power.
+
+2 ** 3      # 8
+
+
+### Comparison Operators
+
+- Comparison operators compare two values.
+- They return `True` or `False`.
+
+==   equal to
+!=   not equal to
+>    greater than
+<    less than
+>=   greater than or equal to
+<=   less than or equal to
+
+Example:
+
+age = 20
+
+age == 20
+age != 18
+age > 18
+age <= 20
+
+
+### Assignment Operators
+
+- Assignment operators are used to store or update values.
+
+=    assign
++=   add and assign
+-=   subtract and assign
+*=   multiply and assign
+/=   divide and assign
+//=  floor divide and assign
+%=   modulo and assign
+
+Example:
+
+score = 10
+score += 5
+
+- `score += 5` is basically the same as:
+
+score = score + 5
+
+
+### Logical Operators
+
+- Logical operators combine conditions.
+
+and
+- Both conditions must be True.
+
+age = 20
+age >= 18 and age <= 30
+
+or
+- At least one condition must be True.
+
+age < 18 or age > 65
+
+not
+- Reverses True/False.
+
+not True
+not False
+
+Example:
+
+age = 20
+has_ticket = True
+
+age >= 18 and has_ticket
+
+
+### Input and Output
+
+- `print()` displays information to the user.
+
+print("Hello")
+print(20)
+
+- I can print multiple values.
+
+name = "Ben"
+age = 20
+
+print(name, age)
+
+- `input()` gets text from the user.
+
+name = input("What is your name? ")
+
+- Important:
+  - `input()` always returns a string.
+  - If I want a number, I need to convert it.
+
+age = int(input("How old are you? "))
+
+- I can combine input, conversion and calculations.
+
+number = int(input("Enter a number: "))
+print(number * 2)
+
+
+### Comments
+
+- Comments are notes inside the code that Python ignores.
+- A single-line comment starts with `#`.
+
+# This is a comment
+
+- Comments are useful for explaining why something is being done.
+- I should not comment every obvious line.
+- Good comments explain reasoning that might not be obvious.
+
+
+### Basic Python Syntax
+
+- Python uses indentation to show which lines belong together.
+- Indentation is extremely important in Python.
+
+if age >= 18:
+    print("Adult")
+
+- The indented line belongs to the `if` statement.
+- Normally I use 4 spaces for indentation.
+- Mixing tabs and spaces can cause problems.
+
+- Python statements normally go on separate lines.
+
+name = "Ben"
+age = 20
+
+- Python does not normally require semicolons.
+
+- A colon `:` is normally used after statements that introduce an indented block.
+
+if
+for
+while
+def
+class
+try
+except
+else
+finally
+
+Example:
+
+if age >= 18:
+    print("Adult")
+
+
+### Strings
+
+- A string stores text.
+
+name = "Ben"
+message = 'Hello'
+
+- Single and double quotes both work.
+
+"Hello"
+'Hello'
+
+- Triple quotes can be used for multi-line strings.
+
+message = """Hello
+This is
+multiple lines"""
+
+- Strings are sequences of characters.
+- This means I can access individual characters.
+
+word = "Python"
+
+word[0]    # P
+word[1]    # y
+word[-1]   # n
+
+- Strings are immutable.
+- I cannot directly change one character.
+
+word = "Python"
+
+word[0] = "J"
+
+- This causes an error.
+- Instead, I create a new string.
+
+
+### String Formatting
+
+- F-strings are usually the easiest way to put variables inside strings.
+
+name = "Ben"
+age = 20
+
+print(f"My name is {name} and I am {age}")
+
+- I can put expressions inside `{}`.
+
+age = 20
+
+print(f"Next year I will be {age + 1}")
+
+- I can control decimal places.
+
+price = 12.3456
+
+print(f"£{price:.2f}")
+
+- Other formatting methods exist, such as `.format()` and `%` formatting, but f-strings are usually the modern choice.
+
+
+### Useful String Operations
+
+- Strings have many useful methods.
+
+text = "hello world"
+
+text.upper()
+text.lower()
+text.title()
+text.capitalize()
+
+- Removing whitespace:
+
+text.strip()
+text.lstrip()
+text.rstrip()
+
+- Replacing text:
+
+text.replace("world", "Python")
+
+- Checking content:
+
+text.startswith("hello")
+text.endswith("world")
+
+- Finding text:
+
+text.find("world")
+
+- Splitting a string:
+
+"apple,banana,orange".split(",")
+
+- Joining strings:
+
+words = ["Hello", "World"]
+
+" ".join(words)
+
+- String methods usually return a new string because strings are immutable.
+
+
+### Boolean Logic
+
+- A Boolean can only be:
+
+True
+False
+
+- Boolean values are commonly produced by comparisons.
+
+5 > 3       # True
+5 == 3      # False
+
+- Boolean values are heavily used with `if`, `while` and other conditions.
+
+is_logged_in = True
+
+if is_logged_in:
+    print("Welcome")
+
+
+### Truthy and Falsy Values
+
+- Python treats some values as False when used as a condition.
+
+False
+None
+0
+0.0
+""
+[]
+{}
+set()
+
+- Most other values are considered True.
+
+if "hello":
+    print("This runs")
+
+- This is useful when checking whether something contains a value.
+
+name = ""
+
+if name:
+    print("Name entered")
 else:
-print("adult")
-only one branch runs — python checks each condition top to bottom and stops at the first one that's true
-elif and else are both optional, an if on its own is perfectly valid
+    print("No name entered")
 
-## for loops
 
-repeats a block of code once for each item in a sequence
-example: for letter in "abc":
-print(letter)
-result a, b, c printed on separate lines
-looping a set number of times uses range(): for i in range(5):
-print(i)
-result 0 1 2 3 4
-range(start, stop, step) works the same way slicing does — start is included, stop isn't range(2, 10, 2) result 2, 4, 6, 8
+### if / elif / else
 
-## while loops
+- `if` runs code when a condition is True.
 
-repeats a block of code for as long as a condition stays true
-example: count = 0
+if age >= 18:
+    print("Adult")
+
+- `else` runs when the `if` condition is False.
+
+if age >= 18:
+    print("Adult")
+else:
+    print("Under 18")
+
+- `elif` allows me to check additional conditions.
+
+if age >= 18:
+    print("Adult")
+elif age >= 13:
+    print("Teenager")
+else:
+    print("Child")
+
+- Conditions are checked from top to bottom.
+- Once one condition is True, the remaining branches are skipped.
+
+
+### for Loops
+
+- A `for` loop repeats code for each item in a sequence.
+
+for number in [1, 2, 3]:
+    print(number)
+
+- I can loop through strings.
+
+for character in "Python":
+    print(character)
+
+- `range()` is commonly used when I want a sequence of numbers.
+
+for i in range(5):
+    print(i)
+
+- This prints:
+
+0
+1
+2
+3
+4
+
+- `range()` stops before the final number.
+
+range(1, 6)
+
+- Produces:
+
+1
+2
+3
+4
+5
+
+- I can also provide a step.
+
+range(0, 10, 2)
+
+- Produces:
+
+0
+2
+4
+6
+8
+
+
+### while Loops
+
+- A `while` loop keeps running while a condition is True.
+
+count = 0
+
 while count < 5:
-print(count)
-count += 1
-unlike a for loop, there's no automatic limit — forgetting to update the condition inside the loop causes an infinite loop that never stops on its own
-generally reach for a for loop when you know how many times to repeat something, and a while loop when you're waiting for a condition to change
+    print(count)
+    count += 1
 
-## break, continue, pass
+- I must make sure the condition eventually becomes False.
+- Otherwise I can create an infinite loop.
 
-three keywords for controlling a loop's flow from the inside
-break stops the loop immediately, skips everything left, even in later iterations for i in range(10):
-if i == 3:
-break
-print(i)
-result 0 1 2
-continue skips just the rest of this iteration, then moves on to the next one for i in range(5):
-if i == 2:
-continue
-print(i)
-result 0 1 3 4
-pass does literally nothing, just a placeholder so python doesn't complain about an empty block if True:
-pass todo: fill this in later
+while True:
+    print("This never stops")
 
-## Basic debugging
 
-reading the error message properly is step one — python's traceback tells you the exact line and the type of error, like NameError, TypeError, IndentationError
-the error is almost always at or just above the line number given, not somewhere random
-print statements dropped in at key points are the simplest way to check what a variable actually holds at that point in the program print(f"DEBUG: x = {x}")
-common early mistakes worth checking for first:
-mismatched indentation
-using a single equals sign (assignment) where a double equals sign (comparison) was meant
-off-by-one errors in loops or slicing
-forgetting that input() returns a string, not a number
-most editors (including VS Code) have a proper debugger built in that lets you pause the program and step through it line by line — worth learning once print statements start feeling limiting
+### break
+
+- `break` immediately exits the loop.
+
+for number in range(10):
+    if number == 5:
+        break
+    print(number)
+
+
+### continue
+
+- `continue` skips the current iteration and moves to the next one.
+
+for number in range(10):
+    if number % 2 == 0:
+        continue
+    print(number)
+
+- This prints only odd numbers.
+
+
+### pass
+
+- `pass` does nothing.
+- It is useful when Python requires a statement but I do not want to write the code yet.
+
+if age >= 18:
+    pass
+
+- It is also useful as a temporary placeholder while building something.
+
+
+### Basic Debugging
+
+- Debugging means finding and fixing problems in my code.
+- When something goes wrong, I should not randomly change things.
+- I should work out exactly what Python is doing.
+
+Useful techniques:
+
+- Read the error message.
+- Read the traceback.
+- Check the line where the error happened.
+- Print important variables.
+- Check assumptions.
+- Break a large problem into smaller pieces.
+- Test small parts separately.
+- Reproduce the problem consistently.
+
+Example:
+
+numbers = [1, 2, 3]
+
+print(numbers)
+
+- Printing variables can show me what my program is actually doing rather than what I think it is doing.
+
+
+### Goal
+
+- I should be able to write small Python programs without following a tutorial.
+- I should understand variables, conditions, loops, strings, basic types and operators well enough to solve simple problems myself.

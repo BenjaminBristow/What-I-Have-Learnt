@@ -1,161 +1,471 @@
-## Reading/writing files
 
-python can read from and write to files sitting on disk, letting a program save data outside of just running once and losing everything when it closes
-basic idea: open a file, do something with it, then close it again so nothing gets left dangling
-there are a couple of main modes for text files, covered properly under open() below
+### Reading and Writing Files
 
-## open()
+- Python can read from and write to files.
+- The most common function is `open()`.
 
-the built-in function used to open a file and get a file object back, which is what you actually read from or write to
-needs a filename, and a mode telling it what you plan to do with the file: f = open("notes.txt", "r") r means read
-f = open("notes.txt", "w") w means write, overwrites the whole file if it already exists
-f = open("notes.txt", "a") a means append, adds to the end instead of overwriting
-reading the contents once it's open: f = open("notes.txt", "r")
-content = f.read()
-print(content)
-f.close()
-writing works similarly: f = open("notes.txt", "w")
-f.write("hello file")
-f.close()
-forgetting to close a file can cause problems, especially with writing, since changes might not actually get saved to disk until it's closed properly
+file = open("data.txt", "r")
 
-## Context managers
+- `"r"` means read.
+- `"w"` means write.
+- `"a"` means append.
+- `"x"` means create a new file.
 
-a cleaner way of handling something that needs setup and cleanup, files being the most common example
-using with automatically closes the file for you, even if an error happens partway through, so you never have to remember to call close() manually
-example: with open("notes.txt", "r") as f:
-content = f.read()
-print(content)
-as soon as the code exits the with block, the file gets closed automatically behind the scenes
-this is the pattern worth reaching for basically every time, instead of manually calling open() and close() yourself
+- I should normally use a `with` statement when working with files.
 
-## pathlib
 
-a more modern way of working with file paths, built around a Path object instead of plain strings
-example: from pathlib import Path p = Path("notes.txt")
-p.exists() result True or False, checks if it's actually there
-p.name result "notes.txt"
-p.suffix result ".txt"
-makes joining paths together far less error prone than manually gluing strings with slashes, since it works the same on windows and mac/linux even though they use different slash characters normally: folder = Path("documents")
-full_path = folder / "notes.txt"
+### open()
 
-## Directories
+- Example:
 
-a folder, basically, used to organise files
-pathlib handles most directory tasks cleanly: from pathlib import Path Path("new_folder").mkdir() creates a folder
-Path("new_folder").exists() checks if it exists
-list(Path(".").iterdir()) lists everything in the current folder
-os.listdir() and os.makedirs() are the older, pre-pathlib way of doing the same sort of thing, still common in existing code
+with open("data.txt", "r") as file:
+    contents = file.read()
 
-## File manipulation
+- `read()` reads the whole file.
+- `readline()` reads one line.
+- `readlines()` reads all lines into a list.
 
-covers the general tasks of moving, renaming, copying, and deleting files from within python itself
-the shutil and os modules handle most of this: import shutil
-import os os.rename("old_name.txt", "new_name.txt")
-shutil.copy("notes.txt", "notes_backup.txt")
-os.remove("notes_backup.txt")
-worth being careful with anything that deletes or overwrites — python won't ask for confirmation first, it just does it
+- I can loop directly through a file.
 
-## JSON
+with open("data.txt", "r") as file:
+    for line in file:
+        print(line)
 
-a common text format for storing structured data, looks a lot like a python dictionary
-python's json module converts between JSON text and actual python objects
-example: import json data = {"name": "Ben", "age": 20} with open("data.json", "w") as f:
-json.dump(data, f) with open("data.json", "r") as f:
-loaded = json.load(f) print(loaded)
-result {'name': 'Ben', 'age': 20}
-dump writes python data out as JSON, load reads JSON back in as python data
-dumps and loads, with an s on the end, do the same thing but work with plain strings directly instead of files
 
-## CSV
+### Writing Files
 
-comma separated values, a plain text format for tabular data, basically a simple spreadsheet
-python's csv module handles reading and writing it properly, including tricky edge cases like commas sitting inside a field
-example: import csv with open("people.csv", "r") as f:
-reader = csv.reader(f)
-for row in reader:
-print(row)
-writing works the same way in reverse: with open("people.csv", "w") as f:
-writer = csv.writer(f)
-writer.writerow(["name", "age"])
-writer.writerow(["Ben", 20])
-DictReader and DictWriter do the same job but let you work with each row as a dictionary using the header row as keys, instead of a plain list by position
+with open("data.txt", "w") as file:
+    file.write("Hello")
 
-## Regular expressions
+- Important:
+  - `"w"` can overwrite existing content.
 
-a pattern language for searching, matching, and manipulating text, accessed through the re module
-looks cryptic at first but covers a huge amount of ground once it clicks
-example: import re text = "my number is 12345"
-match = re.search(r"\d+", text)
-print(match.group())
-result 12345
-a few building blocks worth knowing: \d matches any digit
-\w matches any letter, digit, or underscore
-means one or more of whatever came before it
-means zero or more
-. matches any character
-also useful for replacing text: re.sub(r"\d+", "X", "my number is 12345")
-result "my number is X"
+- `"a"` adds to the end.
 
-## Modules
+with open("data.txt", "a") as file:
+    file.write("\nAnother line")
 
-a single python file containing code, functions, classes, variables, that can be reused in another file
-literally just any .py file — the moment you write one, it's technically a module
-example, a file called helpers.py containing: def greet(name):
-return "hello " + name
 
-## Imports
+### Context Managers
 
-how you actually bring a module's code into another file so you can use it
-example, assuming helpers.py exists in the same folder: import helpers
-helpers.greet("Ben")
-can also import just one specific thing from a module instead of the whole thing: from helpers import greet
-greet("Ben")
-or rename something on the way in if it's long or clashes with something else: import helpers as h
-h.greet("Ben")
+- `with` creates a context manager.
+- It makes sure resources such as files are properly cleaned up.
 
-## Packages
+with open("data.txt") as file:
+    data = file.read()
 
-a folder containing multiple related modules, grouped together as one importable unit
-turns a plain folder into a package by including a special file inside it, covered next
-example structure: my_package/
-init.py
-helpers.py
-utils.py
-once set up, you can import from inside it like: from my_package import helpers
+- When the `with` block finishes, the file is automatically closed.
+- This is safer and cleaner than manually opening and closing files.
 
-## __init__.py
 
-a special, usually empty file that tells python to treat that folder as a package
-can also be used to control what gets exposed when someone imports the package, or to run setup code the moment the package gets imported
-older python needed this file present to recognise a folder as a package at all — newer python is more lenient about it, but including it is still the standard, expected convention
+### pathlib
 
-## __name__
+- `pathlib` provides a modern way to work with file paths.
 
-a special built-in variable that every python file automatically has, holding the name of the current module
-if the file is being run directly, __name__ gets set to the literal string __main__
-if the file is instead being imported into another file, __name__ gets set to the module's actual filename instead
-this is what lets a single file behave differently depending on whether it's the one being run, or just being borrowed for its functions
+from pathlib import Path
 
-## __main__
+path = Path("data.txt")
 
-the value __name__ holds specifically when a file is run directly rather than imported
-the common pattern you'll see constantly: def main():
-print("running the program") if __name__ == "__main__":
+- I can check whether it exists.
+
+path.exists()
+
+- Check if it is a file:
+
+path.is_file()
+
+- Check if it is a directory:
+
+path.is_dir()
+
+- Read text:
+
+text = path.read_text()
+
+- Write text:
+
+path.write_text("Hello")
+
+- `pathlib` is generally easier and safer to work with than manually constructing paths as strings.
+
+
+### Directories
+
+- A directory is a folder.
+- `pathlib` can be used to work with directories.
+
+from pathlib import Path
+
+folder = Path("data")
+
+folder.mkdir(exist_ok=True)
+
+- `exist_ok=True` means it does not cause an error if the directory already exists.
+
+- I can find files inside a directory.
+
+for file in folder.iterdir():
+    print(file)
+
+
+### File Manipulation
+
+- `pathlib` can also be used for common file operations.
+
+path.rename("new_name.txt")
+
+path.unlink()
+
+- `unlink()` deletes a file.
+- I should be careful with deletion because it can permanently remove data.
+
+
+### JSON
+
+- JSON is a common format for storing structured data.
+- JSON looks similar to Python dictionaries and lists.
+
+Example JSON:
+
+{
+    "name": "Ben",
+    "age": 20
+}
+
+- Python has the built-in `json` module.
+
+import json
+
+- Convert Python data into JSON:
+
+data = {
+    "name": "Ben",
+    "age": 20
+}
+
+json_text = json.dumps(data)
+
+- Convert JSON text back into Python data:
+
+data = json.loads(json_text)
+
+- I can also read and write JSON files.
+
+with open("data.json", "r") as file:
+    data = json.load(file)
+
+with open("data.json", "w") as file:
+    json.dump(data, file, indent=4)
+
+- JSON is extremely common when working with APIs and web applications.
+
+
+### CSV
+
+- CSV stands for Comma-Separated Values.
+- It is commonly used for spreadsheet-style data.
+
+Example:
+
+name,age
+Ben,20
+John,21
+
+- Python has the built-in `csv` module.
+
+import csv
+
+- Reading:
+
+with open("people.csv", newline="") as file:
+    reader = csv.reader(file)
+
+    for row in reader:
+        print(row)
+
+- Dictionary-style reading:
+
+with open("people.csv", newline="") as file:
+    reader = csv.DictReader(file)
+
+    for row in reader:
+        print(row["name"])
+
+- Writing:
+
+with open("people.csv", "w", newline="") as file:
+    writer = csv.writer(file)
+
+    writer.writerow(["name", "age"])
+    writer.writerow(["Ben", 20])
+
+
+### Regular Expressions
+
+- Regular expressions, or regex, are patterns used to search and manipulate text.
+- Python provides regex through the `re` module.
+
+import re
+
+- Example:
+
+text = "My phone number is 12345"
+
+result = re.search(r"\d+", text)
+
+- `\d` means a digit.
+- `+` means one or more.
+- `r""` creates a raw string, which is useful for regex patterns.
+
+- Common regex concepts include:
+
+.       any character
+\d      digit
+\w      word character
+\s      whitespace
++       one or more
+*       zero or more
+?       zero or one
+^       start of string
+$       end of string
+[]      character set
+()      capture group
+|       OR
+
+- Useful functions include:
+
+re.search()
+re.match()
+re.fullmatch()
+re.findall()
+re.sub()
+re.split()
+
+- Regex is powerful but can become difficult to read.
+- I should use normal string methods when regex is unnecessary.
+
+
+### Modules
+
+- A module is normally a Python file containing code that I can import into another Python file.
+
+Example:
+
+math_tools.py
+
+def add(a, b):
+    return a + b
+
+- Another file can import it:
+
+import math_tools
+
+math_tools.add(2, 3)
+
+- I can also import specific things.
+
+from math_tools import add
+
+add(2, 3)
+
+
+### Imports
+
+- Imports allow me to use code from other modules.
+
+import math
+
+math.sqrt(25)
+
+- I can give an imported module another name.
+
+import numpy as np
+
+- Aliases are common for certain libraries.
+- I should avoid unnecessary aliases that make code confusing.
+
+
+### Python Standard Library
+
+- Python comes with a large standard library.
+- This means I can do many things without installing external packages.
+
+Useful modules include:
+
+math
+random
+datetime
+pathlib
+json
+csv
+re
+os
+sys
+collections
+itertools
+functools
+statistics
+logging
+
+- Learning to check whether the standard library already provides something can save me from writing unnecessary code.
+
+
+### Packages
+
+- A package is a way of organising related Python modules into a directory structure.
+
+Example:
+
+my_project/
+    main.py
+    tools/
+        __init__.py
+        maths.py
+        text.py
+
+- I can then import code from the package.
+
+from tools.maths import add
+
+
+### __init__.py
+
+- `__init__.py` is traditionally used to mark a directory as a Python package.
+- It can also contain package initialisation code or expose selected objects.
+
+- Modern Python also supports namespace packages that do not require `__init__.py`.
+- However, I will still commonly see and use `__init__.py` in normal projects.
+
+
+### __name__
+
+- Every Python module has a special variable called `__name__`.
+- When a file is run directly, Python sets:
+
+__name__ == "__main__"
+
+- When the file is imported, `__name__` is normally the module's name.
+
+
+### __main__
+
+- This pattern is very common:
+
+if __name__ == "__main__":
     main()
-this means main() only runs when the file is executed directly, not when some other file imports it just to reuse its functions — without this check, importing a file would also accidentally run all its top-level code immediately
 
-## Project structure
+- It means the code inside only runs when the file is executed directly.
+- It does not run automatically when the file is imported.
 
-how files and folders get organised once a program grows past a single script
-a reasonably typical layout for a small project: my_project/
-main.py
-my_package/
-init.py
-helpers.py
-utils.py
-tests/
-test_helpers.py
-README.md
-requirements.txt
-keeping related code grouped into packages, tests separated out, and dependencies listed in one place makes a project far easier to navigate as it grows, both for you later on and for anyone else looking at it
+
+### Project Structure
+
+- As programs become larger, I should organise them into multiple files instead of putting everything into one huge file.
+
+Simple example:
+
+my_project/
+    main.py
+    config.py
+    database.py
+    utils.py
+    data/
+        data.json
+
+- Larger applications may have more structured folders.
+
+my_project/
+    main.py
+    app/
+        __init__.py
+        models.py
+        services.py
+        utils.py
+    tests/
+        test_models.py
+        test_services.py
+    data/
+    README.md
+
+- The exact structure depends on the type and size of the project.
+- The important idea is that related code should be organised together.
+
+
+### Separating Code Into Functions and Modules
+
+- I should avoid putting the entire program into one massive function.
+- I should split code based on responsibility.
+
+For example:
+
+get_user()
+validate_user()
+save_user()
+send_email()
+
+- Each function should have a clear purpose.
+- Modules can then group related functions together.
+
+
+### Virtual Environments
+
+- A virtual environment creates an isolated Python environment for a project.
+- This allows different projects to use different package versions.
+
+Example:
+
+python -m venv .venv
+
+- Activate it depending on the operating system.
+- On macOS/Linux:
+
+source .venv/bin/activate
+
+- On Windows:
+
+.venv\Scripts\activate
+
+- I can then install packages without affecting every Python project on my computer.
+
+pip install package_name
+
+- Virtual environments are extremely important for real Python projects.
+
+
+### pip
+
+- `pip` is Python's package installer.
+- It can install external libraries.
+
+pip install requests
+
+- I can uninstall packages:
+
+pip uninstall requests
+
+- I can see installed packages:
+
+pip list
+
+- I can save dependencies:
+
+pip freeze > requirements.txt
+
+- Another person can install them with:
+
+pip install -r requirements.txt
+
+
+### Project Dependencies
+
+- A dependency is an external package that my project relies on.
+- I should keep track of dependencies so someone else can recreate my environment.
+- Virtual environments help prevent different projects from interfering with each other.
+
+
+### Goal
+
+- I should be able to build programs consisting of multiple files that interact properly.
+- I should understand files, paths, JSON, CSV, modules, packages, imports and basic project structure.
+- I should be comfortable creating a Python project instead of putting everything into one file.
+- I should understand how Python projects use virtual environments and external packages.
