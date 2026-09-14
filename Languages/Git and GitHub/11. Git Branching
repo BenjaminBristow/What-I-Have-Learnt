@@ -1,0 +1,96 @@
+
+# GIT BRANCHING STRATEGIES
+
+## Feature Branches
+
+- A common approach is to create a branch for every feature.
+
+- Example:
+
+    main
+    ├── feature-login
+    ├── feature-search
+    └── feature-dark-mode
+
+- Each feature can be developed separately.
+
+- Once finished, the branch can be merged.
+
+---
+
+## Main Branch
+
+- `main` is usually the stable branch.
+
+- I should avoid making experimental changes directly on main in larger projects.
+
+- Main should ideally contain code that is working and reasonably stable.
+
+---
+
+## Development Branch
+
+- Some projects use a separate `develop` branch.
+
+- Example:
+
+    main
+      ↑
+    develop
+      ↑
+    feature branches
+
+- Features are merged into `develop` first.
+- Stable versions can later be merged into `main`.
+
+- Different teams use different branching strategies.
+
+---
+
+# REMOTE BRANCHES
+
+## Remote Branches
+
+- Branches can exist locally and remotely.
+
+- Example:
+
+    main
+
+    origin/main
+
+- `main` is my local branch.
+
+- `origin/main` represents the main branch on the remote repository.
+
+- I can see remote branches using:
+
+    git branch -r
+
+- I can see everything using:
+
+    git branch -a
+
+---
+
+# TRACKING BRANCHES
+
+## Upstream Branches
+
+- A local branch can track a remote branch.
+
+- Example:
+
+    git push -u origin feature-login
+
+- The `-u` sets the upstream branch.
+
+- After this, I can often just use:
+
+    git push
+
+    git pull
+
+- Git knows which remote branch I mean.
+
+---

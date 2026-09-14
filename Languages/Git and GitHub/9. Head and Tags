@@ -1,0 +1,52 @@
+
+# HEAD
+
+## HEAD
+
+- `HEAD` represents where Git is currently positioned.
+
+- Usually, HEAD points to my current branch.
+
+- For example:
+
+    HEAD
+     ↓
+    main
+     ↓
+    Latest commit
+
+- `HEAD~1` means one commit before HEAD.
+
+- `HEAD~2` means two commits before HEAD.
+
+- This is useful when working with commands such as:
+
+    git reset HEAD~1
+
+---
+
+# TAGS
+
+## Git Tags
+
+- Tags allow me to give a specific commit a name.
+
+- They are commonly used for releases.
+
+- Example:
+
+    v1.0
+    v1.1
+    v2.0
+
+- I can create a tag with:
+
+    git tag v1.0
+
+- I can push it to GitHub with:
+
+    git push origin v1.0
+
+- Tags are useful for marking important versions of my software.
+
+---

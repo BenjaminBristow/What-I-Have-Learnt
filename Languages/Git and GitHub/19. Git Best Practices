@@ -1,0 +1,71 @@
+
+# GIT BEST PRACTICES
+
+## Good Commit Messages
+
+- Commit messages should describe what changed.
+
+- Good:
+
+    Add user registration
+
+    Fix incorrect password validation
+
+    Add database indexes
+
+    Update README installation instructions
+
+- Avoid vague messages such as:
+
+    stuff
+
+    update
+
+    changes
+
+    fixed things
+
+---
+
+## Commit Frequently
+
+- I should make commits regularly.
+
+- A commit should represent a logical change.
+
+- Example:
+
+    Commit 1:
+    Add database model
+
+    Commit 2:
+    Add registration form
+
+    Commit 3:
+    Add password validation
+
+- This makes it easier to understand and undo changes.
+
+---
+
+## Keep Commits Focused
+
+- A commit should ideally do one main thing.
+
+- Bad:
+
+    Add login + redesign homepage + fix database + update README
+
+- Better:
+
+    Add login system
+
+    Fix database connection
+
+    Redesign homepage
+
+    Update README
+
+- Focused commits make code reviews and debugging easier.
+
+---

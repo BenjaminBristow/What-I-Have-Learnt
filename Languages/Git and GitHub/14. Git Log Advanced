@@ -1,0 +1,27 @@
+
+## Useful Git Log Commands
+
+- Normal:
+
+    git log
+
+- Short:
+
+    git log --oneline
+
+- Graph:
+
+    git log --oneline --graph --all
+
+- This can help me visualise branches.
+
+- Example:
+
+    * a123 Add login
+    * b456 Add database
+    |\
+    | * c789 Experimental feature
+    |/
+    * d012 Initial project
+
+---

@@ -1,0 +1,62 @@
+## Pull Requests
+
+- A Pull Request (PR) is a request to merge changes from one branch into another.
+
+- For example:
+
+    feature-login
+          ↓
+    Pull Request
+          ↓
+        main
+
+- Pull Requests are heavily used in professional software development.
+
+- They allow developers to:
+    - Review code
+    - Discuss changes
+    - Suggest improvements
+    - Run automated tests
+    - Check for problems
+    - Approve changes
+    - Merge changes
+
+- I should learn how to create and review Pull Requests.
+
+---
+
+## Pull Request Workflow
+
+- A typical professional workflow is:
+
+    1. Start from main
+    2. Create a new branch
+    3. Work on a feature
+    4. Commit changes
+    5. Push the branch to GitHub
+    6. Open a Pull Request
+    7. Other developers review the code
+    8. Make requested changes
+    9. Get approval
+    10. Merge the Pull Request
+    11. Delete the feature branch if no longer needed
+
+- Example:
+
+    git switch main
+
+    git pull
+
+    git switch -c add-login
+
+    # Make changes
+
+    git add .
+
+    git commit -m "Add login system"
+
+    git push -u origin add-login
+
+- I can then create a Pull Request on GitHub.
+
+---

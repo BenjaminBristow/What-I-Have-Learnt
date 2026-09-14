@@ -1,0 +1,76 @@
+
+# GITHUB ACTIONS
+
+## GitHub Actions
+
+- GitHub Actions lets me automate tasks when things happen in my repository.
+
+- For example:
+
+    Push code
+        ↓
+    GitHub Action runs
+        ↓
+    Tests run
+        ↓
+    Code is checked
+
+- Actions can be used for:
+
+    - Running tests
+    - Linting
+    - Building applications
+    - Deploying websites
+    - Creating releases
+    - Checking security
+    - Automating repetitive tasks
+
+- GitHub Actions uses workflow files, normally stored in:
+
+    .github/workflows/
+
+- Example:
+
+    .github/
+        workflows/
+            tests.yml
+
+---
+
+# CI/CD
+
+## Continuous Integration
+
+- Continuous Integration (CI) means automatically checking code as developers make changes.
+
+- For example:
+
+    Developer pushes code
+        ↓
+    Tests automatically run
+        ↓
+    Tests pass/fail
+        ↓
+    Developers know whether something broke
+
+- CI helps catch bugs early.
+
+---
+
+## Continuous Deployment
+
+- Continuous Deployment (CD) can automatically deploy code after it passes checks.
+
+- Example:
+
+    Push code
+        ↓
+    Tests
+        ↓
+    Build
+        ↓
+    Deploy
+
+- This can be used to automatically update a live website.
+
+---

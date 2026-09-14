@@ -1,0 +1,131 @@
+
+# IMPORTANT COMMANDS TO MEMORISE
+
+## Git Command Cheat Sheet
+
+- Check Git version:
+
+    git --version
+
+- Start repository:
+
+    git init
+
+- Check status:
+
+    git status
+
+- See changes:
+
+    git diff
+
+- Stage file:
+
+    git add filename
+
+- Stage everything:
+
+    git add .
+
+- Commit:
+
+    git commit -m "message"
+
+- View history:
+
+    git log
+
+- Short history:
+
+    git log --oneline
+
+- Create branch:
+
+    git branch branch-name
+
+- Create and switch branch:
+
+    git switch -c branch-name
+
+- Switch branch:
+
+    git switch branch-name
+
+- List branches:
+
+    git branch
+
+- Merge branch:
+
+    git merge branch-name
+
+- Download remote changes:
+
+    git fetch
+
+- Download and integrate changes:
+
+    git pull
+
+- Upload commits:
+
+    git push
+
+- Clone repository:
+
+    git clone <url>
+
+- Add remote:
+
+    git remote add origin <url>
+
+- View remotes:
+
+    git remote -v
+
+- Temporarily save changes:
+
+    git stash
+
+- Restore stashed changes:
+
+    git stash pop
+
+- Undo a commit safely:
+
+    git revert <commit>
+
+- Restore a file:
+
+    git restore filename
+
+---
+
+# THE MOST IMPORTANT CONCEPTS
+
+## Things I Should Actually Understand
+
+- I do not need to memorise every Git command.
+
+- The most important concepts are:
+
+    - Repository
+    - Working directory
+    - Staging area
+    - Commit
+    - Branch
+    - Merge
+    - Remote
+    - Push
+    - Pull
+    - Fetch
+    - Pull Request
+    - Merge conflict
+    - `.gitignore`
+    - GitHub Issues
+    - GitHub Actions
+    - Code review
+
+- If I understand these concepts properly, I can learn the more advanced commands when I need them.
+
+---

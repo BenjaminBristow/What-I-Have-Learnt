@@ -1,0 +1,159 @@
+## Creating a GitHub Account
+
+- GitHub accounts allow me to store repositories online.
+
+- After creating an account, I can create repositories.
+
+- A repository can be:
+    - Public
+    - Private
+
+- Public:
+    - Anyone can view the repository.
+
+- Private:
+    - Only people I give access to can view it.
+
+- Public repositories are useful for:
+    - Portfolios
+    - Open-source projects
+    - Showing employers my code
+    - Sharing projects
+
+---
+
+## Creating a GitHub Repository
+
+- On GitHub I can create a new repository.
+
+- I choose:
+    - Repository name
+    - Description
+    - Public/private
+    - README if I want one
+    - `.gitignore` if appropriate
+    - Licence if appropriate
+
+- Example repository:
+
+    python-learning-projects
+
+- GitHub then gives me a remote repository that I can connect to my local Git repository.
+
+---
+
+## Local Repository vs Remote Repository
+
+- My local repository is stored on my computer.
+
+- My remote repository is stored somewhere online, such as GitHub.
+
+- Example:
+
+    My PC
+      ↓
+    Local Git repository
+
+    GitHub
+      ↓
+    Remote Git repository
+
+- Git lets me move changes between them.
+
+- Upload changes:
+
+    git push
+
+- Download changes:
+
+    git pull
+
+---
+
+## Git Remote
+
+- A remote is a connection between my local repository and a remote repository.
+
+- I can see my remotes using:
+
+    git remote -v
+
+- I can add a GitHub repository as a remote using:
+
+    git remote add origin <repository-url>
+
+- `origin` is normally the name given to the main remote repository.
+
+- Example:
+
+    git remote add origin https://github.com/myusername/my-project.git
+
+- I can then push my local repository to GitHub.
+
+---
+
+## Git Push
+
+- `git push` uploads my local commits to the remote repository.
+
+- Example:
+
+    git push origin main
+
+- This means:
+    - Push my commits
+    - To the remote called `origin`
+    - To the `main` branch
+
+- Once pushed, my changes should appear on GitHub.
+
+- Typical workflow:
+
+    git add .
+    git commit -m "Add new feature"
+    git push
+
+---
+
+## Git Pull
+
+- `git pull` downloads changes from the remote repository and applies them to my local repository.
+
+- Example:
+
+    git pull
+
+- This is important when working with other people.
+
+- For example:
+
+    My friend changes the project
+        ↓
+    Pushes changes to GitHub
+        ↓
+    I run:
+        git pull
+        ↓
+    I get their changes
+
+---
+
+## Git Fetch
+
+- `git fetch` downloads information about changes from the remote repository without automatically applying those changes to my current branch.
+
+- Example:
+
+    git fetch
+
+- This is useful when I want to see what has changed before merging it into my work.
+
+- Difference:
+
+    git fetch
+        = download information
+
+    git pull
+        = download + integrate changes
+
+---

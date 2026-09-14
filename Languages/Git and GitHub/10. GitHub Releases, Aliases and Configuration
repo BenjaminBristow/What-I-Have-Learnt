@@ -1,0 +1,68 @@
+
+# GITHUB RELEASES
+
+## GitHub Releases
+
+- GitHub Releases are used to publish specific versions of a project.
+
+- For example:
+
+    MyProject v1.0
+
+- A release can contain:
+    - Version information
+    - Release notes
+    - Changes
+    - Downloadable files
+
+- Releases are useful when making software available to users.
+
+---
+
+# GIT ALIASES
+
+## Git Aliases
+
+- Git aliases let me create shortcuts for commands I use frequently.
+
+- Example:
+
+    git config --global alias.st status
+
+- Then I can use:
+
+    git st
+
+  instead of:
+
+    git status
+
+- Another example:
+
+    git config --global alias.co checkout
+
+- However, I should learn the normal commands before relying heavily on aliases.
+
+---
+
+# GIT CONFIGURATION
+
+## Git Config
+
+- Git stores configuration settings.
+
+- I can see configuration using:
+
+    git config --list
+
+- Global settings apply to my user account.
+
+- Local settings apply only to a particular repository.
+
+- Example:
+
+    git config --global user.name "My Name"
+
+- Repository-specific settings can be configured without `--global`.
+
+---

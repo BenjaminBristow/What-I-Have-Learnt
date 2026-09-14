@@ -1,0 +1,43 @@
+
+
+# MERGE VS REBASE
+
+## Git Merge
+
+- Merge combines two branches.
+
+- Example:
+
+    git switch main
+
+    git merge feature-login
+
+- It preserves the branch history.
+
+- It can create a merge commit.
+
+---
+
+## Git Rebase
+
+- Rebase moves my commits so they appear on top of another branch.
+
+- Example:
+
+    git switch feature-login
+
+    git rebase main
+
+- This can create a cleaner-looking history.
+
+- However, rebase rewrites commit history.
+
+- I should be careful rebasing branches that other people are already using.
+
+- Simple rule:
+
+    Merge = combine histories
+
+    Rebase = rewrite my branch history so it is based on another point
+
+---

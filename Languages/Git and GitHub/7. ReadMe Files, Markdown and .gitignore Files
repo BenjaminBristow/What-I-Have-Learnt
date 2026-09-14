@@ -1,0 +1,126 @@
+## README.md
+
+- A README is normally the first thing someone sees when visiting my GitHub repository.
+
+- It explains what my project is.
+
+- A good README can contain:
+
+    - Project name
+    - Description
+    - Features
+    - Installation instructions
+    - How to use the project
+    - Technologies used
+    - Examples
+    - Screenshots
+    - Future plans
+    - Author information
+    - Licence
+
+- Example:
+
+    # My Project
+
+    A Python application that manages tasks.
+
+    ## Features
+
+    - Create tasks
+    - Delete tasks
+    - Mark tasks as complete
+
+    ## Installation
+
+    pip install -r requirements.txt
+
+- README files normally use Markdown.
+
+---
+
+
+# MARKDOWN
+
+## Basic Markdown
+
+- GitHub uses Markdown heavily.
+
+- Heading:
+
+    # Heading 1
+
+    ## Heading 2
+
+    ### Heading 3
+
+- Bold:
+
+    **bold**
+
+- Italic:
+
+    *italic*
+
+- Bullet point:
+
+    - Item
+
+- Numbered list:
+
+    1. First
+    2. Second
+    3. Third
+
+- Code:
+
+    `print("Hello")`
+
+- Code block:
+
+    ```python
+    print("Hello")
+    ```
+
+- Markdown is useful for README files, documentation and GitHub Issues.
+
+---
+
+# .GITIGNORE
+
+## What .gitignore Does
+
+- `.gitignore` tells Git which files it should not track.
+
+- This is extremely important.
+
+- I should not normally upload things such as:
+
+    - Passwords
+    - API keys
+    - Secret keys
+    - Virtual environments
+    - Temporary files
+    - Compiled files
+    - Operating system files
+
+- Example Python `.gitignore`:
+
+    __pycache__/
+    *.pyc
+    .venv/
+    venv/
+    .env
+
+- If I have:
+
+    .env
+
+  containing:
+
+    API_KEY=secret123
+
+  I should put `.env` inside `.gitignore`.
+
+- IMPORTANT:
+    - `.gitignore` does not remove something that has already been committed.
+    - If I accidentally commit a secret, I need to remove it properly and potentially rotate/revoke the secret.

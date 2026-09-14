@@ -1,0 +1,141 @@
+## The Three Main Areas of Git
+
+- Git can be thought of as having three important areas:
+
+    1. Working directory
+    2. Staging area
+    3. Repository
+
+- Working directory:
+    - The actual files I am currently editing.
+
+- Staging area:
+    - The changes I have selected to include in my next commit.
+
+- Repository:
+    - The history of commits that Git has saved.
+
+- The basic workflow is:
+
+    Edit files
+        ↓
+    git add
+        ↓
+    Staging area
+        ↓
+    git commit
+        ↓
+    Repository
+        ↓
+    git push
+        ↓
+    GitHub
+
+---
+
+## Git Add
+
+- `git add` puts changes into the staging area.
+
+- Example:
+
+    git add main.py
+
+- This stages only `main.py`.
+
+- I can stage multiple files:
+
+    git add main.py database.py
+
+- I can stage all changed files:
+
+    git add .
+
+- The `.` means the current directory and its contents.
+
+- I should be careful with:
+
+    git add .
+
+  because it can stage files I did not intend to include.
+
+- I can check what is staged using:
+
+    git status
+
+---
+
+## Git Commit
+
+- A commit is a saved point in my project's history.
+
+- After staging my changes, I can create a commit:
+
+    git commit -m "Add user login system"
+
+- The message should describe what I changed.
+
+- Good commit messages:
+
+    git commit -m "Add user authentication"
+
+    git commit -m "Fix database connection error"
+
+    git commit -m "Add homepage styling"
+
+- Bad commit messages:
+
+    git commit -m "stuff"
+
+    git commit -m "changes"
+
+    git commit -m "asdf"
+
+- A commit does not automatically upload anything to GitHub.
+- A commit is saved locally.
+
+---
+
+## Viewing Commit History
+
+- I can see previous commits using:
+
+    git log
+
+- This shows information such as:
+    - Commit ID
+    - Author
+    - Date
+    - Commit message
+
+- A shorter version is:
+
+    git log --oneline
+
+- This is much easier to read.
+
+- Example:
+
+    a82f3c1 Add login system
+    61d91aa Fix database bug
+    9c421ab Create homepage
+
+- Every commit has a unique identifier called a commit hash.
+
+---
+
+## Git Diff
+
+- `git diff` lets me see changes I have made.
+
+- Example:
+
+    git diff
+
+- This shows differences between my current files and the last committed version.
+
+- I can use this before committing to check exactly what I changed.
+
+- This is useful because it helps me avoid accidentally committing something I did not intend to change.
+
+---

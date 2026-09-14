@@ -1,0 +1,76 @@
+
+
+# GITHUB SECURITY
+
+## Never Commit Secrets
+
+- I should never commit sensitive information to GitHub.
+
+- Examples:
+
+    API keys
+    Passwords
+    Database passwords
+    Private keys
+    Secret tokens
+    `.env` files containing secrets
+
+- Even if I delete a secret later, it may still exist in Git history.
+
+- If a secret is accidentally exposed:
+
+    1. Revoke/rotate the secret immediately.
+    2. Remove it from the repository.
+    3. Remove it from history if necessary.
+    4. Replace it with a secure secret-management method.
+
+---
+
+# SSH
+
+## SSH With GitHub
+
+- SSH allows me to authenticate with GitHub using an SSH key.
+
+- Instead of repeatedly entering credentials, I can use a key pair.
+
+- There are two important parts:
+
+    Private key
+    Public key
+
+- I keep the private key secret.
+
+- I can give GitHub my public key.
+
+- I should NEVER share my private SSH key.
+
+- An SSH remote might look like:
+
+    git@github.com:username/project.git
+
+- SSH is commonly used by developers who work with GitHub regularly.
+
+---
+
+# HTTPS VS SSH
+
+## HTTPS and SSH
+
+- GitHub repositories can commonly be accessed using HTTPS or SSH.
+
+- HTTPS example:
+
+    https://github.com/username/project.git
+
+- SSH example:
+
+    git@github.com:username/project.git
+
+- HTTPS is simple and easy to understand.
+
+- SSH is convenient once I have configured an SSH key.
+
+- Both can be used to push and pull repositories.
+
+---

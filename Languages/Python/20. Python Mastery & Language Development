@@ -1,0 +1,1752 @@
+
+This section is about understanding Python itself rather than simply using Python.
+
+At this stage, you should already be comfortable writing Python programs. The goal now is to understand:
+
+* How Python code is parsed
+* How Python code is compiled
+* How Python executes code
+* How Python represents objects
+* How attributes and methods work internally
+* How imports work
+* How memory is managed
+* How the Python interpreter works
+* How the Python language evolves
+* How Python packages are built
+* How CPython itself is implemented
+
+The ultimate goal is to move from:
+
+> "I know how to use Python."
+
+to:
+
+> "I understand how Python works."
+
+---
+
+## Python Language Architecture
+
+Python is a programming language, but there are several different layers involved when you run Python code.
+
+A simplified model is:
+
+Python source code
+        ↓
+Lexing / tokenisation
+        ↓
+Parsing
+        ↓
+AST
+        ↓
+Compilation
+        ↓
+Bytecode
+        ↓
+Python Virtual Machine
+        ↓
+CPython runtime
+        ↓
+Operating system
+        ↓
+Hardware
+
+For example:
+
+x = 10
+print(x)
+
+does not simply get "read line by line".
+
+Python performs several stages before the program actually executes.
+
+---
+
+## Python Source Code
+
+Python source code is the human-readable code that you write.
+
+Example:
+
+x = 10
+
+if x > 5:
+    print("Large")
+
+This is stored in a `.py` file.
+
+The source code contains:
+
+* Keywords
+* Identifiers
+* Literals
+* Operators
+* Expressions
+* Statements
+* Indentation
+* Function definitions
+* Class definitions
+
+Python needs to turn this source code into something that the interpreter can execute.
+
+---
+
+## Tokenisation
+
+The first major stage is breaking the source code into tokens.
+
+For example:
+
+x = 10 + 5
+
+can conceptually be broken into:
+
+NAME       x
+OPERATOR   =
+NUMBER     10
+OPERATOR   +
+NUMBER     5
+
+These individual pieces are called tokens.
+
+Python provides the `tokenize` module for examining this process.
+
+Example:
+
+import tokenize
+
+Tokenisation allows Python to understand what the individual pieces of source code represent.
+
+Important concepts:
+
+* Tokens
+* Keywords
+* Names
+* Operators
+* Literals
+* Indentation
+* Newlines
+* Comments
+
+Python's tokenizer must also understand indentation.
+
+For example:
+
+if x > 5:
+    print(x)
+
+The indentation is meaningful.
+
+---
+
+## Python Grammar
+
+After tokenisation, Python needs to determine whether those tokens form valid Python syntax.
+
+Python has a formal grammar describing how valid Python programs can be constructed.
+
+For example:
+
+x = 10
+
+follows Python's rules for an assignment statement.
+
+Whereas:
+
+x = = 10
+
+does not.
+
+The grammar describes relationships between things such as:
+
+* Expressions
+* Statements
+* Assignments
+* Function definitions
+* Class definitions
+* Loops
+* Conditions
+* Imports
+
+Understanding grammar helps explain why some combinations of Python syntax are valid while others are not.
+
+---
+
+## Parsing
+
+Parsing takes the tokens produced by tokenisation and determines their structure.
+
+For example:
+
+x = 10 + 5
+
+needs to be interpreted as:
+
+Assign
+ ├── x
+ └── Add
+      ├── 10
+      └── 5
+
+The parser determines the relationships between the different parts of the program.
+
+If the code violates Python's grammar, Python raises a `SyntaxError`.
+
+Example:
+
+if True
+    print("Hello")
+
+Python cannot parse this correctly because the colon is missing.
+
+---
+
+## Abstract Syntax Tree
+
+The result of parsing is represented using an Abstract Syntax Tree, commonly called an AST.
+
+Python provides the `ast` module.
+
+Example:
+
+import ast
+
+tree = ast.parse("x = 10 + 5")
+
+print(ast.dump(tree, indent=4))
+
+The AST represents the structure of the program.
+
+For:
+
+x = 10 + 5
+
+the tree is conceptually:
+
+Module
+└── Assign
+    ├── Name(x)
+    └── BinOp
+        ├── Constant(10)
+        ├── Add
+        └── Constant(5)
+
+The AST does not primarily care about formatting.
+
+These are structurally equivalent:
+
+x=10+5
+
+and:
+
+x = 10 + 5
+
+The AST represents the underlying structure rather than the exact formatting.
+
+---
+
+## Working With the AST
+
+Python allows you to inspect and manipulate ASTs.
+
+Example:
+
+import ast
+
+code = """
+x = 10
+y = x + 5
+"""
+
+tree = ast.parse(code)
+
+print(ast.dump(tree, indent=4))
+
+You can also create programs that analyse Python source code.
+
+For example, an AST program could detect:
+
+* Function definitions
+* Class definitions
+* Imports
+* Variables
+* Loops
+* Dangerous operations
+* Certain coding patterns
+
+This is useful for:
+
+* Linters
+* Static analysis
+* Code formatters
+* Refactoring tools
+* Security tools
+* Compilers
+* Code generation
+
+---
+
+## Compilation
+
+Once Python has understood the source code, it can compile it into bytecode.
+
+Conceptually:
+
+Source code
+     ↓
+Tokens
+     ↓
+AST
+     ↓
+Compiler
+     ↓
+Bytecode
+
+Bytecode is a lower-level representation of the program.
+
+It is not the same as machine code.
+
+---
+
+## Python Bytecode
+
+Python bytecode consists of instructions for Python's virtual machine.
+
+You can inspect bytecode using the `dis` module.
+
+Example:
+
+import dis
+
+def add(a, b):
+    return a + b
+
+dis.dis(add)
+
+This shows the instructions Python uses to execute the function.
+
+You may see instructions representing operations such as:
+
+LOAD_FAST
+BINARY_OP
+RETURN_VALUE
+
+The exact instructions can change between Python versions.
+
+Therefore:
+
+> Do not memorise Python bytecode instructions.
+
+Instead understand the concept:
+
+Python source
+      ↓
+Bytecode
+      ↓
+Python interpreter executes bytecode
+
+---
+
+## Python Virtual Machine
+
+CPython contains a virtual machine responsible for executing Python bytecode.
+
+The virtual machine repeatedly:
+
+1. Retrieves an instruction
+2. Determines what it means
+3. Performs the operation
+4. Moves to the next instruction
+
+Conceptually:
+
+Bytecode
+   ↓
+Instruction
+   ↓
+Execute
+   ↓
+Instruction
+   ↓
+Execute
+   ↓
+...
+
+This is one reason Python is different from languages that compile directly to native machine code.
+
+---
+
+## CPython
+
+CPython is the most widely used implementation of Python.
+
+Important distinction:
+
+Python = language/specification/ecosystem
+
+CPython = one implementation of Python
+
+Other Python implementations exist.
+
+Examples include:
+
+* CPython
+* PyPy
+* MicroPython
+* GraalPy
+
+When most people say:
+
+> "Python does X"
+
+they are often actually talking about CPython.
+
+---
+
+## CPython's Architecture
+
+A simplified model is:
+
+Python source
+      ↓
+Tokenizer
+      ↓
+Parser
+      ↓
+AST
+      ↓
+Compiler
+      ↓
+Bytecode
+      ↓
+CPython interpreter
+      ↓
+Python objects
+      ↓
+Operating system
+
+CPython itself is largely written in:
+
+* C
+* Python
+
+Some components may also use other technologies.
+
+Understanding CPython requires eventually becoming comfortable reading C code.
+
+---
+
+## Python Objects
+
+One of the most important concepts in advanced Python is:
+
+> Almost everything in Python is an object.
+
+Examples:
+
+x = 10
+
+The `10` is an object.
+
+name = "Ben"
+
+The string is an object.
+
+numbers = [1, 2, 3]
+
+The list is an object.
+
+Functions are objects.
+
+Classes are objects.
+
+Modules are objects.
+
+Even classes themselves are objects.
+
+---
+
+## Object Identity
+
+Every Python object has an identity.
+
+You can inspect it with:
+
+id(object)
+
+Example:
+
+x = 10
+
+print(id(x))
+
+The identity represents the object's identity during its lifetime.
+
+You can compare identities using:
+
+is
+
+For example:
+
+a = None
+b = None
+
+print(a is b)
+
+This checks whether both variables refer to the same object.
+
+---
+
+## Identity vs Equality
+
+This distinction is extremely important.
+
+==
+
+asks:
+
+> Do these objects have equal values?
+
+Whereas:
+
+is
+
+asks:
+
+> Are these the exact same object?
+
+Example:
+
+a = [1, 2, 3]
+b = [1, 2, 3]
+
+print(a == b)
+
+Result:
+
+True
+
+But:
+
+print(a is b)
+
+will normally be:
+
+False
+
+because they are separate list objects.
+
+---
+
+## Names and References
+
+Python variables are better understood as names referring to objects.
+
+For example:
+
+x = [1, 2, 3]
+
+Conceptually:
+
+x ───────→ [1, 2, 3]
+
+Then:
+
+y = x
+
+creates:
+
+x ───────→ [1, 2, 3]
+             ↑
+y ───────────┘
+
+There is still only one list.
+
+Therefore:
+
+y.append(4)
+
+changes the same list that `x` refers to.
+
+print(x)
+
+produces:
+
+[1, 2, 3, 4]
+
+---
+
+## Mutability
+
+Objects can be mutable or immutable.
+
+Mutable objects can be changed after creation.
+
+Examples:
+
+* `list`
+* `dict`
+* `set`
+
+Immutable objects cannot be changed after creation.
+
+Examples:
+
+* `int`
+* `float`
+* `str`
+* `tuple`
+* `bool`
+
+For example:
+
+x = 10
+
+You cannot modify the existing integer object from `10` into `11`.
+
+Instead:
+
+x = 11
+
+makes `x` refer to another object.
+
+---
+
+## Reference Counting
+
+CPython primarily uses reference counting as part of its memory management.
+
+Conceptually, Python tracks how many references point to an object.
+
+Example:
+
+a = [1, 2, 3]
+
+There is a reference to the list.
+
+Then:
+
+b = a
+
+creates another reference.
+
+Conceptually:
+
+a ──┐
+    ├──→ [1, 2, 3]
+b ──┘
+
+When references disappear, the reference count decreases.
+
+When an object's reference count reaches zero, CPython can generally deallocate it.
+
+---
+
+## Garbage Collection
+
+Reference counting alone cannot handle every situation.
+
+Consider a circular reference:
+
+a = []
+b = []
+
+a.append(b)
+b.append(a)
+
+Now:
+
+a → b
+↑   ↓
+└───┘
+
+The objects refer to each other.
+
+Even if the rest of the program stops referring to them, their reference counts may not reach zero.
+
+Python therefore has a cyclic garbage collector.
+
+The `gc` module provides access to Python's garbage collection system.
+
+import gc
+
+Important concepts:
+
+* Reference counting
+* Cyclic references
+* Garbage collection
+* Object lifetime
+* Memory reclamation
+
+---
+
+## The Python Memory Model
+
+You should understand that Python programs use memory for things such as:
+
+* Objects
+* References
+* Function frames
+* Containers
+* Strings
+* Modules
+* Classes
+
+Python manages most memory automatically.
+
+You generally do not manually allocate and free memory like you might in C.
+
+However, understanding memory is still important for writing efficient programs.
+
+---
+
+## Namespaces
+
+A namespace is a mapping between names and objects.
+
+For example:
+
+x = 10
+
+creates a relationship similar to:
+
+"x" → 10
+
+Common namespaces include:
+
+* Local namespace
+* Global namespace
+* Built-in namespace
+* Module namespace
+* Class namespace
+
+You can inspect some namespaces with:
+
+globals()
+locals()
+
+---
+
+### LEGB Rule
+
+Python searches for names using the LEGB rule.
+
+L = Local
+E = Enclosing
+G = Global
+B = Built-in
+
+For example:
+
+x = "global"
+
+def outer():
+    x = "enclosing"
+
+    def inner():
+        x = "local"
+        print(x)
+
+    inner()
+
+Python searches for `x` in this order:
+
+Local
+↓
+Enclosing
+↓
+Global
+↓
+Built-in
+
+This is fundamental to understanding:
+
+* Functions
+* Closures
+* Nested functions
+* Variables
+* Scope
+
+---
+
+## Closures
+
+A closure occurs when an inner function remembers values from an enclosing scope.
+
+Example:
+
+def multiplier(x):
+
+    def multiply(y):
+        return x * y
+
+    return multiply
+
+Then:
+
+double = multiplier(2)
+
+print(double(5))
+
+Result:
+
+10
+
+The returned function remembers `x`.
+
+Closures are important because they help explain:
+
+* Decorators
+* Functional programming
+* Callbacks
+* State without classes
+
+---
+
+## Attribute Lookup
+
+When Python evaluates:
+
+object.attribute
+
+it must determine where `attribute` comes from.
+
+Python's attribute lookup mechanism involves things such as:
+
+* Instance dictionaries
+* Class dictionaries
+* Base classes
+* Descriptors
+* `__getattribute__`
+* `__getattr__`
+
+This is a major part of the Python object model.
+
+---
+
+## `__getattribute__`
+
+`__getattribute__` is involved whenever an attribute is accessed.
+
+Example:
+
+class Person:
+
+    def __getattribute__(self, name):
+        print("Looking for:", name)
+        return object.__getattribute__(self, name)
+
+This can intercept attribute access.
+
+It is extremely powerful, but also easy to misuse.
+
+---
+
+## `__getattr__`
+
+`__getattr__` is called when normal attribute lookup fails.
+
+Example:
+
+class Person:
+
+    def __getattr__(self, name):
+        return "Attribute not found"
+
+Then:
+
+person = Person()
+
+print(person.age)
+
+can use `__getattr__`.
+
+Understanding the difference:
+
+__getattribute__
+    ↓
+runs for attribute access
+
+__getattr__
+    ↓
+runs when normal lookup fails
+
+---
+
+## Descriptors
+
+Descriptors are one of the deepest parts of Python's object model.
+
+A descriptor is an object implementing methods such as:
+
+__get__
+__set__
+__delete__
+
+Descriptors are heavily involved in Python features such as:
+
+* Properties
+* Methods
+* Class attributes
+* ORM fields
+* Framework behaviour
+
+Example:
+
+class Descriptor:
+
+    def __get__(self, instance, owner):
+        return "Hello"
+
+Then:
+
+class Example:
+    value = Descriptor()
+
+Accessing:
+
+Example().value
+
+causes Python to use the descriptor protocol.
+
+---
+
+## Properties
+
+Properties are built using descriptors.
+
+Example:
+
+class Person:
+
+    def __init__(self, age):
+        self._age = age
+
+    @property
+    def age(self):
+        return self._age
+
+    @age.setter
+    def age(self, value):
+        if value < 0:
+            raise ValueError("Age cannot be negative")
+
+        self._age = value
+
+This allows:
+
+person.age
+
+to behave like an attribute while executing methods behind the scenes.
+
+---
+
+## Methods Are Objects
+
+Consider:
+
+class Person:
+
+    def greet(self):
+        print("Hello")
+
+The function stored on the class becomes a bound method when accessed through an instance.
+
+Conceptually:
+
+person.greet
+
+binds:
+
+person
+
+as the first argument.
+
+This is part of Python's descriptor system.
+
+---
+
+## Classes Are Objects
+
+Python classes themselves are objects.
+
+For example:
+
+class Person:
+    pass
+
+`Person` is itself an object.
+
+Its type is:
+
+type(Person)
+
+which normally produces:
+
+<class 'type'>
+
+This leads to one of Python's most important advanced ideas:
+
+> Classes are instances of metaclasses.
+
+---
+
+## Metaclasses
+
+A metaclass is essentially the class used to create classes.
+
+The default metaclass is:
+
+type
+
+Conceptually:
+
+object
+   ↑
+ Person
+   ↑
+ instance
+
+But also:
+
+type
+  ↓
+Person
+
+`type` is responsible for creating classes.
+
+You can define custom metaclasses:
+
+class MyMeta(type):
+    pass
+
+Then:
+
+class MyClass(metaclass=MyMeta):
+    pass
+
+Metaclasses are powerful but should be used carefully.
+
+Most Python programs do not need custom metaclasses.
+
+---
+
+## Class Creation
+
+When Python encounters:
+
+class Person:
+    pass
+
+there is a process involved.
+
+Conceptually:
+
+Execute class body
+       ↓
+Create namespace
+       ↓
+Populate namespace
+       ↓
+Metaclass creates class
+       ↓
+Class object exists
+
+Advanced Python provides hooks into this process.
+
+Important concepts include:
+
+* `type`
+* `__prepare__`
+* `__new__`
+* `__init__`
+* Metaclasses
+
+---
+
+### Import System
+
+Imports are much more sophisticated than:
+
+import math
+
+suggests.
+
+When Python imports a module, it needs to:
+
+1. Find the module
+2. Load the module
+3. Create a module object
+4. Execute the module
+5. Store it in the import cache
+
+Python stores imported modules in:
+
+sys.modules
+
+For example:
+
+import sys
+
+print(sys.modules)
+
+This contains modules that Python has loaded.
+
+---
+
+## Import Caching
+
+If you do:
+
+import mymodule
+import mymodule
+
+Python does not normally execute the module from scratch every time.
+
+The imported module is cached in:
+
+sys.modules
+
+This is important for understanding:
+
+* Import performance
+* Circular imports
+* Module state
+* Import side effects
+
+---
+
+## Circular Imports
+
+A circular import occurs when modules depend on each other.
+
+For example:
+
+module_a
+   ↓
+module_b
+   ↓
+module_a
+
+This can cause partially initialised modules and confusing errors.
+
+Good project architecture should usually avoid unnecessary circular dependencies.
+
+---
+
+## `__name__` and `__main__`
+
+When a Python file is executed directly:
+
+python program.py
+
+Python sets:
+
+__name__ == "__main__"
+
+Therefore you often see:
+
+if __name__ == "__main__":
+    main()
+
+This allows a file to behave differently when:
+
+* Run directly
+* Imported as a module
+
+---
+
+## Python Packaging
+
+A Python project can be turned into an installable package.
+
+Modern Python projects commonly use:
+
+pyproject.toml
+
+A package can contain:
+
+* Source code
+* Metadata
+* Dependencies
+* Tests
+* Documentation
+* Configuration
+
+Packages can be distributed through package repositories such as PyPI.
+
+---
+
+## Wheels
+
+A wheel is a built Python distribution format.
+
+Example:
+
+package_name-1.0.0-py3-none-any.whl
+
+Wheels make installation easier because Python does not necessarily have to build the package from source.
+
+Some wheels contain compiled native code.
+
+---
+
+## Source Distributions
+
+A source distribution contains the source required to build/install a package.
+
+Commonly:
+
+.tar.gz
+
+Python packaging can therefore involve:
+
+Source code
+     ↓
+Build system
+     ↓
+Wheel / source distribution
+     ↓
+Package repository
+     ↓
+pip
+
+---
+
+## Python Enhancement Proposals
+
+PEPs are Python Enhancement Proposals.
+
+They describe proposed changes, standards, or guidance relating to Python.
+
+Examples include major language features and conventions.
+
+You should learn to read PEPs because they explain:
+
+* Why features were introduced
+* What problems they solve
+* How they should be used
+* What design decisions were made
+
+Important idea:
+
+> Advanced Python developers don't just learn features. They understand why the language was designed that way.
+
+---
+
+## Python Language Design
+
+At the highest level, Python is designed around principles such as:
+
+* Readability
+* Simplicity
+* Explicitness
+* Consistency
+* Practicality
+
+Python's design philosophy can be explored through:
+
+import this
+
+This displays the Zen of Python.
+
+Important principles include:
+
+Readability counts.
+
+Simple is better than complex.
+
+Explicit is better than implicit.
+
+Errors should never pass silently.
+
+There should be one obvious way to do it.
+
+These principles influence how Python develops.
+
+---
+
+## Alternative Python Implementations
+
+CPython is not the only Python implementation.
+
+### CPython
+
+The standard/default implementation.
+
+Written primarily in C.
+
+### PyPy
+
+Uses a JIT compiler and can provide significant performance improvements for some workloads.
+
+### MicroPython
+
+Designed for constrained hardware and microcontrollers.
+
+### GraalPy
+
+Python implementation built on GraalVM.
+
+The important lesson is:
+
+> Python is a language specification/ecosystem, while CPython is an implementation.
+
+---
+
+## The Global Interpreter Lock
+
+CPython has historically used the Global Interpreter Lock, commonly called the GIL.
+
+The GIL affects how Python threads execute Python code.
+
+It is particularly important for CPU-bound workloads.
+
+The important concepts are:
+
+* Threads
+* Processes
+* CPU-bound work
+* I/O-bound work
+* Parallelism
+* Concurrency
+* GIL
+
+Modern Python development also requires understanding the newer free-threaded/no-GIL work in Python, rather than assuming the historical GIL model is the only possible model.
+
+---
+
+## C Extensions
+
+Python can interact with native C code.
+
+This is important because Python itself is implemented largely in C through CPython.
+
+C extensions can be used when:
+
+* Performance is critical
+* Existing C libraries need to be used
+* Low-level functionality is required
+
+Technologies include:
+
+* CPython C API
+* Cython
+* `ctypes`
+* `cffi`
+
+Many high-performance Python libraries rely on native code underneath.
+
+Examples include parts of:
+
+* NumPy
+* SciPy
+* PyTorch
+
+---
+
+## Reading CPython
+
+To reach true Python mastery, eventually read parts of the CPython source code.
+
+You do not need to understand all of it.
+
+Start by exploring areas involving:
+
+* Objects
+* Lists
+* Dictionaries
+* Functions
+* The interpreter
+* Memory management
+* Exceptions
+
+The purpose is not to memorise the source.
+
+The purpose is to answer questions such as:
+
+> How does Python actually implement a list?
+
+or:
+
+> What happens internally when I call a Python function?
+
+---
+
+## Building a Python Interpreter
+
+One of the ultimate Python projects is creating a small Python-like interpreter.
+
+Start with:
+
+Numbers
+    ↓
+Variables
+    ↓
+Arithmetic
+    ↓
+Conditions
+    ↓
+Loops
+    ↓
+Functions
+    ↓
+Lists
+    ↓
+Dictionaries
+    ↓
+Classes
+    ↓
+Exceptions
+
+A simplified architecture could be:
+
+Source code
+     ↓
+Lexer
+     ↓
+Parser
+     ↓
+AST
+     ↓
+Interpreter
+     ↓
+Runtime
+
+This teaches:
+
+* Lexing
+* Parsing
+* ASTs
+* Evaluation
+* Scope
+* Functions
+* Objects
+* Memory
+* Language design
+
+---
+
+## Building a Compiler
+
+Go even further by building a compiler.
+
+Conceptually:
+
+Source
+  ↓
+Lexer
+  ↓
+Parser
+  ↓
+AST
+  ↓
+Intermediate representation
+  ↓
+Optimisation
+  ↓
+Machine code / bytecode
+
+This connects Python to:
+
+* Compiler theory
+* Computer architecture
+* Operating systems
+* Programming languages
+
+---
+
+## Python Static Analysis
+
+Python can analyse Python code without executing it.
+
+Tools can inspect:
+
+* ASTs
+* Types
+* Imports
+* Variables
+* Control flow
+
+This powers tools such as:
+
+* Linters
+* Type checkers
+* Formatters
+* IDEs
+* Refactoring tools
+
+Understanding ASTs and static analysis is useful if you want to build developer tools.
+
+---
+
+## Python Developer Tools
+
+At mastery level, understand how tools interact with Python.
+
+Examples:
+
+Source code
+     ↓
+Parser / AST
+     ↓
+Static analysis
+     ↓
+Type checking
+     ↓
+Formatting
+     ↓
+Linting
+     ↓
+Testing
+     ↓
+Packaging
+
+Tools you should understand include:
+
+* Ruff
+* Black
+* mypy
+* Pyright
+* pytest
+* coverage
+* `ast`
+* `dis`
+
+---
+
+## Contributing to Python
+
+The ultimate practical step is contributing to Python itself.
+
+This means:
+
+* Finding issues
+* Understanding existing code
+* Reproducing bugs
+* Writing tests
+* Modifying CPython
+* Running the CPython test suite
+* Reviewing changes
+* Writing documentation
+* Submitting patches
+
+You do not need to become a core Python developer.
+
+Even understanding the contribution process gives you a much deeper understanding of the language.
+
+---
+
+## What Python Mastery Actually Means
+
+Being a Python master does NOT mean:
+
+* Memorising every standard library function
+* Knowing every obscure syntax feature
+* Using advanced features everywhere
+* Writing unnecessarily clever code
+* Knowing every framework
+
+Instead, mastery means you can:
+
+* Read unfamiliar Python
+* Design large Python systems
+* Debug difficult problems
+* Understand memory behaviour
+* Understand object behaviour
+* Use the standard library effectively
+* Write maintainable code
+* Optimise when necessary
+* Understand concurrency
+* Understand Python internals
+* Read CPython source
+* Understand PEPs
+* Build Python packages
+* Contribute to open source
+* Explain why Python behaves the way it does
+
+The most important progression is:
+
+Beginner
+"I can write Python."
+
+        ↓
+
+Intermediate
+"I can solve problems with Python."
+
+        ↓
+
+Advanced
+"I understand Python's advanced features."
+
+        ↓
+
+Expert
+"I understand why Python behaves the way it does."
+
+        ↓
+
+Master
+"I understand the language, its implementation,
+its ecosystem, and how to extend or change it."
+
+## Ultimate Mastery Projects
+
+To prove that you understand this section, build progressively harder projects.
+
+### Project 1 — Python code analyser
+
+Build a program using `ast` that analyses Python files.
+
+It could report:
+
+* Number of functions
+* Number of classes
+* Number of imports
+* Number of loops
+* Number of `if` statements
+* Function lengths
+* Potentially suspicious patterns
+
+---
+
+### Project 2 — Mini Python interpreter
+
+Build:
+
+lexer
+parser
+AST
+interpreter
+runtime
+
+Support:
+
+x = 10
+y = 20
+
+if x < y:
+    print(x + y)
+
+---
+
+### Project 3 — Python package
+
+Create a real package containing:
+
+* Proper project structure
+* Type hints
+* Tests
+* Documentation
+* `pyproject.toml`
+* CI
+* Versioning
+
+Publish it.
+
+---
+
+### Project 4 — Python debugger/tool
+
+Build a developer tool capable of inspecting Python programs.
+
+Learn about:
+
+* Frames
+* Tracebacks
+* Execution
+* `sys`
+* `inspect`
+
+---
+
+### Project 5 — CPython exploration
+
+Download/build CPython.
+
+Then investigate questions such as:
+
+How is a Python list represented?
+
+How does a dictionary work?
+
+How are Python integers represented?
+
+How are function calls implemented?
+
+How does Python manage memory?
+
+How does the interpreter execute bytecode?
+
+---
+
+### Project 6 — Contribute to an open-source Python project
+
+Start small.
+
+Eventually:
+
+Issue
+  ↓
+Reproduce
+  ↓
+Understand source
+  ↓
+Write test
+  ↓
+Implement fix
+  ↓
+Run tests
+  ↓
+Pull request
+
+---
+
+## Final Mastery Checklist
+
+By the end of this section, you should be able to explain:
+
+* What happens when Python runs a `.py` file
+* What tokenisation is
+* What parsing is
+* What an AST is
+* What compilation does
+* What bytecode is
+* What the Python virtual machine does
+* What CPython is
+* What Python objects are
+* How names reference objects
+* Identity vs equality
+* Mutable vs immutable objects
+* Reference counting
+* Garbage collection
+* Namespaces
+* LEGB
+* Closures
+* Attribute lookup
+* Descriptors
+* Properties
+* Methods
+* Classes as objects
+* Metaclasses
+* Import machinery
+* `sys.modules`
+* Python packaging
+* Wheels
+* Source distributions
+* PEPs
+* Alternative Python implementations
+* The GIL
+* C extensions
+* Python's memory model
+* Python bytecode
+* AST manipulation
+* Static analysis
+* CPython architecture
+* How Python itself can be extended
+* How Python itself can be modified
+
+And ultimately:
+
+> You should be able to look at a piece of Python and explain not only **what it does**, but **how Python makes it happen**.

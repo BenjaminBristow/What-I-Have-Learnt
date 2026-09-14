@@ -1,0 +1,45 @@
+
+# OPEN SOURCE
+
+## Open Source
+
+- Open-source software has source code that can be viewed and often modified according to its licence.
+
+- GitHub contains a huge amount of open-source software.
+
+- I can learn by looking at real projects.
+
+- I can contribute by:
+
+    - Fixing bugs
+    - Adding features
+    - Improving documentation
+    - Writing tests
+    - Reporting issues
+    - Reviewing code
+
+- Forks and Pull Requests are commonly used when contributing.
+
+---
+
+# LICENCES
+
+## GitHub Licences
+
+- A licence tells people what they are allowed to do with my code.
+
+- Common licences include:
+
+    MIT
+    Apache 2.0
+    GPL
+
+- MIT is relatively permissive.
+
+- GPL has stronger requirements around derivative software.
+
+- Apache 2.0 includes additional legal protections compared with MIT.
+
+- I should understand a licence before using someone else's code in my own project.
+
+---

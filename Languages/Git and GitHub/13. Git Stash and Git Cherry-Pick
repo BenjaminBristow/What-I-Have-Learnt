@@ -1,0 +1,42 @@
+
+# STASH
+
+## Git Stash
+
+- Sometimes I have unfinished changes but need to switch branches.
+
+- I can temporarily save my changes using:
+
+    git stash
+
+- This puts my uncommitted changes aside.
+
+- I can then switch branches.
+
+- To get the changes back:
+
+    git stash pop
+
+- I can see saved stashes using:
+
+    git stash list
+
+- Stash is useful when I am halfway through something but suddenly need to work on something else.
+
+---
+
+# CHERRY-PICK
+
+## Git Cherry-Pick
+
+- `git cherry-pick` lets me copy a specific commit from one branch onto another.
+
+- Example:
+
+    git cherry-pick abc1234
+
+- This can be useful when I only want one particular change rather than an entire branch.
+
+- It is more advanced and I probably will not need it regularly when starting out.
+
+---

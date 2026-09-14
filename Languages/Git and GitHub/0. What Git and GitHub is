@@ -1,0 +1,56 @@
+## 1. What Git Is
+
+- Git is a version control system.
+- It lets me keep track of changes I make to my code.
+- Instead of having files like:
+    project_final.py
+    project_final2.py
+    project_final_REAL.py
+    project_final_REAL_v2.py
+
+  I can use Git to save different versions of my project properly.
+
+- Git runs locally on my computer.
+- I do not need the internet to use Git.
+- Git records changes to files inside a Git repository.
+- Git is mainly used through the terminal.
+
+- Git is useful because I can:
+    - Track changes
+    - Undo mistakes
+    - See what I changed
+    - Create different versions of a project
+    - Experiment without breaking my main project
+    - Work with other developers
+    - Keep a history of my project
+
+---
+
+## 2. What GitHub Is
+
+- GitHub is a website/platform built around Git.
+- Git and GitHub are not the same thing.
+
+- Git:
+    - Runs on my computer
+    - Tracks changes
+    - Manages versions
+    - Works without the internet
+
+- GitHub:
+    - Stores Git repositories online
+    - Lets me back up projects
+    - Lets other people see my code
+    - Makes collaboration easier
+    - Provides tools for issues, pull requests, actions, etc.
+
+- A simple way to remember it:
+
+    Git = version control
+
+    GitHub = online platform for Git repositories
+
+- I can use Git without GitHub.
+- I can also use GitHub with other Git hosting services such as GitLab or Bitbucket.
+
+---

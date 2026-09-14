@@ -1,0 +1,78 @@
+
+
+## Basic Solo Project Workflow
+
+- When starting a project:
+
+    mkdir my-project
+
+    cd my-project
+
+    git init
+
+- Create my files.
+
+- Check status:
+
+    git status
+
+- Stage changes:
+
+    git add .
+
+- Commit:
+
+    git commit -m "Initial project"
+
+- Create a GitHub repository.
+
+- Connect it:
+
+    git remote add origin <github-url>
+
+- Push:
+
+    git push -u origin main
+
+---
+
+## Normal Daily Workflow
+
+- A normal workflow for me could be:
+
+    1. Open project.
+    2. Check current branch:
+
+        git status
+
+    3. Get latest changes:
+
+        git pull
+
+    4. Create a feature branch:
+
+        git switch -c add-feature
+
+    5. Write code.
+    6. Test code.
+    7. Check changes:
+
+        git diff
+
+    8. Stage changes:
+
+        git add .
+
+    9. Commit:
+
+        git commit -m "Add feature"
+
+    10. Push:
+
+        git push -u origin add-feature
+
+    11. Create Pull Request on GitHub.
+    12. Review changes.
+    13. Merge into main.
+
+---

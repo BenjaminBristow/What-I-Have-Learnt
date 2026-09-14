@@ -1,0 +1,44 @@
+
+## GITHUB COLLABORATION: Working With Other Developers
+
+- Git becomes especially useful when multiple people work on the same project.
+
+- A common workflow is:
+
+    Developer A
+        ↓
+    Creates branch
+        ↓
+    Makes changes
+        ↓
+    Pushes branch
+        ↓
+    Pull Request
+        ↓
+    Code review
+        ↓
+    Merge
+
+- Developer B can then pull the updated main branch.
+
+- This prevents everyone from constantly editing the same files without version control.
+
+---
+
+## Code Reviews
+
+- Code review means another developer looks at my changes before they are merged.
+
+- They might check:
+
+    - Does the code work?
+    - Is it readable?
+    - Is it secure?
+    - Is it efficient?
+    - Are there bugs?
+    - Are there tests?
+    - Does it follow the project's style?
+
+- Code review is a major part of professional software development.
+
+---

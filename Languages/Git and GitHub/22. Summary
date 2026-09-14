@@ -1,0 +1,67 @@
+
+# GIT VS GITHUB SUMMARY
+
+## Quick Summary
+
+- Git:
+    - Version control system
+    - Runs locally
+    - Tracks changes
+    - Creates commits
+    - Manages branches
+    - Allows me to undo changes
+
+- GitHub:
+    - Online platform
+    - Hosts Git repositories
+    - Allows collaboration
+    - Provides Pull Requests
+    - Provides Issues
+    - Provides Actions
+    - Makes projects accessible to other people
+
+---
+
+# SIMPLE WAY TO THINK ABOUT EVERYTHING
+
+## The Full Git/GitHub Process
+
+- I write code.
+
+- Git tracks my changes.
+
+- I stage the changes:
+
+    git add .
+
+- I save them as a commit:
+
+    git commit -m "Add feature"
+
+- I upload the commit to GitHub:
+
+    git push
+
+- Someone else can download my changes:
+
+    git pull
+
+- If I want to work on something separately:
+
+    git switch -c feature-name
+
+- When I finish:
+
+    Push branch
+        ↓
+    Pull Request
+        ↓
+    Code review
+        ↓
+    Merge
+        ↓
+    Main branch
+
+- This is the basic system behind how many software development teams work.
+
+---

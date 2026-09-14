@@ -1,0 +1,74 @@
+
+## Installing Git
+
+- I can check whether Git is installed with:
+
+    git --version
+
+- If it is installed, I should get something similar to:
+
+    git version 2.x.x
+
+- On macOS I can install Git using Homebrew if necessary:
+
+    brew install git
+
+- On Windows I can install Git through Git for Windows.
+
+- After installing Git, I should configure my name and email.
+
+    git config --global user.name "My Name"
+
+    git config --global user.email "myemail@example.com"
+
+- These details are attached to the commits I make.
+
+---
+
+## Git Repository
+
+- A Git repository is a project that Git is tracking.
+
+- I can turn a normal project folder into a Git repository using:
+
+    git init
+
+- This creates a hidden `.git` folder.
+
+- The `.git` folder contains the information Git needs to track my project.
+
+- I normally should not manually edit the `.git` folder.
+
+- Example:
+
+    my-project/
+        main.py
+        README.md
+        .git/
+
+- Once `.git` exists, Git can track changes inside that project.
+
+---
+
+## Checking Git Status
+
+- One of the most useful commands is:
+
+    git status
+
+- It tells me what is happening in my repository.
+
+- It can tell me:
+    - Which files have changed
+    - Which files are untracked
+    - Which files are staged
+    - Whether I have commits waiting to be pushed
+    - Which branch I am currently on
+
+- I should get into the habit of using:
+
+    git status
+
+  regularly.
+
+---

@@ -1,0 +1,144 @@
+
+# GIT CLONE
+
+## Git Clone
+
+- `git clone` copies a remote repository onto my computer.
+
+- Example:
+
+    git clone https://github.com/user/project.git
+
+- This downloads the repository and creates a local Git repository.
+
+- I can then:
+
+    cd project
+
+- And start working on it.
+
+- This is commonly how I download an existing GitHub project.
+
+---
+
+# GIT FORK
+
+## GitHub Forks
+
+- A fork is my own GitHub copy of someone else's repository.
+
+- Forks are especially useful for open-source projects.
+
+- Example:
+
+    Someone else's repository
+            ↓
+          Fork
+            ↓
+    My GitHub repository
+
+- I can make changes to my fork without directly changing the original project.
+
+- I can then create a Pull Request back to the original project.
+
+- This is a common way to contribute to open-source software.
+
+---
+
+# GIT RESET
+
+## Git Reset
+
+- `git reset` can move my current branch to another commit.
+
+- It can be useful for undoing changes.
+
+- There are different types of reset.
+
+- Example:
+
+    git reset --soft HEAD~1
+
+- This removes the most recent commit but keeps the changes staged.
+
+- Example:
+
+    git reset HEAD~1
+
+- This removes the commit and unstages the changes while keeping the files.
+
+- `git reset --hard` is dangerous because it can permanently remove changes.
+
+- I should understand exactly what a reset command will do before using it.
+
+---
+
+# GIT REVERT
+
+## Git Revert
+
+- `git revert` creates a new commit that undoes the changes from an earlier commit.
+
+- Example:
+
+    git revert <commit>
+
+- This is generally safer than rewriting history on shared branches.
+
+- Example:
+
+    Commit A
+        ↓
+    Commit B
+        ↓
+    Commit C
+        ↓
+    Revert B
+
+- Git creates another commit that reverses the changes from B.
+
+- The original history remains intact.
+
+---
+
+# GIT CHECKOUT
+
+## Git Checkout
+
+- `git checkout` is an older Git command that can be used for several things.
+
+- It can switch branches:
+
+    git checkout main
+
+- It can also restore files or move to another commit.
+
+- Modern Git generally encourages using more specific commands:
+
+    git switch
+
+    git restore
+
+- This makes the commands easier to understand.
+
+---
+
+# GIT RESTORE
+
+## Git Restore
+
+- `git restore` can undo changes in files.
+
+- Example:
+
+    git restore main.py
+
+- This can restore the file to the version from the last commit.
+
+- I should be careful because this can discard changes I have made.
+
+- I can also unstage a file:
+
+    git restore --staged main.py
+
+---

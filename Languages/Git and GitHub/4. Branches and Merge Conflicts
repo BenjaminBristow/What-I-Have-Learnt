@@ -1,0 +1,151 @@
+
+## What a Branch Is
+
+- A branch is a separate line of development.
+
+- The main branch is usually called:
+
+    main
+
+- I can create another branch to work on a feature.
+
+- Example:
+
+    main
+      |
+      └── feature-login
+
+- I can work on `feature-login` without directly changing `main`.
+
+- This is extremely useful for larger projects.
+
+---
+
+## Creating a Branch
+
+- I can create a branch using:
+
+    git branch feature-login
+
+- I can switch to it using:
+
+    git switch feature-login
+
+- I can create and switch to a branch at the same time:
+
+    git switch -c feature-login
+
+- This is probably the command I will use most often.
+
+---
+
+## Viewing Branches
+
+- I can see my local branches using:
+
+    git branch
+
+- The branch with `*` beside it is the branch I am currently using.
+
+- Example:
+
+    * feature-login
+      main
+      testing
+
+---
+
+##Switching Branches
+
+- I can switch branches with:
+
+    git switch main
+
+- Or:
+
+    git switch feature-login
+
+- I should make sure I understand which branch I am on before making important changes.
+
+- I can check with:
+
+    git branch
+
+  or:
+
+    git status
+
+---
+
+## Merging Branches
+
+- Once I have finished a feature, I can merge it into another branch.
+
+- Example:
+
+    git switch main
+
+    git merge feature-login
+
+- This takes the changes from `feature-login` and merges them into `main`.
+
+- A common workflow is:
+
+    Create feature branch
+        ↓
+    Work on feature
+        ↓
+    Commit changes
+        ↓
+    Push feature branch
+        ↓
+    Create Pull Request
+        ↓
+    Review
+        ↓
+    Merge into main
+
+---
+
+# MERGE CONFLICTS
+
+## What a Merge Conflict Is
+
+- A merge conflict happens when Git cannot automatically decide how two sets of changes should be combined.
+
+- For example:
+
+- Person A changes:
+
+    print("Hello")
+
+- Person B changes the same line to:
+
+    print("Hi")
+
+- Git cannot know which version should be used.
+
+- Git will mark the conflict inside the file.
+
+- It can look something like:
+
+    <<<<<<< HEAD
+    print("Hello")
+    =======
+    print("Hi")
+    >>>>>>> feature-branch
+
+- I need to manually decide which version I want.
+
+- Then I remove the conflict markers.
+
+- After fixing the file:
+
+    git add .
+
+    git commit
+
+- Merge conflicts are normal when working with Git.
+- They do not mean Git is broken.
+
+---

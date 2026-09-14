@@ -1,0 +1,52 @@
+## Issues
+
+- GitHub Issues are used to track problems, tasks and ideas.
+
+- An issue could be:
+
+    - Fix login bug
+    - Add dark mode
+    - Improve database performance
+    - Add password reset
+    - Write tests for authentication
+
+- Issues are useful because I can keep track of work without relying on memory.
+
+---
+
+## Labels
+
+- GitHub Issues can have labels.
+
+- Example labels:
+
+    bug
+    feature
+    documentation
+    enhancement
+    help wanted
+    good first issue
+
+- Labels make it easier to organise issues.
+
+---
+
+## Milestones
+
+- Milestones group issues and Pull Requests around a larger goal.
+
+- Example:
+
+    Version 1.0
+
+- Could contain:
+
+    - User registration
+    - Login
+    - Password reset
+    - User profiles
+    - Testing
+
+- This helps organise development.
+
+---
